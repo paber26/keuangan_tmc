@@ -38,21 +38,42 @@ class AbsensiController extends Controller
             $period = CarbonPeriod::create($start, $end);
 
             // Fetch existing attendance records
-            $records = Absensi::where('kebun_id', $selectedKebunId)
+            $absensis = Absensi::with('karyawan')->where('kebun_id', $selectedKebunId)
                 ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])
                 ->get();
 
-            // Structure data for easy view access and figure out which Karyawans are assigned
-            $assignedKaryawanIds = [];
-            foreach ($records as $record) {
-                $absensiData[$record->karyawan_id][$record->tanggal] = $record->status;
-                if (!in_array($record->karyawan_id, $assignedKaryawanIds)) {
-                    $assignedKaryawanIds[] = $record->karyawan_id;
+            // Group the absences by karyawan_id AND jabatan so we can construct the view data
+            $absensiData = [];
+            $uniquePairs = [];
+            
+            foreach ($absensis as $absensi) {
+                // If it's old data and has no jabatan, fallback to the master data or 'Tidak Diketahui'
+                $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatan ?? 'Tidak Diketahui');
+                
+                $absensiData[$absensi->karyawan_id][$jabatan][$absensi->tanggal] = $absensi->status;
+                
+                $pairKey = $absensi->karyawan_id . '-' . $jabatan;
+                if (!isset($uniquePairs[$pairKey])) {
+                    $uniquePairs[$pairKey] = [
+                        'karyawan_id' => $absensi->karyawan_id,
+                        'jabatan' => $jabatan
+                    ];
                 }
             }
 
-            // Only show karyawans that have an absensi record in this period
-            $karyawans = $allKaryawans->whereIn('id', $assignedKaryawanIds)->values();
+            // Fetch the karyawans we need
+            $karyawanIds = collect($uniquePairs)->pluck('karyawan_id')->unique();
+            $karyawansList = Karyawan::whereIn('id', $karyawanIds)->get()->keyBy('id');
+            
+            $karyawans = collect();
+            foreach ($uniquePairs as $pair) {
+                $k = $karyawansList->get($pair['karyawan_id']);
+                if ($k) {
+                    $row = clone $k;
+                    $row->jabatan_pekerjaan = $pair['jabatan'];
+                    $karyawans->push($row);
+                }
+            }
         }
 
         return view('absensi.index', compact(
@@ -69,40 +90,35 @@ class AbsensiController extends Controller
 
     public function store(Request $request)
     {
-        $kebunId = $request->input('kebun_id');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-        $absensiInput = $request->input('absensi', []); // Array of [karyawan_id][tanggal] = 'on'
+        $request->validate([
+            'kebun_id' => 'required|exists:kebuns,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
 
-        if (!$kebunId || !$startDate || !$endDate) {
-            return redirect()->back()->with('error', 'Data tidak lengkap!');
-        }
+        // Clear existing 'Hadir' and set to 'Alpha' or delete existing to refresh
+        // But since we want to keep dummy rows, we first update all existing for the registered karyawans
+        Absensi::where('kebun_id', $request->kebun_id)
+            ->whereBetween('tanggal', [$request->start_date, $request->end_date])
+            ->update(['status' => 'Alpha']);
 
-        $start = Carbon::parse($startDate);
-        $end = Carbon::parse($endDate);
-        $period = CarbonPeriod::create($start, $end);
+        // Expected absensi input: absensi[karyawan_id][jabatan_pekerjaan][date_string] = "on"
+        $absensiInput = $request->input('absensi', []);
 
-        // Fetch all karyawans listed in the form
-        $karyawanIds = $request->input('karyawan_ids', []);
-
-        foreach ($karyawanIds as $karyawanId) {
-            foreach ($period as $date) {
-                $dateStr = $date->format('Y-m-d');
-                $isChecked = isset($absensiInput[$karyawanId][$dateStr]);
-                
-                $status = $isChecked ? 'Hadir' : 'Alpha';
-
-                // We update or create the record
-                Absensi::updateOrCreate(
-                    [
-                        'karyawan_id' => $karyawanId,
-                        'kebun_id' => $kebunId,
-                        'tanggal' => $dateStr,
-                    ],
-                    [
-                        'status' => $status
-                    ]
-                );
+        foreach ($absensiInput as $karyawanId => $jabatanData) {
+            foreach ($jabatanData as $jabatanPekerjaan => $dates) {
+                foreach ($dates as $date => $val) {
+                    if ($val === 'on') {
+                        Absensi::updateOrCreate([
+                            'kebun_id' => $request->kebun_id,
+                            'karyawan_id' => $karyawanId,
+                            'jabatan' => $jabatanPekerjaan,
+                            'tanggal' => $date,
+                        ], [
+                            'status' => 'Hadir'
+                        ]);
+                    }
+                }
             }
         }
 
@@ -111,29 +127,24 @@ class AbsensiController extends Controller
 
     public function addKaryawan(Request $request)
     {
-        $kebunId = $request->input('kebun_id');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-        $karyawanId = $request->input('karyawan_id');
+        $request->validate([
+            'kebun_id' => 'required|exists:kebuns,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'karyawan_id' => 'required|exists:karyawans,id',
+            'jabatan_pekerjaan' => 'required|string|max:255',
+        ]);
 
-        if (!$kebunId || !$startDate || !$endDate || !$karyawanId) {
-            return redirect()->back()->with('error', 'Data tidak lengkap!');
-        }
-
-        $start = Carbon::parse($startDate);
-        $end = Carbon::parse($endDate);
-        $period = CarbonPeriod::create($start, $end);
-
-        // Add 'Alpha' records for this employee for the whole period to register them in the sheet
-        foreach ($period as $date) {
-            Absensi::firstOrCreate([
-                'karyawan_id' => $karyawanId,
-                'kebun_id' => $kebunId,
-                'tanggal' => $date->format('Y-m-d'),
-            ], [
-                'status' => 'Alpha'
-            ]);
-        }
+        // Create a dummy entry for the first day of the period to register them
+        // We use status 'Alpha' or a special status so they appear in the sheet but not checked
+        Absensi::firstOrCreate([
+            'kebun_id' => $request->kebun_id,
+            'karyawan_id' => $request->karyawan_id,
+            'jabatan' => $request->jabatan_pekerjaan,
+            'tanggal' => $request->start_date,
+        ], [
+            'status' => 'Alpha'
+        ]);
 
         return redirect()->back()->with('success', 'Karyawan berhasil ditambahkan ke lembar absensi!');
     }

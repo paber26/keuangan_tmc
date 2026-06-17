@@ -101,7 +101,7 @@
                                         <td class="px-2 py-3 border border-gray-200 text-center align-middle hover:bg-emerald-50 cursor-pointer" onclick="toggleCheckbox(this)">
                                             <input type="checkbox" 
                                                 class="w-5 h-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 cursor-pointer attendance-cb pointer-events-none" 
-                                                name="absensi[{{ $karyawan->id }}][{{ $dateStr }}]" 
+                                                name="absensi[{{ $karyawan->id }}][{{ $jabatan }}][{{ $dateStr }}]" 
                                                 data-karyawan="{{ $karyawan->id }}"
                                                 {{ $isChecked ? 'checked' : '' }}>
                                         </td>
@@ -121,7 +121,7 @@
                                         Rp 0
                                     </td>
                                     <td class="px-4 py-3 border border-gray-200 text-center">
-                                        <button type="submit" form="remove_form_{{ $karyawan->id }}" class="text-red-400 hover:text-red-600 transition" title="Hapus dari lembar ini">
+                                        <button type="button" onclick="document.getElementById('remove_form_{{ $karyawan->id }}_{{ Str::slug($jabatan) }}').submit();" class="text-red-400 hover:text-red-600 transition" title="Hapus dari lembar ini">
                                             <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                         </button>
                                     </td>
@@ -180,12 +180,13 @@
 
     <!-- Hidden Forms for Removing -->
     @foreach($karyawans as $karyawan)
-        <form id="remove_form_{{ $karyawan->id }}" action="{{ route('absensi.remove') }}" method="POST" class="hidden">
+        <form id="remove_form_{{ $karyawan->id }}_{{ Str::slug($karyawan->jabatan_pekerjaan) }}" action="{{ route('absensi.remove') }}" method="POST" class="hidden">
             @csrf
             <input type="hidden" name="kebun_id" value="{{ $selectedKebunId }}">
             <input type="hidden" name="start_date" value="{{ $startDate }}">
             <input type="hidden" name="end_date" value="{{ $endDate }}">
             <input type="hidden" name="karyawan_id" value="{{ $karyawan->id }}">
+            <input type="hidden" name="jabatan_pekerjaan" value="{{ $karyawan->jabatan_pekerjaan }}">
         </form>
     @endforeach
 
@@ -212,14 +213,22 @@
             <input type="hidden" name="start_date" value="{{ $startDate }}">
             <input type="hidden" name="end_date" value="{{ $endDate }}">
             
-            <select name="karyawan_id" class="w-80 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm" required>
-                <option value="">-- Pilih Karyawan --</option>
+            <select name="karyawan_id" class="w-64 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm" required>
+                <option value="">-- Pilih Pekerja --</option>
                 @foreach($allKaryawans as $k)
-                    @if(!$karyawans->contains('id', $k->id))
-                        <option value="{{ $k->id }}">{{ $k->nama }} ({{ $k->jabatan ?? $k->tipe_gaji }})</option>
-                    @endif
+                    <option value="{{ $k->id }}">{{ $k->nama }}</option>
                 @endforeach
             </select>
+
+            <select name="jabatan_pekerjaan" class="w-56 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm" required>
+                <option value="">-- Sebagai (Peran) --</option>
+                <option value="Harian Kumpul">Harian Kumpul</option>
+                <option value="Kupas Kelapa">Kupas Kelapa</option>
+                <option value="Momaras Mesin">Momaras Mesin</option>
+                <option value="Pemanjat Kelapa">Pemanjat Kelapa</option>
+                <option value="Lainnya">Lainnya...</option>
+            </select>
+
             <button type="submit" class="px-6 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg shadow-sm transition">
                 Tambahkan
             </button>
