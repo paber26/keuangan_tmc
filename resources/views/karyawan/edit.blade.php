@@ -41,9 +41,9 @@
                 <div>
                     <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kebun</label>
                     <select id="lokasi" name="lokasi" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-                        <option value="">-- Pilih Lokasi Kebun --</option>
-                        @foreach($kebuns as $kebun)
-                            <option value="{{ $kebun->nama }}" {{ old('lokasi', $karyawan->lokasi) == $kebun->nama ? 'selected' : '' }}>{{ $kebun->nama }}</option>
+                        <option value="">-- Pilih Lokasi --</option>
+                        @foreach($lokasiKebuns as $lokasi)
+                            <option value="{{ $lokasi }}" {{ old('lokasi', $karyawan->lokasi) == $lokasi ? 'selected' : '' }}>{{ $lokasi }}</option>
                         @endforeach
                     </select>
                     @error('lokasi') <span class="text-xs text-red-500">{{ $message }}</span> @enderror

@@ -22,8 +22,8 @@ class KaryawanController extends Controller
      */
     public function create()
     {
-        $kebuns = Kebun::all();
-        return view('karyawan.create', compact('kebuns'));
+        $lokasiKebuns = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        return view('karyawan.create', compact('lokasiKebuns'));
     }
 
     /**
@@ -50,8 +50,8 @@ class KaryawanController extends Controller
      */
     public function edit(Karyawan $karyawan)
     {
-        $kebuns = Kebun::all();
-        return view('karyawan.edit', compact('karyawan', 'kebuns'));
+        $lokasiKebuns = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        return view('karyawan.edit', compact('karyawan', 'lokasiKebuns'));
     }
 
     /**
