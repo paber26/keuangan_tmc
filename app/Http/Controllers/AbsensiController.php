@@ -26,15 +26,11 @@ class AbsensiController extends Controller
         $period = [];
         $absensiData = [];
 
+        $allKaryawans = collect();
+
         if ($selectedKebunId && $startDate && $endDate) {
-            // Get all Harian workers for this kebun. Note: The database doesn't strictly link Karyawan to Kebun ID yet, 
-            // but we can just pull all 'Harian' workers or filter by Lokasi if needed. For now, pull all 'Harian' workers.
-            // If Lokasi strictly matches Kebun nama, we can filter by that.
-            $selectedKebun = Kebun::find($selectedKebunId);
-            $karyawans = Karyawan::where('tipe_gaji', 'Harian')
-                ->where('status', 'Aktif')
-                // ->where('lokasi', $selectedKebun->nama) // Optional: filter by location
-                ->get();
+            // Get all active workers to populate the "Tambah Pekerja" dropdown (including Borongan like Kupas Kelapa, etc)
+            $allKaryawans = Karyawan::where('status', 'Aktif')->get();
 
             // Create date period
             $start = Carbon::parse($startDate);
@@ -46,10 +42,17 @@ class AbsensiController extends Controller
                 ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])
                 ->get();
 
-            // Structure data for easy view access: $absensiData[karyawan_id][tanggal_string] = status
+            // Structure data for easy view access and figure out which Karyawans are assigned
+            $assignedKaryawanIds = [];
             foreach ($records as $record) {
                 $absensiData[$record->karyawan_id][$record->tanggal] = $record->status;
+                if (!in_array($record->karyawan_id, $assignedKaryawanIds)) {
+                    $assignedKaryawanIds[] = $record->karyawan_id;
+                }
             }
+
+            // Only show karyawans that have an absensi record in this period
+            $karyawans = $allKaryawans->whereIn('id', $assignedKaryawanIds)->values();
         }
 
         return view('absensi.index', compact(
@@ -58,6 +61,7 @@ class AbsensiController extends Controller
             'startDate', 
             'endDate', 
             'karyawans', 
+            'allKaryawans',
             'period', 
             'absensiData'
         ));
@@ -103,5 +107,56 @@ class AbsensiController extends Controller
         }
 
         return redirect()->back()->with('success', 'Data absensi berhasil disimpan!');
+    }
+
+    public function addKaryawan(Request $request)
+    {
+        $kebunId = $request->input('kebun_id');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $karyawanId = $request->input('karyawan_id');
+
+        if (!$kebunId || !$startDate || !$endDate || !$karyawanId) {
+            return redirect()->back()->with('error', 'Data tidak lengkap!');
+        }
+
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+        $period = CarbonPeriod::create($start, $end);
+
+        // Add 'Alpha' records for this employee for the whole period to register them in the sheet
+        foreach ($period as $date) {
+            Absensi::firstOrCreate([
+                'karyawan_id' => $karyawanId,
+                'kebun_id' => $kebunId,
+                'tanggal' => $date->format('Y-m-d'),
+            ], [
+                'status' => 'Alpha'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Karyawan berhasil ditambahkan ke lembar absensi!');
+    }
+
+    public function removeKaryawan(Request $request)
+    {
+        $kebunId = $request->input('kebun_id');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $karyawanId = $request->input('karyawan_id');
+
+        if (!$kebunId || !$startDate || !$endDate || !$karyawanId) {
+            return redirect()->back()->with('error', 'Data tidak lengkap!');
+        }
+
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+
+        Absensi::where('karyawan_id', $karyawanId)
+            ->where('kebun_id', $kebunId)
+            ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])
+            ->delete();
+
+        return redirect()->back()->with('success', 'Karyawan berhasil dihapus dari lembar absensi!');
     }
 }
