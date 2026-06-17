@@ -25,7 +25,6 @@ ssh -t nls@103.172.204.6 "sudo su -c 'rm /www/wwwroot/tmc.kuydinas.id/keuangan_t
 if [ -f "local_backup.sql" ]; then
     echo "➡️ Mengosongkan database lokal dan mengimpor data baru..."
     
-    # Kita menggunakan Laravel Database facade untuk mengeksekusi SQL agar menghindari masalah mysql tidak ada di PATH
     php -r "
         require 'vendor/autoload.php';
         \$app = require_once 'bootstrap/app.php';
@@ -33,7 +32,7 @@ if [ -f "local_backup.sql" ]; then
         
         // Disable foreign key checks temporarily and wipe
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        $tables = DB::select('SHOW TABLES');
+        \$tables = DB::select('SHOW TABLES');
         foreach (\$tables as \$table) {
             \$tableName = array_values((array)\$table)[0];
             DB::statement('DROP TABLE IF EXISTS ' . \$tableName);

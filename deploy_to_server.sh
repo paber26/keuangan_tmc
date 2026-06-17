@@ -15,8 +15,9 @@ git pull origin main
 echo \"➡️ Menjalankan migrasi database (php artisan migrate)...\"
 php artisan migrate --force
 
-echo \"➡️ Menjalankan seeding data awal (KaryawanSeeder)...\"
+echo \"➡️ Menjalankan seeding data awal (Karyawan & Kebun)...\"
 php artisan db:seed --class=KaryawanSeeder --force
+php artisan db:seed --class=KebunSeeder --force
 
 echo \"➡️ Memperbarui izin akses file (Permissions)...\"
 chown -R www:www storage bootstrap/cache
