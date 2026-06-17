@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Data Kebun')
-@section('page-title', 'Tambah Kebun')
-@section('page-subtitle', 'Tambahkan data kebun perkebunan baru')
+@section('title', 'Edit Data Kebun')
+@section('page-title', 'Edit Kebun')
+@section('page-subtitle', 'Ubah data kebun perkebunan')
 
 @section('page-actions')
 <a href="{{ route('kebun.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
@@ -13,31 +13,32 @@
 
 @section('content')
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden max-w-3xl">
-    <form action="{{ route('kebun.store') }}" method="POST" class="p-6">
+    <form action="{{ route('kebun.update', $kebun->id) }}" method="POST" class="p-6">
         @csrf
+        @method('PUT')
 
         <div class="space-y-6">
             <div>
                 <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama Kebun</label>
-                <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                <input type="text" id="nama" name="nama" value="{{ old('nama', $kebun->nama) }}" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 @error('nama') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
-                <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi') }}" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi', $kebun->lokasi) }}" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 @error('lokasi') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div class="grid grid-cols-2 gap-6">
                 <div>
                     <label for="luas" class="block text-sm font-medium text-gray-700 mb-1">Luas (Ha)</label>
-                    <input type="number" step="0.01" id="luas" name="luas" value="{{ old('luas') }}" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    <input type="number" step="0.01" id="luas" name="luas" value="{{ old('luas', $kebun->luas) }}" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     @error('luas') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label for="jumlah_blok" class="block text-sm font-medium text-gray-700 mb-1">Jumlah Blok</label>
-                    <input type="number" id="jumlah_blok" name="jumlah_blok" value="{{ old('jumlah_blok') }}" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    <input type="number" id="jumlah_blok" name="jumlah_blok" value="{{ old('jumlah_blok', $kebun->jumlah_blok) }}" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     @error('jumlah_blok') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
             </div>
@@ -45,8 +46,8 @@
             <div>
                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select id="status" name="status" required class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-                    <option value="Aktif" {{ old('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                    <option value="Nonaktif" {{ old('status') == 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                    <option value="Aktif" {{ old('status', $kebun->status) == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="Nonaktif" {{ old('status', $kebun->status) == 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
                 </select>
                 @error('status') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
             </div>
@@ -54,7 +55,7 @@
 
         <div class="mt-8 pt-5 border-t border-gray-100 flex justify-end gap-3">
             <button type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition shadow-sm">
-                Simpan Data
+                Simpan Perubahan
             </button>
         </div>
     </form>

@@ -6,11 +6,11 @@
 
 @section('page-actions')
     <div class="flex items-center gap-2">
-        <button class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm">
+        <a href="{{ route('laporan.rekap-mingguan.word') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Export Word
-        </button>
-        <button class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm">
+        </a>
+        <button onclick="window.print()" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
             Export PDF
         </button>
@@ -426,15 +426,41 @@
     </div>
 
     {{-- Bottom Export Buttons --}}
-    <div class="flex items-center justify-center gap-4 mt-6">
-        <button class="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl text-sm font-bold transition-all duration-200 shadow-lg shadow-blue-500/20">
+    <div class="flex items-center justify-center gap-4 mt-6 print:hidden">
+        <a href="{{ route('laporan.rekap-mingguan.word') }}" class="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl text-sm font-bold transition-all duration-200 shadow-lg shadow-blue-500/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Export ke Word
-        </button>
-        <button class="inline-flex items-center gap-2.5 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl text-sm font-bold transition-all duration-200 shadow-lg shadow-red-500/20">
+        </a>
+        <button onclick="window.print()" class="inline-flex items-center gap-2.5 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl text-sm font-bold transition-all duration-200 shadow-lg shadow-red-500/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
             Export ke PDF
         </button>
     </div>
+
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            main, main * {
+                visibility: visible;
+            }
+            main {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            aside, header, footer, .print\:hidden, .page-actions {
+                display: none !important;
+            }
+            /* Make shadows and backgrounds print nicely */
+            .bg-white { background-color: #fff !important; }
+            .shadow-sm { box-shadow: none !important; }
+            .border { border-color: #ddd !important; }
+        }
+    </style>
 
 @endsection

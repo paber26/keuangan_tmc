@@ -16,9 +16,10 @@ Route::post('/logout', function() { return redirect()->route('login'); })->name(
 // Dashboard
 Route::get('/', function() { return view('dashboard'); })->name('dashboard');
 
+use App\Http\Controllers\KebunController;
+
 // Master Data
-Route::get('/kebun', function() { return view('kebun.index'); })->name('kebun.index');
-Route::get('/kebun/create', function() { return view('dashboard'); })->name('kebun.create'); // Placeholder
+Route::resource('kebun', KebunController::class);
 Route::get('/karyawan', function() { return view('dashboard'); })->name('karyawan.index'); // Placeholder
 Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
 Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
@@ -32,6 +33,9 @@ Route::get('/penggajian/gaji-bulanan', function() { return view('dashboard'); })
 Route::get('/penggajian/upah-harian', function() { return view('dashboard'); })->name('upah-harian.index'); // Placeholder
 Route::get('/penggajian/upah-borongan', function() { return view('upah-borongan.index'); })->name('upah-borongan.index');
 
+use App\Http\Controllers\LaporanController;
+
 // Keuangan & Laporan
 Route::get('/transaksi', function() { return view('dashboard'); })->name('transaksi.index'); // Placeholder
-Route::get('/laporan/rekap-mingguan', function() { return view('laporan.rekap-mingguan'); })->name('laporan.rekap-mingguan');
+Route::get('/laporan/rekap-mingguan', [LaporanController::class, 'index'])->name('laporan.rekap-mingguan');
+Route::get('/laporan/rekap-mingguan/word', [LaporanController::class, 'exportWord'])->name('laporan.rekap-mingguan.word');
