@@ -159,7 +159,6 @@
                         <th class="px-4 py-3 border border-gray-200 w-12 text-center">NO.</th>
                         <th class="px-4 py-3 border border-gray-200">STATUS / JABATAN</th>
                         <th class="px-4 py-3 border border-gray-200 text-center">JUMLAH PEKERJA</th>
-                        <th class="px-4 py-3 border border-gray-200 text-center">TOTAL HARI (HOK)</th>
                         <th class="px-4 py-3 border border-gray-200 text-right">TOTAL UPAH</th>
                     </tr>
                 </thead>
@@ -170,7 +169,6 @@
                     <tr>
                         <td colspan="2" class="px-4 py-3 border border-gray-200 text-center font-bold text-gray-700">GRAND TOTAL</td>
                         <td class="px-4 py-3 border border-gray-200 text-center font-bold" id="summary_grand_pekerja">0</td>
-                        <td class="px-4 py-3 border border-gray-200 text-center font-bold text-emerald-700" id="summary_grand_hari">0</td>
                         <td class="px-4 py-3 border border-gray-200 text-right font-bold text-emerald-700" id="summary_grand_upah">Rp 0</td>
                     </tr>
                 </tfoot>
@@ -309,7 +307,6 @@
                     <td class="px-4 py-3 border border-gray-200 text-center">${index++}</td>
                     <td class="px-4 py-3 border border-gray-200 font-semibold text-gray-700">${jabatan}</td>
                     <td class="px-4 py-3 border border-gray-200 text-center">${data.pekerja} Orang</td>
-                    <td class="px-4 py-3 border border-gray-200 text-center font-semibold text-emerald-600">${data.hari}</td>
                     <td class="px-4 py-3 border border-gray-200 text-right font-semibold text-emerald-700">${new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(data.upah)}</td>
                 `;
                 summaryBody.appendChild(tr);
@@ -317,7 +314,6 @@
 
             // Update summary grand totals
             document.getElementById('summary_grand_pekerja').textContent = grandTotalPekerja + ' Orang';
-            document.getElementById('summary_grand_hari').textContent = grandTotalHari;
             document.getElementById('summary_grand_upah').textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(grandTotalUpah);
         }
     }
