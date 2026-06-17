@@ -32,6 +32,7 @@ class KaryawanController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'jabatan' => 'nullable|string|max:255',
+            'lokasi' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
             'tipe_gaji' => 'required|in:Tetap,Harian,Borongan',
             'status' => 'required|in:Aktif,Nonaktif',
@@ -58,6 +59,7 @@ class KaryawanController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'jabatan' => 'nullable|string|max:255',
+            'lokasi' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
             'tipe_gaji' => 'required|in:Tetap,Harian,Borongan',
             'status' => 'required|in:Aktif,Nonaktif',

@@ -31,6 +31,14 @@
                     @error('jabatan') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
                 <div>
+                    <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kebun</label>
+                    <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi', $karyawan->lokasi) }}" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    @error('lokasi') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div>
                     <label for="no_hp" class="block text-sm font-medium text-gray-700 mb-1">No. HP / WhatsApp</label>
                     <input type="text" id="no_hp" name="no_hp" value="{{ old('no_hp', $karyawan->no_hp) }}" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     @error('no_hp') <span class="text-xs text-red-500">{{ $message }}</span> @enderror

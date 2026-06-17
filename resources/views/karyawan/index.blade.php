@@ -31,6 +31,7 @@
                     <th class="px-6 py-4">No</th>
                     <th class="px-6 py-4">Nama Karyawan</th>
                     <th class="px-6 py-4">Jabatan</th>
+                    <th class="px-6 py-4">Lokasi</th>
                     <th class="px-6 py-4">No. HP</th>
                     <th class="px-6 py-4 text-center">Tipe Gaji</th>
                     <th class="px-6 py-4 text-center">Status</th>
@@ -43,6 +44,7 @@
                     <td class="px-6 py-4">{{ $index + 1 }}</td>
                     <td class="px-6 py-4 font-bold text-gray-800">{{ $karyawan->nama }}</td>
                     <td class="px-6 py-4 text-gray-500">{{ $karyawan->jabatan ?? '-' }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ $karyawan->lokasi ?? '-' }}</td>
                     <td class="px-6 py-4 text-gray-500">{{ $karyawan->no_hp ?? '-' }}</td>
                     <td class="px-6 py-4 text-center">
                         @if($karyawan->tipe_gaji === 'Tetap')
@@ -77,7 +79,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                    <td colspan="8" class="px-6 py-8 text-center text-gray-500">
                         Belum ada data karyawan.
                     </td>
                 </tr>
