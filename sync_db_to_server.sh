@@ -45,7 +45,7 @@ echo "✅ Ekspor lokal berhasil (local_dump.sql)"
 
 echo "2️⃣ Mengunggah data ke server..."
 echo "Mohon masukkan password SSH Anda (nls) jika diminta (Bisa diminta 2 kali)..."
-scp local_dump.sql nls@103.172.204.6:/www/wwwroot/tmc.kuydinas.id/keuangan_tmc/
+scp local_dump.sql nls@103.172.204.6:/tmp/local_dump.sql
 
 echo "3️⃣ Menerapkan data ke database Server..."
 ssh -t nls@103.172.204.6 "sudo su -c '
@@ -55,8 +55,8 @@ DB_USER=\$(grep DB_USERNAME .env | cut -d \"=\" -f2 | tr -d \"\\r\\n\")
 DB_PASS=\$(grep DB_PASSWORD .env | cut -d \"=\" -f2 | tr -d \"\\r\\n\")
 
 echo \"➡️ Menimpa data di server (\$DB_NAME)...\"
-mysql -u \$DB_USER -p\$DB_PASS \$DB_NAME < local_dump.sql
-rm local_dump.sql
+mysql -u \$DB_USER -p\$DB_PASS \$DB_NAME < /tmp/local_dump.sql
+rm /tmp/local_dump.sql
 echo \"✅ Impor di server berhasil!\"
 '"
 

@@ -27,7 +27,15 @@
             <div class="grid grid-cols-2 gap-6">
                 <div>
                     <label for="jabatan" class="block text-sm font-medium text-gray-700 mb-1">Jabatan</label>
-                    <input type="text" id="jabatan" name="jabatan" value="{{ old('jabatan', $karyawan->jabatan) }}" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    <select id="jabatan" name="jabatan" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                        <option value="">-- Pilih Jabatan --</option>
+                        <option value="Harian Kumpul" {{ old('jabatan', $karyawan->jabatan) == 'Harian Kumpul' ? 'selected' : '' }}>Harian Kumpul</option>
+                        <option value="Kupas Kelapa" {{ old('jabatan', $karyawan->jabatan) == 'Kupas Kelapa' ? 'selected' : '' }}>Kupas Kelapa</option>
+                        <option value="Momaras Mesin" {{ old('jabatan', $karyawan->jabatan) == 'Momaras Mesin' ? 'selected' : '' }}>Momaras Mesin</option>
+                        <option value="Pemanjat Kelapa" {{ old('jabatan', $karyawan->jabatan) == 'Pemanjat Kelapa' ? 'selected' : '' }}>Pemanjat Kelapa</option>
+                        <option value="Mandor" {{ old('jabatan', $karyawan->jabatan) == 'Mandor' ? 'selected' : '' }}>Mandor</option>
+                        <option value="Lainnya" {{ old('jabatan', $karyawan->jabatan) == 'Lainnya' ? 'selected' : '' }}>Lainnya...</option>
+                    </select>
                     @error('jabatan') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
                 <div>
