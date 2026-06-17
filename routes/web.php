@@ -25,8 +25,11 @@ Route::resource('karyawan', KaryawanController::class);
 Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
 Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 
+use App\Http\Controllers\AbsensiController;
+
 // Pencatatan Harian
-Route::get('/absensi', function() { return view('absensi.index'); })->name('absensi.index');
+Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
 Route::get('/panen', function() { return view('dashboard'); })->name('panen.index'); // Placeholder
 
 // Penggajian
