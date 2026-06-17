@@ -71,9 +71,20 @@
                                 <tr>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 w-12 text-center">NO.</th>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-left min-w-[150px]">NAMA</th>
+                                    @php
+                                        $headerTotal = 'HARI<br>KERJA';
+                                        $headerUpah = 'UPAH<br>PER HARI';
+                                        if ($jabatan === 'Kupas Kelapa') {
+                                            $headerTotal = 'TOTAL<br>BUTIR';
+                                            $headerUpah = 'UPAH<br>PER BUTIR';
+                                        } elseif ($jabatan === 'Pemanjat Kelapa') {
+                                            $headerTotal = 'TOTAL<br>POHON';
+                                            $headerUpah = 'UPAH<br>PER POHON';
+                                        }
+                                    @endphp
                                     <th colspan="{{ count($period) }}" class="px-4 py-2 border border-yellow-300 text-center text-xs tracking-wider">PERIODE</th>
-                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-center">{!! $jabatan === 'Kupas Kelapa' ? 'TOTAL<br>BUTIR' : 'HARI<br>KERJA' !!}</th>
-                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-right w-32">{!! $jabatan === 'Kupas Kelapa' ? 'UPAH<br>PER BUTIR' : 'UPAH<br>PER HARI' !!}</th>
+                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-center">{!! $headerTotal !!}</th>
+                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-right w-32">{!! $headerUpah !!}</th>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-right w-36">TOTAL UPAH</th>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-center w-12"><span class="sr-only">AKSI</span></th>
                                 </tr>
@@ -101,7 +112,7 @@
                                             $isChecked = $status === 'Hadir';
                                         @endphp
                                         
-                                        @if($jabatan === 'Kupas Kelapa')
+                                        @if($jabatan === 'Kupas Kelapa' || $jabatan === 'Pemanjat Kelapa')
                                             <td class="px-1 py-2 border border-gray-200 text-center align-middle">
                                                 <input type="number" 
                                                     class="w-full text-center bg-transparent border border-gray-300 focus:ring-emerald-500 p-1 text-sm rounded volume-input" 
@@ -122,12 +133,18 @@
 
                                     <td class="px-4 py-3 border border-gray-200 text-center font-bold bg-gray-50 hari-kerja-cell">0</td>
                                     <td class="px-4 py-3 border border-gray-200 text-right">
+                                        @php
+                                            $defaultUpah = 125000;
+                                            if ($jabatan === 'Kupas Kelapa') $defaultUpah = 200;
+                                            elseif ($jabatan === 'Pemanjat Kelapa') $defaultUpah = 15000;
+                                            elseif ($jabatan === 'Momaras Mesin') $defaultUpah = 250000;
+                                        @endphp
                                         <div class="flex items-center justify-between">
                                             <span class="text-gray-500 text-xs">Rp</span>
                                             <input type="number" 
                                                 class="w-24 text-right bg-transparent border-0 focus:ring-0 p-0 text-sm font-medium upah-input" 
                                                 data-karyawan="{{ $karyawan->id }}" 
-                                                value="{{ $jabatan === 'Kupas Kelapa' ? 300 : 125000 }}">
+                                                value="{{ $defaultUpah }}">
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border border-gray-200 text-right font-bold text-emerald-700 bg-emerald-50 total-upah-cell">
@@ -265,7 +282,7 @@
 
         rows.forEach(row => {
             const jabatan = row.dataset.jabatan || 'Tidak Diketahui';
-            const isBorongan = jabatan === 'Kupas Kelapa';
+            const isBorongan = jabatan === 'Kupas Kelapa' || jabatan === 'Pemanjat Kelapa';
             
             let hariKerjaAtauButir = 0;
             
