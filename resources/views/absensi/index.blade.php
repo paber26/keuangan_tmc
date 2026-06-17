@@ -11,10 +11,10 @@
     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
         <form action="{{ route('absensi.index') }}" method="GET" class="flex flex-wrap items-end gap-4">
             <div>
-                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Kebun</label>
-                <select name="kebun_id" class="w-64 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
-                    @foreach($kebuns as $kebun)
-                        <option value="{{ $kebun->id }}" {{ $selectedKebunId == $kebun->id ? 'selected' : '' }}>{{ $kebun->nama }}</option>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Lokasi Kebun</label>
+                <select name="lokasi" class="w-64 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    @foreach($lokasiList as $lokasi)
+                        <option value="{{ $lokasi }}" {{ $selectedLokasi == $lokasi ? 'selected' : '' }}>{{ $lokasi }}</option>
                     @endforeach
                 </select>
             </div>
@@ -36,7 +36,7 @@
     <!-- Attendance Table Form -->
     <form action="{{ route('absensi.store') }}" method="POST">
         @csrf
-        <input type="hidden" name="kebun_id" value="{{ $selectedKebunId }}">
+        <input type="hidden" name="lokasi" value="{{ $selectedLokasi }}">
         <input type="hidden" name="start_date" value="{{ $startDate }}">
         <input type="hidden" name="end_date" value="{{ $endDate }}">
 
@@ -182,7 +182,7 @@
     @foreach($karyawans as $karyawan)
         <form id="remove_form_{{ $karyawan->id }}_{{ Str::slug($karyawan->jabatan_pekerjaan) }}" action="{{ route('absensi.remove') }}" method="POST" class="hidden">
             @csrf
-            <input type="hidden" name="kebun_id" value="{{ $selectedKebunId }}">
+            <input type="hidden" name="lokasi" value="{{ $selectedLokasi }}">
             <input type="hidden" name="start_date" value="{{ $startDate }}">
             <input type="hidden" name="end_date" value="{{ $endDate }}">
             <input type="hidden" name="karyawan_id" value="{{ $karyawan->id }}">
@@ -201,7 +201,7 @@
     @endif
 
     <!-- Add Karyawan Form -->
-    @if(isset($allKaryawans) && $allKaryawans->count() > 0 && isset($selectedKebunId))
+    @if(isset($allKaryawans) && $allKaryawans->count() > 0 && isset($selectedLokasi))
     <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 mt-6 shadow-sm">
         <h4 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
             <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
@@ -209,7 +209,7 @@
         </h4>
         <form action="{{ route('absensi.add') }}" method="POST" class="flex gap-4 items-center">
             @csrf
-            <input type="hidden" name="kebun_id" value="{{ $selectedKebunId }}">
+            <input type="hidden" name="lokasi" value="{{ $selectedLokasi }}">
             <input type="hidden" name="start_date" value="{{ $startDate }}">
             <input type="hidden" name="end_date" value="{{ $endDate }}">
             

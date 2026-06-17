@@ -13,9 +13,9 @@ class AbsensiController extends Controller
 {
     public function index(Request $request)
     {
-        $kebuns = Kebun::where('status', 'Aktif')->get();
+        $lokasiList = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
         
-        $selectedKebunId = $request->get('kebun_id', $kebuns->first()?->id);
+        $selectedLokasi = $request->get('lokasi', $lokasiList->first());
         
         // Default to current week (Monday to Saturday) if no date provided
         $now = Carbon::now();
@@ -28,7 +28,7 @@ class AbsensiController extends Controller
 
         $allKaryawans = collect();
 
-        if ($selectedKebunId && $startDate && $endDate) {
+        if ($selectedLokasi && $startDate && $endDate) {
             // Get all active workers to populate the "Tambah Pekerja" dropdown (including Borongan like Kupas Kelapa, etc)
             $allKaryawans = Karyawan::where('status', 'Aktif')->get();
 
@@ -37,8 +37,8 @@ class AbsensiController extends Controller
             $end = Carbon::parse($endDate);
             $period = CarbonPeriod::create($start, $end);
 
-            // Fetch existing attendance records
-            $absensis = Absensi::with('karyawan')->where('kebun_id', $selectedKebunId)
+            // Fetch existing attendance records by lokasi
+            $absensis = Absensi::with('karyawan')->where('lokasi', $selectedLokasi)
                 ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])
                 ->get();
 
@@ -77,13 +77,13 @@ class AbsensiController extends Controller
         }
 
         return view('absensi.index', compact(
-            'kebuns', 
-            'selectedKebunId', 
-            'startDate', 
-            'endDate', 
-            'karyawans', 
+            'lokasiList',
+            'selectedLokasi',
+            'startDate',
+            'endDate',
+            'karyawans',
             'allKaryawans',
-            'period', 
+            'period',
             'absensiData'
         ));
     }
@@ -91,14 +91,14 @@ class AbsensiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kebun_id' => 'required|exists:kebuns,id',
+            'lokasi' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
         // Clear existing 'Hadir' and set to 'Alpha' or delete existing to refresh
         // But since we want to keep dummy rows, we first update all existing for the registered karyawans
-        Absensi::where('kebun_id', $request->kebun_id)
+        Absensi::where('lokasi', $request->lokasi)
             ->whereBetween('tanggal', [$request->start_date, $request->end_date])
             ->update(['status' => 'Alpha']);
 
@@ -110,7 +110,7 @@ class AbsensiController extends Controller
                 foreach ($dates as $date => $val) {
                     if ($val === 'on') {
                         Absensi::updateOrCreate([
-                            'kebun_id' => $request->kebun_id,
+                            'lokasi' => $request->lokasi,
                             'karyawan_id' => $karyawanId,
                             'jabatan' => $jabatanPekerjaan,
                             'tanggal' => $date,
@@ -128,7 +128,7 @@ class AbsensiController extends Controller
     public function addKaryawan(Request $request)
     {
         $request->validate([
-            'kebun_id' => 'required|exists:kebuns,id',
+            'lokasi' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'karyawan_id' => 'required|exists:karyawans,id',
@@ -138,7 +138,7 @@ class AbsensiController extends Controller
         // Create a dummy entry for the first day of the period to register them
         // We use status 'Alpha' or a special status so they appear in the sheet but not checked
         Absensi::firstOrCreate([
-            'kebun_id' => $request->kebun_id,
+            'lokasi' => $request->lokasi,
             'karyawan_id' => $request->karyawan_id,
             'jabatan' => $request->jabatan_pekerjaan,
             'tanggal' => $request->start_date,
@@ -151,21 +151,18 @@ class AbsensiController extends Controller
 
     public function removeKaryawan(Request $request)
     {
-        $kebunId = $request->input('kebun_id');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-        $karyawanId = $request->input('karyawan_id');
+        $request->validate([
+            'lokasi' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'karyawan_id' => 'required|exists:karyawans,id',
+            'jabatan_pekerjaan' => 'required|string'
+        ]);
 
-        if (!$kebunId || !$startDate || !$endDate || !$karyawanId) {
-            return redirect()->back()->with('error', 'Data tidak lengkap!');
-        }
-
-        $start = Carbon::parse($startDate);
-        $end = Carbon::parse($endDate);
-
-        Absensi::where('karyawan_id', $karyawanId)
-            ->where('kebun_id', $kebunId)
-            ->whereBetween('tanggal', [$start->format('Y-m-d'), $end->format('Y-m-d')])
+        Absensi::where('lokasi', $request->lokasi)
+            ->where('karyawan_id', $request->karyawan_id)
+            ->where('jabatan', $request->jabatan_pekerjaan)
+            ->whereBetween('tanggal', [$request->start_date, $request->end_date])
             ->delete();
 
         return redirect()->back()->with('success', 'Karyawan berhasil dihapus dari lembar absensi!');
