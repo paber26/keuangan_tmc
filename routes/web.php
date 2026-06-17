@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes (DUMMY UI MODE)
+|--------------------------------------------------------------------------
+*/
+
+// Auth Routes
+Route::get('/login', function() { return view('auth.login'); })->name('login');
+Route::post('/login', function() { return redirect()->route('dashboard')->with('success', 'Berhasil login!'); });
+Route::post('/logout', function() { return redirect()->route('login'); })->name('logout');
+
+// Dashboard
+Route::get('/', function() { return view('dashboard'); })->name('dashboard');
+
+// Master Data
+Route::get('/kebun', function() { return view('kebun.index'); })->name('kebun.index');
+Route::get('/kebun/create', function() { return view('dashboard'); })->name('kebun.create'); // Placeholder
+Route::get('/karyawan', function() { return view('dashboard'); })->name('karyawan.index'); // Placeholder
+Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
+Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
+
+// Pencatatan Harian
+Route::get('/absensi', function() { return view('absensi.index'); })->name('absensi.index');
+Route::get('/panen', function() { return view('dashboard'); })->name('panen.index'); // Placeholder
+
+// Penggajian
+Route::get('/penggajian/gaji-bulanan', function() { return view('dashboard'); })->name('gaji.index'); // Placeholder
+Route::get('/penggajian/upah-harian', function() { return view('dashboard'); })->name('upah-harian.index'); // Placeholder
+Route::get('/penggajian/upah-borongan', function() { return view('upah-borongan.index'); })->name('upah-borongan.index');
+
+// Keuangan & Laporan
+Route::get('/transaksi', function() { return view('dashboard'); })->name('transaksi.index'); // Placeholder
+Route::get('/laporan/rekap-mingguan', function() { return view('laporan.rekap-mingguan'); })->name('laporan.rekap-mingguan');
