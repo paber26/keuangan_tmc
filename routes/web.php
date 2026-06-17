@@ -17,10 +17,11 @@ Route::post('/logout', function() { return redirect()->route('login'); })->name(
 Route::get('/', function() { return view('dashboard'); })->name('dashboard');
 
 use App\Http\Controllers\KebunController;
+use App\Http\Controllers\KaryawanController;
 
 // Master Data
 Route::resource('kebun', KebunController::class);
-Route::get('/karyawan', function() { return view('dashboard'); })->name('karyawan.index'); // Placeholder
+Route::resource('karyawan', KaryawanController::class);
 Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
 Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 

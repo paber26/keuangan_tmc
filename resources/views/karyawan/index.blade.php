@@ -2,314 +2,88 @@
 
 @section('title', 'Data Karyawan')
 @section('page-title', 'Data Karyawan')
-@section('page-subtitle', 'Kelola data karyawan perkebunan')
+@section('page-subtitle', 'Kelola data karyawan kebun')
 
 @section('page-actions')
-    <a href="#"
-       class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-        </svg>
-        Tambah Karyawan
-    </a>
+<a href="{{ route('karyawan.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl transition shadow-sm">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+    Tambah Karyawan
+</a>
 @endsection
 
 @section('content')
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-        {{-- Search & Filter Bar --}}
-        <div class="p-5 border-b border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-                <div class="relative flex-1 sm:max-w-xs">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-                        </svg>
-                    </span>
-                    <input type="text" placeholder="Cari karyawan..."
-                           class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition"/>
-                </div>
-                <select class="px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition bg-white sm:w-44">
-                    <option value="">Semua Tipe</option>
-                    <option value="tetap">Tetap</option>
-                    <option value="harian">Harian</option>
-                    <option value="borongan">Borongan</option>
-                </select>
-                <div class="sm:ml-auto">
-                    <p class="text-sm text-gray-500">Menampilkan <span class="font-semibold text-gray-700">6</span> karyawan</p>
-                </div>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <!-- Filter Bar -->
+    <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div class="relative w-72">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
-        </div>
-
-        {{-- Table --}}
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-gray-50/80">
-                        <th class="px-5 py-3.5 text-left font-semibold text-gray-600 w-12">No</th>
-                        <th class="px-5 py-3.5 text-left font-semibold text-gray-600">Nama</th>
-                        <th class="px-5 py-3.5 text-left font-semibold text-gray-600">No HP</th>
-                        <th class="px-5 py-3.5 text-center font-semibold text-gray-600">Tipe</th>
-                        <th class="px-5 py-3.5 text-left font-semibold text-gray-600">Kebun</th>
-                        <th class="px-5 py-3.5 text-right font-semibold text-gray-600">Gaji/Upah</th>
-                        <th class="px-5 py-3.5 text-center font-semibold text-gray-600">Status</th>
-                        <th class="px-5 py-3.5 text-center font-semibold text-gray-600">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    {{-- Row 1 - Tetap --}}
-                    <tr class="hover:bg-gray-50/60 transition">
-                        <td class="px-5 py-4 text-gray-500">1</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold text-sm">AS</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Ahmad Sudirman</p>
-                                    <p class="text-xs text-gray-400">Masuk: 15 Jan 2022</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">0812-3456-7890</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Tetap</span>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">Kebun Raya Utama</td>
-                        <td class="px-5 py-4 text-right font-medium text-gray-800">Rp 2.500.000</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    {{-- Row 2 - Harian --}}
-                    <tr class="hover:bg-gray-50/60 transition">
-                        <td class="px-5 py-4 text-gray-500">2</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-semibold text-sm">BW</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Budi Wicaksono</p>
-                                    <p class="text-xs text-gray-400">Masuk: 03 Mar 2023</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">0856-1234-5678</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Harian</span>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">Kebun Pantai Selatan</td>
-                        <td class="px-5 py-4 text-right font-medium text-gray-800">Rp 120.000/hari</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    {{-- Row 3 - Borongan --}}
-                    <tr class="hover:bg-gray-50/60 transition">
-                        <td class="px-5 py-4 text-gray-500">3</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-semibold text-sm">SR</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Siti Rahmawati</p>
-                                    <p class="text-xs text-gray-400">Masuk: 20 Jun 2023</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">0878-9012-3456</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">Borongan</span>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">Kebun Raya Utama</td>
-                        <td class="px-5 py-4 text-right font-medium text-gray-800">Rp 200/butir</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    {{-- Row 4 - Tetap --}}
-                    <tr class="hover:bg-gray-50/60 transition">
-                        <td class="px-5 py-4 text-gray-500">4</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold text-sm">DH</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Dedi Hermawan</p>
-                                    <p class="text-xs text-gray-400">Masuk: 01 Feb 2021</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">0813-5678-9012</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Tetap</span>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">Kebun Bukit Indah</td>
-                        <td class="px-5 py-4 text-right font-medium text-gray-800">Rp 2.800.000</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    {{-- Row 5 - Harian --}}
-                    <tr class="hover:bg-gray-50/60 transition">
-                        <td class="px-5 py-4 text-gray-500">5</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-semibold text-sm">EK</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Eka Kurniawan</p>
-                                    <p class="text-xs text-gray-400">Masuk: 10 Sep 2024</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">0857-3456-7890</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Harian</span>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">Kebun Pantai Selatan</td>
-                        <td class="px-5 py-4 text-right font-medium text-gray-800">Rp 110.000/hari</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Aktif
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    {{-- Row 6 - Borongan --}}
-                    <tr class="hover:bg-gray-50/60 transition">
-                        <td class="px-5 py-4 text-gray-500">6</td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-semibold text-sm">FN</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">Fatimah Nurhaliza</p>
-                                    <p class="text-xs text-gray-400">Masuk: 05 Apr 2024</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">0821-6789-0123</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">Borongan</span>
-                        </td>
-                        <td class="px-5 py-4 text-gray-600">Kebun Sungai Baru</td>
-                        <td class="px-5 py-4 text-right font-medium text-gray-800">Rp 150/butir</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">
-                                <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-                                Nonaktif
-                            </span>
-                        </td>
-                        <td class="px-5 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button class="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125"/>
-                                    </svg>
-                                </button>
-                                <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        {{-- Table Footer --}}
-        <div class="px-5 py-4 border-t border-gray-100">
-            <div class="flex items-center justify-between text-sm text-gray-500">
-                <p>Menampilkan 1-6 dari 6 data</p>
-                <div class="flex items-center gap-1">
-                    <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed" disabled>&laquo; Sebelumnya</button>
-                    <button class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-medium">1</button>
-                    <button class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed" disabled>Selanjutnya &raquo;</button>
-                </div>
-            </div>
+            <input type="text" class="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" placeholder="Cari karyawan...">
         </div>
     </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-4">No</th>
+                    <th class="px-6 py-4">Nama Karyawan</th>
+                    <th class="px-6 py-4">Jabatan</th>
+                    <th class="px-6 py-4">No. HP</th>
+                    <th class="px-6 py-4 text-center">Tipe Gaji</th>
+                    <th class="px-6 py-4 text-center">Status</th>
+                    <th class="px-6 py-4 text-center">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @forelse($karyawans as $index => $karyawan)
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4">{{ $index + 1 }}</td>
+                    <td class="px-6 py-4 font-bold text-gray-800">{{ $karyawan->nama }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ $karyawan->jabatan ?? '-' }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ $karyawan->no_hp ?? '-' }}</td>
+                    <td class="px-6 py-4 text-center">
+                        @if($karyawan->tipe_gaji === 'Tetap')
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Tetap</span>
+                        @elseif($karyawan->tipe_gaji === 'Borongan')
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Borongan</span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Harian</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        @if($karyawan->status === 'Aktif')
+                        <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-emerald-100 text-emerald-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                        </span>
+                        @else
+                        <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Nonaktif
+                        </span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex justify-center items-center gap-2">
+                            <a href="{{ route('karyawan.edit', $karyawan->id) }}" class="text-gray-400 hover:text-blue-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></a>
+                            <form action="{{ route('karyawan.destroy', $karyawan->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-gray-400 hover:text-red-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        Belum ada data karyawan.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

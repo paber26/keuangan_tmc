@@ -1,26 +1,22 @@
 #!/bin/bash
 
-echo "🚀 Menghubungkan ke server 103.172.204.6..."
+echo "🚀 Menghubungkan ke server 103.172.204.6 untuk proses Deployment..."
 echo "Mohon masukkan password SSH Anda jika diminta..."
 
 ssh -t nls@103.172.204.6 "sudo su -c '
 echo \"✅ Berhasil masuk sebagai root!\"
 
-echo \"➡️ Memperbaiki Nginx 404 Not Found (URL Rewrite Laravel)...\"
+# Masuk ke folder project
+cd /www/wwwroot/tmc.kuydinas.id/keuangan_tmc
 
-# Mengisi file URL Rewrite bawaan aaPanel khusus untuk domain ini
-REWRITE_CONF=\"/www/server/panel/vhost/rewrite/tmc.kuydinas.id.conf\"
+echo \"➡️ Menarik pembaruan dari Git (git pull)...\"
+git pull origin main
 
-cat << EOF > \"\$REWRITE_CONF\"
-location / {
-    try_files \\\$uri \\\$uri/ /index.php?\\\$query_string;
-}
-EOF
+echo \"➡️ Menjalankan migrasi database (php artisan migrate)...\"
+php artisan migrate --force
 
-echo \"✅ File rewrite Nginx berhasil diperbarui!\"
+echo \"➡️ Memperbarui izin akses file (Permissions)...\"
+chown -R www:www storage bootstrap/cache
 
-echo \"➡️ Restart Nginx agar perubahan langsung aktif...\"
-systemctl restart nginx || /etc/init.d/nginx restart
-
-echo \"🎉 Setting Routing Laravel selesai! Silakan refresh menu /kebun Anda sekarang.\"
+echo \"🎉 Deployment selesai! Pembaruan sistem sudah live di tmc.kuydinas.id\"
 '"

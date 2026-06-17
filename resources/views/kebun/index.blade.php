@@ -32,7 +32,6 @@
                     <th class="px-6 py-4">Nama Kebun</th>
                     <th class="px-6 py-4">Lokasi</th>
                     <th class="px-6 py-4 text-center">Luas (Ha)</th>
-                    <th class="px-6 py-4 text-center">Jumlah Blok</th>
                     <th class="px-6 py-4">Status</th>
                     <th class="px-6 py-4 text-center">Aksi</th>
                 </tr>
@@ -44,7 +43,6 @@
                     <td class="px-6 py-4 font-bold text-gray-800">{{ $kebun->nama }}</td>
                     <td class="px-6 py-4 text-gray-500">{{ $kebun->lokasi ?? '-' }}</td>
                     <td class="px-6 py-4 text-center font-medium">{{ number_format($kebun->luas, 2) }}</td>
-                    <td class="px-6 py-4 text-center">{{ $kebun->jumlah_blok }}</td>
                     <td class="px-6 py-4">
                         @if($kebun->status === 'Aktif')
                         <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-emerald-100 text-emerald-700">
@@ -69,7 +67,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
                         Belum ada data kebun.
                     </td>
                 </tr>

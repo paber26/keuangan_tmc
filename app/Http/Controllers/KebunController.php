@@ -33,7 +33,6 @@ class KebunController extends Controller
             'nama' => 'required|string|max:255',
             'lokasi' => 'nullable|string|max:255',
             'luas' => 'required|numeric|min:0',
-            'jumlah_blok' => 'required|integer|min:0',
             'status' => 'required|in:Aktif,Nonaktif',
         ]);
 
@@ -59,7 +58,6 @@ class KebunController extends Controller
             'nama' => 'required|string|max:255',
             'lokasi' => 'nullable|string|max:255',
             'luas' => 'required|numeric|min:0',
-            'jumlah_blok' => 'required|integer|min:0',
             'status' => 'required|in:Aktif,Nonaktif',
         ]);
 
