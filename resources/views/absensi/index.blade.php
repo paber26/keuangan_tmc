@@ -54,7 +54,7 @@
 
             @php
                 $groupedKaryawans = $karyawans->groupBy(function($item) {
-                    return $item->jabatan ?: 'Tanpa Jabatan';
+                    return $item->jabatan_pekerjaan ?: 'Tanpa Jabatan';
                 });
             @endphp
 
@@ -107,7 +107,7 @@
                                         </td>
                                     @endforeach
 
-                                    <td class="px-4 py-3 border border-gray-200 text-center font-bold bg-gray-50" id="hari_kerja_{{ $karyawan->id }}">0</td>
+                                    <td class="px-4 py-3 border border-gray-200 text-center font-bold bg-gray-50 hari-kerja-cell">0</td>
                                     <td class="px-4 py-3 border border-gray-200 text-right">
                                         <div class="flex items-center justify-between">
                                             <span class="text-gray-500 text-xs">Rp</span>
@@ -117,7 +117,7 @@
                                                 value="125000">
                                         </div>
                                     </td>
-                                    <td class="px-4 py-3 border border-gray-200 text-right font-bold text-emerald-700 bg-emerald-50" id="total_upah_{{ $karyawan->id }}">
+                                    <td class="px-4 py-3 border border-gray-200 text-right font-bold text-emerald-700 bg-emerald-50 total-upah-cell">
                                         Rp 0
                                     </td>
                                     <td class="px-4 py-3 border border-gray-200 text-center">
@@ -270,8 +270,11 @@
             summaryData[jabatan].upah += totalUpah;
 
             // Update row UI
-            document.getElementById(`hari_kerja_${karyawanId}`).textContent = hariKerja;
-            document.getElementById(`total_upah_${karyawanId}`).textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalUpah);
+            const hariKerjaCell = row.querySelector('.hari-kerja-cell');
+            if (hariKerjaCell) hariKerjaCell.textContent = hariKerja;
+            
+            const totalUpahCell = row.querySelector('.total-upah-cell');
+            if (totalUpahCell) totalUpahCell.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalUpah);
 
             grandTotalHari += hariKerja;
             grandTotalUpah += totalUpah;
