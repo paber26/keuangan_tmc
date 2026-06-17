@@ -72,8 +72,8 @@
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 w-12 text-center">NO.</th>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-left min-w-[150px]">NAMA</th>
                                     <th colspan="{{ count($period) }}" class="px-4 py-2 border border-yellow-300 text-center text-xs tracking-wider">PERIODE</th>
-                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-center">HARI<br>KERJA</th>
-                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-right w-32">UPAH<br>PER HARI</th>
+                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-center">{!! $jabatan === 'Kupas Kelapa' ? 'TOTAL<br>BUTIR' : 'HARI<br>KERJA' !!}</th>
+                                    <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-right w-32">{!! $jabatan === 'Kupas Kelapa' ? 'UPAH<br>PER BUTIR' : 'UPAH<br>PER HARI' !!}</th>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-right w-36">TOTAL UPAH</th>
                                     <th rowspan="2" class="px-4 py-3 border border-yellow-300 text-center w-12"><span class="sr-only">AKSI</span></th>
                                 </tr>
@@ -95,16 +95,29 @@
                                     @foreach($period as $date)
                                         @php
                                             $dateStr = $date->format('Y-m-d');
-                                            $status = $absensiData[$karyawan->id][$dateStr] ?? 'Alpha';
+                                            $absData = $absensiData[$karyawan->id][$jabatan][$dateStr] ?? null;
+                                            $status = $absData ? $absData->status : 'Alpha';
+                                            $volume = $absData ? $absData->volume : '';
                                             $isChecked = $status === 'Hadir';
                                         @endphp
-                                        <td class="px-2 py-3 border border-gray-200 text-center align-middle hover:bg-emerald-50 cursor-pointer" onclick="toggleCheckbox(this)">
-                                            <input type="checkbox" 
-                                                class="w-5 h-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 cursor-pointer attendance-cb pointer-events-none" 
-                                                name="absensi[{{ $karyawan->id }}][{{ $jabatan }}][{{ $dateStr }}]" 
-                                                data-karyawan="{{ $karyawan->id }}"
-                                                {{ $isChecked ? 'checked' : '' }}>
-                                        </td>
+                                        
+                                        @if($jabatan === 'Kupas Kelapa')
+                                            <td class="px-1 py-2 border border-gray-200 text-center align-middle">
+                                                <input type="number" 
+                                                    class="w-full text-center bg-transparent border border-gray-300 focus:ring-emerald-500 p-1 text-sm rounded volume-input" 
+                                                    name="absensi[{{ $karyawan->id }}][{{ $jabatan }}][{{ $dateStr }}]" 
+                                                    data-karyawan="{{ $karyawan->id }}"
+                                                    value="{{ $volume }}" min="0">
+                                            </td>
+                                        @else
+                                            <td class="px-2 py-3 border border-gray-200 text-center align-middle hover:bg-emerald-50 cursor-pointer" onclick="toggleCheckbox(this)">
+                                                <input type="checkbox" 
+                                                    class="w-5 h-5 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500 cursor-pointer attendance-cb pointer-events-none" 
+                                                    name="absensi[{{ $karyawan->id }}][{{ $jabatan }}][{{ $dateStr }}]" 
+                                                    data-karyawan="{{ $karyawan->id }}"
+                                                    {{ $isChecked ? 'checked' : '' }}>
+                                            </td>
+                                        @endif
                                     @endforeach
 
                                     <td class="px-4 py-3 border border-gray-200 text-center font-bold bg-gray-50 hari-kerja-cell">0</td>
@@ -114,7 +127,7 @@
                                             <input type="number" 
                                                 class="w-24 text-right bg-transparent border-0 focus:ring-0 p-0 text-sm font-medium upah-input" 
                                                 data-karyawan="{{ $karyawan->id }}" 
-                                                value="125000">
+                                                value="{{ $jabatan === 'Kupas Kelapa' ? 300 : 125000 }}">
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 border border-gray-200 text-right font-bold text-emerald-700 bg-emerald-50 total-upah-cell">
@@ -252,11 +265,23 @@
 
         rows.forEach(row => {
             const jabatan = row.dataset.jabatan || 'Tidak Diketahui';
-            const checkboxes = row.querySelectorAll('.attendance-cb:checked');
-            const hariKerja = checkboxes.length;
+            const isBorongan = jabatan === 'Kupas Kelapa';
+            
+            let hariKerjaAtauButir = 0;
+            
+            if (isBorongan) {
+                const inputs = row.querySelectorAll('.volume-input');
+                inputs.forEach(input => {
+                    hariKerjaAtauButir += parseInt(input.value) || 0;
+                });
+            } else {
+                const checkboxes = row.querySelectorAll('.attendance-cb:checked');
+                hariKerjaAtauButir = checkboxes.length;
+            }
+            
             const upahInput = row.querySelector('.upah-input');
-            const upahPerHari = parseInt(upahInput.value) || 0;
-            const totalUpah = hariKerja * upahPerHari;
+            const upahPerUnit = parseInt(upahInput.value) || 0;
+            const totalUpah = hariKerjaAtauButir * upahPerUnit;
             const karyawanId = upahInput.dataset.karyawan;
 
             // Initialize summary for this jabatan if not exists
@@ -264,17 +289,17 @@
                 summaryData[jabatan] = { pekerja: 0, hari: 0, upah: 0, slug: row.closest('table').dataset.group };
             }
             summaryData[jabatan].pekerja += 1;
-            summaryData[jabatan].hari += hariKerja;
+            summaryData[jabatan].hari += hariKerjaAtauButir;
             summaryData[jabatan].upah += totalUpah;
 
             // Update row UI
             const hariKerjaCell = row.querySelector('.hari-kerja-cell');
-            if (hariKerjaCell) hariKerjaCell.textContent = hariKerja;
+            if (hariKerjaCell) hariKerjaCell.textContent = hariKerjaAtauButir;
             
             const totalUpahCell = row.querySelector('.total-upah-cell');
             if (totalUpahCell) totalUpahCell.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalUpah);
 
-            grandTotalHari += hariKerja;
+            grandTotalHari += hariKerjaAtauButir;
             grandTotalUpah += totalUpah;
             grandTotalPekerja += 1;
         });
@@ -324,6 +349,11 @@
 
         // Listen for manual upah changes
         document.querySelectorAll('.upah-input').forEach(input => {
+            input.addEventListener('input', calculateTotals);
+        });
+        
+        // Listen for volume changes (Kupas Kelapa)
+        document.querySelectorAll('.volume-input').forEach(input => {
             input.addEventListener('input', calculateTotals);
         });
     });

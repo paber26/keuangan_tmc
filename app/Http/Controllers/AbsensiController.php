@@ -50,7 +50,7 @@ class AbsensiController extends Controller
                 // If it's old data and has no jabatan, fallback to the master data or 'Tidak Diketahui'
                 $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatan ?? 'Tidak Diketahui');
                 
-                $absensiData[$absensi->karyawan_id][$jabatan][$absensi->tanggal] = $absensi->status;
+                $absensiData[$absensi->karyawan_id][$jabatan][$absensi->tanggal] = $absensi;
                 
                 $pairKey = $absensi->karyawan_id . '-' . $jabatan;
                 if (!isset($uniquePairs[$pairKey])) {
@@ -108,14 +108,15 @@ class AbsensiController extends Controller
         foreach ($absensiInput as $karyawanId => $jabatanData) {
             foreach ($jabatanData as $jabatanPekerjaan => $dates) {
                 foreach ($dates as $date => $val) {
-                    if ($val === 'on') {
+                    if ($val === 'on' || (is_numeric($val) && $val > 0)) {
                         Absensi::updateOrCreate([
                             'lokasi' => $request->lokasi,
                             'karyawan_id' => $karyawanId,
                             'jabatan' => $jabatanPekerjaan,
                             'tanggal' => $date,
                         ], [
-                            'status' => 'Hadir'
+                            'status' => 'Hadir',
+                            'volume' => is_numeric($val) ? $val : null
                         ]);
                     }
                 }

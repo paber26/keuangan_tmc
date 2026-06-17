@@ -16,6 +16,7 @@ class Absensi extends Model
         'jabatan',
         'tanggal',
         'status',
+        'volume',
     ];
 
     public function karyawan()
