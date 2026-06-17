@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
+use App\Models\Kebun;
 use Illuminate\Http\Request;
 
 class KaryawanController extends Controller
@@ -21,7 +22,8 @@ class KaryawanController extends Controller
      */
     public function create()
     {
-        return view('karyawan.create');
+        $kebuns = Kebun::all();
+        return view('karyawan.create', compact('kebuns'));
     }
 
     /**
@@ -48,7 +50,8 @@ class KaryawanController extends Controller
      */
     public function edit(Karyawan $karyawan)
     {
-        return view('karyawan.edit', compact('karyawan'));
+        $kebuns = Kebun::all();
+        return view('karyawan.edit', compact('karyawan', 'kebuns'));
     }
 
     /**

@@ -39,7 +39,12 @@
                 </div>
                 <div>
                     <label for="lokasi" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kebun</label>
-                    <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi') }}" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    <select id="lokasi" name="lokasi" class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                        <option value="">-- Pilih Lokasi Kebun --</option>
+                        @foreach($kebuns as $kebun)
+                            <option value="{{ $kebun->nama }}" {{ old('lokasi') == $kebun->nama ? 'selected' : '' }}>{{ $kebun->nama }}</option>
+                        @endforeach
+                    </select>
                     @error('lokasi') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
             </div>
