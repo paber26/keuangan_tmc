@@ -76,6 +76,9 @@
                                         } elseif ($jabatan === 'Pemanjat Kelapa') {
                                             $headerTotal = 'TOTAL<br>POHON';
                                             $headerUpah = 'UPAH<br>PER POHON';
+                                        } elseif ($jabatan === 'Pemetik Cengkeh') {
+                                            $headerTotal = 'TOTAL<br>KG';
+                                            $headerUpah = 'UPAH<br>PER KG';
                                         }
                                     @endphp
                                     <th colspan="{{ count($period) }}" class="px-4 py-2 border border-yellow-300 text-center text-xs tracking-wider">PERIODE</th>
@@ -108,13 +111,20 @@
                                             $isChecked = $status === 'Hadir';
                                         @endphp
                                         
-                                        @if($jabatan === 'Kupas Kelapa' || $jabatan === 'Pemanjat Kelapa')
+                                        @if($jabatan === 'Kupas Kelapa' || $jabatan === 'Pemanjat Kelapa' || $jabatan === 'Pemetik Cengkeh')
+                                            @php
+                                                $step = $jabatan === 'Pemetik Cengkeh' ? '0.01' : '1';
+                                                $formattedVolume = $volume;
+                                                if ($volume !== '' && $volume !== null && $jabatan === 'Pemetik Cengkeh') {
+                                                    $formattedVolume = number_format((float)$volume, 2, '.', '');
+                                                }
+                                            @endphp
                                             <td class="px-1 py-2 border border-gray-200 text-center align-middle">
                                                 <input type="number" 
                                                     class="w-full text-center bg-transparent border border-gray-300 focus:ring-emerald-500 p-1 text-sm rounded volume-input" 
                                                     name="absensi[{{ $karyawan->id }}][{{ $jabatan }}][{{ $dateStr }}]" 
                                                     data-karyawan="{{ $karyawan->id }}"
-                                                    value="{{ $volume }}" min="0">
+                                                    value="{{ $formattedVolume }}" min="0" step="{{ $step }}">
                                             </td>
                                         @else
                                             <td class="px-2 py-3 border border-gray-200 text-center align-middle hover:bg-emerald-50 cursor-pointer" onclick="toggleCheckbox(this)">
@@ -134,6 +144,7 @@
                                             if ($jabatan === 'Kupas Kelapa') $defaultUpah = 200;
                                             elseif ($jabatan === 'Pemanjat Kelapa') $defaultUpah = 15000;
                                             elseif ($jabatan === 'Momaras Mesin') $defaultUpah = 250000;
+                                            elseif ($jabatan === 'Pemetik Cengkeh') $defaultUpah = 14000;
                                         @endphp
                                         <div class="flex items-center justify-between">
                                             <span class="text-gray-500 text-xs">Rp</span>
