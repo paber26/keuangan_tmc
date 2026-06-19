@@ -107,22 +107,15 @@
             }],
             chart: {
                 height: 280,
-                type: 'area',
+                type: 'bar',
                 toolbar: { show: false },
                 fontFamily: 'Inter, sans-serif',
             },
             colors: ['#10b981'],
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.4,
-                    opacityTo: 0.05,
-                    stops: [0, 100]
-                }
+            plotOptions: {
+                bar: { borderRadius: 4, columnWidth: '50%' }
             },
             dataLabels: { enabled: false },
-            stroke: { curve: 'smooth', width: 3 },
             xaxis: {
                 categories: @json($trenMingguLabels),
                 axisBorder: { show: false },
@@ -150,22 +143,15 @@
             }],
             chart: {
                 height: 280,
-                type: 'area',
+                type: 'bar',
                 toolbar: { show: false },
                 fontFamily: 'Inter, sans-serif',
             },
             colors: ['#a855f7'], // Purple color
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.4,
-                    opacityTo: 0.05,
-                    stops: [0, 100]
-                }
+            plotOptions: {
+                bar: { borderRadius: 4, columnWidth: '50%' }
             },
             dataLabels: { enabled: false },
-            stroke: { curve: 'smooth', width: 3 },
             xaxis: {
                 categories: @json($trenMingguLabels),
                 axisBorder: { show: false },
