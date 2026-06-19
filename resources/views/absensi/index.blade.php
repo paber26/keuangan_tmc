@@ -459,6 +459,24 @@
         document.querySelectorAll('.volume-input').forEach(input => {
             input.addEventListener('input', calculateTotals);
         });
+
+        // Toggle behavior for date filters
+        const weekInput = document.querySelector('input[name="week"]');
+        const customStartInput = document.querySelector('input[name="filter_start_date"]');
+        const customEndInput = document.querySelector('input[name="filter_end_date"]');
+        
+        if (weekInput && customStartInput && customEndInput) {
+            weekInput.addEventListener('change', () => {
+                customStartInput.value = '';
+                customEndInput.value = '';
+            });
+            
+            const clearWeek = () => {
+                weekInput.value = '';
+            };
+            customStartInput.addEventListener('change', clearWeek);
+            customEndInput.addEventListener('change', clearWeek);
+        }
     });
 </script>
 @endpush
