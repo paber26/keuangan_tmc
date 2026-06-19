@@ -22,24 +22,30 @@
 
     <!-- Invoice Card -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" id="printable-area">
-        <div class="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between gap-6">
-            <div>
-                <h3 class="text-xl font-bold text-emerald-800 mb-1">TMC Finance</h3>
-                <p class="text-sm text-gray-500">Form Pengajuan Barang & Keperluan</p>
+        <div class="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start gap-6">
+            <div class="flex items-center gap-4">
+                <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-16 h-16 object-contain rounded bg-white p-1 border border-gray-100 shadow-sm">
+                <div>
+                    <h3 class="text-xl font-bold text-emerald-800 mb-1">Perkebunan TMC</h3>
+                    <p class="text-sm text-gray-500">Form Pengajuan Barang & Keperluan</p>
+                </div>
             </div>
-            <div class="text-left md:text-right">
-                <table class="text-sm">
+            <div class="md:ml-auto">
+                <table class="text-sm text-left">
                     <tr>
                         <td class="text-gray-500 pr-4 pb-1">Tanggal</td>
-                        <td class="font-medium text-gray-800 pb-1">: {{ \Carbon\Carbon::parse($pengajuan->tanggal)->format('d F Y') }}</td>
+                        <td class="text-gray-500 pr-2 pb-1">:</td>
+                        <td class="font-medium text-gray-800 pb-1">{{ \Carbon\Carbon::parse($pengajuan->tanggal)->format('d F Y') }}</td>
                     </tr>
                     <tr>
                         <td class="text-gray-500 pr-4 pb-1">Keperluan</td>
-                        <td class="font-medium text-gray-800 pb-1">: {{ $pengajuan->judul_pengajuan }}</td>
+                        <td class="text-gray-500 pr-2 pb-1">:</td>
+                        <td class="font-medium text-gray-800 pb-1">{{ $pengajuan->judul_pengajuan }}</td>
                     </tr>
                     <tr>
                         <td class="text-gray-500 pr-4">Status</td>
-                        <td class="font-medium text-gray-800">: 
+                        <td class="text-gray-500 pr-2">:</td>
+                        <td class="font-medium text-gray-800">
                             <span class="{{ $pengajuan->status == 'Disetujui' ? 'text-emerald-600' : ($pengajuan->status == 'Ditolak' ? 'text-red-600' : 'text-amber-600') }}">
                                 {{ $pengajuan->status }}
                             </span>

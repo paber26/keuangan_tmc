@@ -54,7 +54,7 @@
                         <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-full h-full object-contain">
                     </div>
                     <div>
-                        <h1 class="text-white font-bold text-lg tracking-tight">TMC Finance</h1>
+                        <h1 class="text-white font-bold text-lg tracking-tight">Perkebunan TMC</h1>
                         <p class="text-gray-400 text-[11px] tracking-wide uppercase">Pencatatan Keuangan</p>
                     </div>
                 </a>
