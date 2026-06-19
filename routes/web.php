@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KebunController;
+use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\LaporanController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -13,18 +18,12 @@ Route::middleware('admin.login')->group(function () {
     // Dashboard
     Route::get('/', function() { return view('dashboard'); })->name('dashboard');
 
-    use App\Http\Controllers\KebunController;
-    use App\Http\Controllers\KaryawanController;
-    use App\Http\Controllers\JabatanController;
-
     // Master Data
     Route::resource('kebun', KebunController::class);
     Route::resource('karyawan', KaryawanController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
     Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
-
-    use App\Http\Controllers\AbsensiController;
 
     // Pencatatan Harian
     Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
@@ -37,8 +36,6 @@ Route::middleware('admin.login')->group(function () {
     Route::get('/penggajian/gaji-bulanan', function() { return view('dashboard'); })->name('gaji.index'); // Placeholder
     Route::get('/penggajian/upah-harian', function() { return view('dashboard'); })->name('upah-harian.index'); // Placeholder
     Route::get('/penggajian/upah-borongan', function() { return view('upah-borongan.index'); })->name('upah-borongan.index');
-
-    use App\Http\Controllers\LaporanController;
 
     // Keuangan & Laporan
     Route::get('/transaksi', function() { return view('dashboard'); })->name('transaksi.index'); // Placeholder
