@@ -19,10 +19,7 @@ class DashboardController extends Controller
         // 1. Total Pekerja Aktif
         $totalPekerjaAktif = Karyawan::count();
 
-        // 2. Kehadiran Hari Ini
-        $kehadiranHariIni = Absensi::whereDate('tanggal', $today)->count();
-
-        // 3. Pohon Dipanjat (Bulan Ini)
+        // 2. Pohon Dipanjat (Bulan Ini)
         $pohonBulanIni = Absensi::where('jabatan', 'Pemanjat Kelapa')
             ->whereMonth('tanggal', $thisMonth)
             ->whereYear('tanggal', $thisYear)
@@ -62,7 +59,6 @@ class DashboardController extends Controller
 
         return view('dashboard', compact(
             'totalPekerjaAktif',
-            'kehadiranHariIni',
             'pohonBulanIni',
             'kupasBulanIni',
             'trenPanen',
