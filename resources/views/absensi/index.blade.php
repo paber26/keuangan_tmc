@@ -19,12 +19,8 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Dari Tanggal</label>
-                <input type="date" name="start_date" value="{{ $startDate }}" class="w-40 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Sampai Tanggal</label>
-                <input type="date" name="end_date" value="{{ $endDate }}" class="w-40 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Minggu</label>
+                <input type="week" name="week" value="{{ $selectedWeek }}" class="w-56 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" required>
             </div>
             <button type="submit" class="px-6 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition shadow-sm">
                 Tampilkan

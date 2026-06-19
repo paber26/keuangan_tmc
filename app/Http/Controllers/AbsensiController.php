@@ -19,11 +19,20 @@ class AbsensiController extends Controller
         
         $selectedLokasi = $request->get('lokasi', $lokasiList->first());
         
-        // Default to current week (Monday to Saturday) if no date provided
-        $now = Carbon::now();
-        $startDate = $request->get('start_date', $now->startOfWeek()->format('Y-m-d'));
-        $endDate = $request->get('end_date', $now->endOfWeek()->subDay()->format('Y-m-d')); // Mon to Sat
-
+        // Weekly mechanism (Monday to Saturday)
+        if ($request->has('week') && preg_match('/^(\d{4})-W(\d{2})$/', $request->get('week'), $matches)) {
+            $year = $matches[1];
+            $week = $matches[2];
+            $now = Carbon::now()->setISODate($year, $week);
+            $startDate = $now->startOfWeek()->format('Y-m-d');
+            $endDate = $now->endOfWeek()->subDay()->format('Y-m-d'); // Monday to Saturday
+            $selectedWeek = $request->get('week');
+        } else {
+            $now = Carbon::now();
+            $startDate = $now->startOfWeek()->format('Y-m-d');
+            $endDate = $now->endOfWeek()->subDay()->format('Y-m-d'); // Monday to Saturday
+            $selectedWeek = $now->format('Y-\WW'); // e.g., 2026-W25
+        }
         $karyawans = collect();
         $period = [];
         $absensiData = [];
@@ -83,6 +92,7 @@ class AbsensiController extends Controller
             'selectedLokasi',
             'startDate',
             'endDate',
+            'selectedWeek',
             'karyawans',
             'allKaryawans',
             'period',
