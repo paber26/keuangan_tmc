@@ -43,10 +43,23 @@ class KaryawanSeeder extends Seeder
         ];
 
         foreach ($karyawans as $data) {
-            Karyawan::updateOrCreate(
-                ['nama' => $data['nama']], // Check if this name already exists
-                $data // If not, create it with all data. If yes, update it.
+            $jabatanName = $data['jabatan'];
+            $tipeGaji = $data['tipe_gaji'];
+            
+            unset($data['jabatan']);
+            unset($data['tipe_gaji']);
+
+            $karyawan = Karyawan::updateOrCreate(
+                ['nama' => $data['nama']],
+                $data
             );
+            
+            $jabatan = \App\Models\Jabatan::firstOrCreate(
+                ['nama' => $jabatanName],
+                ['tipe_gaji' => $tipeGaji]
+            );
+            
+            $karyawan->jabatans()->syncWithoutDetaching([$jabatan->id]);
         }
     }
 }
