@@ -29,12 +29,12 @@
     <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100 flex items-center justify-between shadow-sm">
         <div>
             <h3 class="text-lg font-bold text-emerald-800">
-                Data Akumulasi (Lifetime)
+                Data Akumulasi
             </h3>
             <p class="text-sm text-emerald-600 mt-1">Total pohon kelapa yang dipanjat di <span class="font-bold">{{ $selectedLokasi == 'Semua Kebun' ? 'seluruh lokasi kebun' : 'kebun ' . $selectedLokasi }}</span>.</p>
         </div>
         <div class="text-right">
-            <p class="text-sm font-semibold text-emerald-600 uppercase tracking-wider">Grand Total Pohon</p>
+            <p class="text-sm font-semibold text-emerald-600 uppercase tracking-wider">Total Pohon</p>
             <p class="text-4xl font-black text-emerald-700 mt-1">{{ number_format($grandTotalPohon, 0, ',', '.') }}</p>
         </div>
     </div>
