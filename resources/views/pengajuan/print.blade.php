@@ -28,7 +28,7 @@
             <div class="flex items-center gap-4">
                 <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-16 h-16 object-contain rounded bg-white p-1 border border-gray-100 shadow-sm">
                 <div>
-                    <h3 class="text-xl font-bold text-emerald-800 mb-1">Perkebunan TMC</h3>
+                    <h3 class="text-xl font-bold text-emerald-800 mb-1">PT. TRI MUSTIKA COCOMINAESA</h3>
                     <p class="text-sm text-gray-500">Form Pengajuan Barang & Keperluan</p>
                 </div>
             </div>
