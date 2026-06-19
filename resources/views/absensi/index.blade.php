@@ -115,8 +115,12 @@
                                             @php
                                                 $step = $jabatan === 'Pemetik Cengkeh' ? '0.01' : '1';
                                                 $formattedVolume = $volume;
-                                                if ($volume !== '' && $volume !== null && $jabatan === 'Pemetik Cengkeh') {
-                                                    $formattedVolume = number_format((float)$volume, 2, '.', '');
+                                                if ($volume !== '' && $volume !== null) {
+                                                    if ($jabatan === 'Pemetik Cengkeh') {
+                                                        $formattedVolume = number_format((float)$volume, 2, '.', '');
+                                                    } else {
+                                                        $formattedVolume = (int)$volume;
+                                                    }
                                                 }
                                             @endphp
                                             <td class="px-1 py-2 border border-gray-200 text-center align-middle">
@@ -349,14 +353,14 @@
 
         rows.forEach(row => {
             const jabatan = row.dataset.jabatan || 'Tidak Diketahui';
-            const isBorongan = jabatan === 'Kupas Kelapa' || jabatan === 'Pemanjat Kelapa';
+            const isBorongan = jabatan === 'Kupas Kelapa' || jabatan === 'Pemanjat Kelapa' || jabatan === 'Pemetik Cengkeh';
             
             let hariKerjaAtauButir = 0;
             
             if (isBorongan) {
                 const inputs = row.querySelectorAll('.volume-input');
                 inputs.forEach(input => {
-                    hariKerjaAtauButir += parseInt(input.value) || 0;
+                    hariKerjaAtauButir += parseFloat(input.value) || 0;
                 });
             } else {
                 const checkboxes = row.querySelectorAll('.attendance-cb:checked');
@@ -378,7 +382,9 @@
 
             // Update row UI
             const hariKerjaCell = row.querySelector('.hari-kerja-cell');
-            if (hariKerjaCell) hariKerjaCell.textContent = hariKerjaAtauButir;
+            if (hariKerjaCell) {
+                hariKerjaCell.textContent = Number.isInteger(hariKerjaAtauButir) ? hariKerjaAtauButir : hariKerjaAtauButir.toFixed(2);
+            }
             
             const totalUpahCell = row.querySelector('.total-upah-cell');
             if (totalUpahCell) totalUpahCell.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(totalUpah);
@@ -392,7 +398,9 @@
         for (const [jabatan, data] of Object.entries(summaryData)) {
             const slug = data.slug;
             const subHariEl = document.getElementById(`subtotal_hari_${slug}`);
-            if (subHariEl) subHariEl.textContent = data.hari;
+            if (subHariEl) {
+                subHariEl.textContent = Number.isInteger(data.hari) ? data.hari : data.hari.toFixed(2);
+            }
             
             const subUpahEl = document.getElementById(`subtotal_upah_${slug}`);
             if (subUpahEl) subUpahEl.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(data.upah);
