@@ -47,11 +47,11 @@
 <!-- Charts -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Panen 6 Bulan Terakhir</h3>
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Panen 6 Minggu Terakhir</h3>
         <div id="harvestChart" class="w-full h-72"></div>
     </div>
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Kupas 6 Bulan Terakhir</h3>
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Kupas 6 Minggu Terakhir</h3>
         <div id="kupasChart" class="w-full h-72"></div>
     </div>
 </div>
@@ -124,9 +124,12 @@
             dataLabels: { enabled: false },
             stroke: { curve: 'smooth', width: 3 },
             xaxis: {
-                categories: @json($trenBulanLabels),
+                categories: @json($trenMingguLabels),
                 axisBorder: { show: false },
                 axisTicks: { show: false },
+                labels: {
+                    style: { fontSize: '10px' }
+                }
             },
             yaxis: {
                 labels: { formatter: function (val) { return val.toLocaleString('id-ID'); } }
@@ -164,9 +167,12 @@
             dataLabels: { enabled: false },
             stroke: { curve: 'smooth', width: 3 },
             xaxis: {
-                categories: @json($trenBulanLabels),
+                categories: @json($trenMingguLabels),
                 axisBorder: { show: false },
                 axisTicks: { show: false },
+                labels: {
+                    style: { fontSize: '10px' }
+                }
             },
             yaxis: {
                 labels: { formatter: function (val) { return val.toLocaleString('id-ID'); } }

@@ -31,24 +31,24 @@ class DashboardController extends Controller
             ->whereYear('tanggal', $thisYear)
             ->sum('volume');
 
-        // Tren Panen & Kupas (6 Bulan Terakhir)
+        // Tren Panen & Kupas (6 Minggu Terakhir)
         $trenPanen = [];
         $trenKupas = [];
-        $trenBulanLabels = [];
+        $trenMingguLabels = [];
         for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
+            $startOfWeek = Carbon::now()->subWeeks($i)->startOfWeek();
+            $endOfWeek = Carbon::now()->subWeeks($i)->endOfWeek();
+
             $sumPanen = Absensi::where('jabatan', 'Pemanjat Kelapa')
-                ->whereMonth('tanggal', $month->month)
-                ->whereYear('tanggal', $month->year)
+                ->whereBetween('tanggal', [$startOfWeek->format('Y-m-d'), $endOfWeek->format('Y-m-d')])
                 ->sum('volume');
             $sumKupas = Absensi::where('jabatan', 'Kupas Kelapa')
-                ->whereMonth('tanggal', $month->month)
-                ->whereYear('tanggal', $month->year)
+                ->whereBetween('tanggal', [$startOfWeek->format('Y-m-d'), $endOfWeek->format('Y-m-d')])
                 ->sum('volume');
                 
             $trenPanen[] = $sumPanen;
             $trenKupas[] = $sumKupas;
-            $trenBulanLabels[] = $month->translatedFormat('M y');
+            $trenMingguLabels[] = $startOfWeek->format('d M') . ' - ' . $endOfWeek->format('d M');
         }
 
         // Aktivitas Terbaru
@@ -63,7 +63,7 @@ class DashboardController extends Controller
             'kupasBulanIni',
             'trenPanen',
             'trenKupas',
-            'trenBulanLabels',
+            'trenMingguLabels',
             'aktivitasTerbaru'
         ));
     }
