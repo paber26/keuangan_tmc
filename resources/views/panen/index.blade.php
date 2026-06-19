@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page-title', 'Total Panjat Pohon')
-@section('page-subtitle', 'Rekapitulasi Total Pohon Kelapa yang Dipanjat Karyawan (Semua Periode)')
+@section('page-subtitle', 'Rekapitulasi Total Pohon Kelapa yang Dipanjat Karyawan')
 
 @section('content')
 <div class="space-y-6">
@@ -19,6 +19,11 @@
                 </select>
             </div>
             
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Bulan</label>
+                <input type="month" name="month" value="{{ $selectedMonth }}" class="w-48 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" onchange="this.form.submit()">
+            </div>
+            
             <button type="submit" class="px-6 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition shadow-sm">
                 Segarkan
             </button>
@@ -29,7 +34,11 @@
     <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100 flex items-center justify-between shadow-sm">
         <div>
             <h3 class="text-lg font-bold text-emerald-800">
-                Data Akumulasi
+                @if($selectedMonth)
+                    Bulan: {{ \Carbon\Carbon::parse($selectedMonth.'-01')->translatedFormat('F Y') }}
+                @else
+                    Data Akumulasi (Semua Periode)
+                @endif
             </h3>
             <p class="text-sm text-emerald-600 mt-1">Total pohon kelapa yang dipanjat di <span class="font-bold">{{ $selectedLokasi == 'Semua Kebun' ? 'seluruh lokasi kebun' : 'kebun ' . $selectedLokasi }}</span>.</p>
         </div>
