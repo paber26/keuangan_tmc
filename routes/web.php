@@ -10,6 +10,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PanenController;
 use App\Http\Controllers\KupasController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PengajuanController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -25,6 +26,7 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('kebun', KebunController::class);
     Route::resource('karyawan', KaryawanController::class);
     Route::resource('jabatan', JabatanController::class);
+    Route::resource('pengajuan', PengajuanController::class);
     Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
     Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 
