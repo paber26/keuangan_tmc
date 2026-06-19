@@ -142,7 +142,7 @@
                                         @php
                                             $defaultUpah = 125000;
                                             if ($jabatan === 'Kupas Kelapa') $defaultUpah = 200;
-                                            elseif ($jabatan === 'Pemanjat Kelapa') $defaultUpah = 15000;
+                                            elseif ($jabatan === 'Pemanjat Kelapa') $defaultUpah = 10000;
                                             elseif ($jabatan === 'Momaras Mesin') $defaultUpah = 250000;
                                             elseif ($jabatan === 'Pemetik Cengkeh') $defaultUpah = 14000;
                                         @endphp
