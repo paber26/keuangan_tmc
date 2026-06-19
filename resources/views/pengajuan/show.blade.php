@@ -103,6 +103,10 @@
 
 <style>
 @media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
     body * {
         visibility: hidden;
     }
