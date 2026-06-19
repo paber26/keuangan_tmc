@@ -18,20 +18,27 @@
                     @endforeach
                 </select>
             </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Minggu (Default)</label>
+            <div id="week-container">
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Minggu</label>
                 <input type="week" name="week" value="{{ $selectedWeek }}" class="w-52 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
             </div>
-            <div class="flex items-center gap-2 pb-2">
-                <span class="text-sm font-bold text-gray-400">ATAU</span>
+            
+            <div id="custom-date-container" class="{{ ($filterStartDate || $filterEndDate) ? 'flex' : 'hidden' }} flex-wrap items-end gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Tgl Mulai (Kustom)</label>
+                    <input type="date" name="filter_start_date" value="{{ $filterStartDate }}" class="w-36 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Tgl Akhir (Kustom)</label>
+                    <input type="date" name="filter_end_date" value="{{ $filterEndDate }}" class="w-36 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                </div>
             </div>
-            <div>
-                <label class="block text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Tgl Mulai (Kustom)</label>
-                <input type="date" name="filter_start_date" value="{{ $filterStartDate }}" class="w-36 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Tgl Akhir (Kustom)</label>
-                <input type="date" name="filter_end_date" value="{{ $filterEndDate }}" class="w-36 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+
+            <div class="flex items-center pb-2 ml-2">
+                <label class="flex items-center cursor-pointer gap-2" title="Gunakan untuk pembayaran lebih dari 6 hari">
+                    <input type="checkbox" id="toggle-custom-date" class="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500" {{ ($filterStartDate || $filterEndDate) ? 'checked' : '' }}>
+                    <span class="text-sm font-medium text-gray-600">Gunakan Tanggal Kustom</span>
+                </label>
             </div>
             <button type="submit" class="px-6 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition shadow-sm">
                 Tampilkan
@@ -464,18 +471,34 @@
         const weekInput = document.querySelector('input[name="week"]');
         const customStartInput = document.querySelector('input[name="filter_start_date"]');
         const customEndInput = document.querySelector('input[name="filter_end_date"]');
+        const toggleCustom = document.getElementById('toggle-custom-date');
+        const weekContainer = document.getElementById('week-container');
+        const customContainer = document.getElementById('custom-date-container');
         
-        if (weekInput && customStartInput && customEndInput) {
-            weekInput.addEventListener('change', () => {
-                customStartInput.value = '';
-                customEndInput.value = '';
-            });
-            
-            const clearWeek = () => {
-                weekInput.value = '';
+        if (toggleCustom && weekContainer && customContainer) {
+            const updateUI = () => {
+                if (toggleCustom.checked) {
+                    weekContainer.classList.add('hidden');
+                    customContainer.classList.remove('hidden');
+                    customContainer.classList.add('flex');
+                    weekInput.value = ''; // Clear week to prioritize custom dates
+                } else {
+                    weekContainer.classList.remove('hidden');
+                    customContainer.classList.add('hidden');
+                    customContainer.classList.remove('flex');
+                    customStartInput.value = ''; // Clear custom dates
+                    customEndInput.value = '';
+                }
             };
-            customStartInput.addEventListener('change', clearWeek);
-            customEndInput.addEventListener('change', clearWeek);
+            
+            toggleCustom.addEventListener('change', updateUI);
+            
+            // Initial UI Sync just in case
+            if (customStartInput.value || customEndInput.value) {
+                weekContainer.classList.add('hidden');
+            } else {
+                customContainer.classList.add('hidden');
+            }
         }
     });
 </script>
