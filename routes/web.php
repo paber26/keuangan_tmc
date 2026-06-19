@@ -27,6 +27,7 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('karyawan', KaryawanController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::resource('pengajuan', PengajuanController::class);
+    Route::patch('pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
     Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
     Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 

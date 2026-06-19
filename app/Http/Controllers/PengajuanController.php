@@ -90,6 +90,12 @@ class PengajuanController extends Controller
         //
     }
 
+    public function approve(Pengajuan $pengajuan)
+    {
+        $pengajuan->update(['status' => 'Disetujui']);
+        return back()->with('success', 'Pengajuan berhasil disetujui!');
+    }
+
     public function destroy(Pengajuan $pengajuan)
     {
         $pengajuan->delete();
