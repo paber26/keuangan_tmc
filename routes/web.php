@@ -1,49 +1,47 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes (DUMMY UI MODE)
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\AuthController;
 
 // Auth Routes
-Route::get('/login', function() { return view('auth.login'); })->name('login');
-Route::post('/login', function() { return redirect()->route('dashboard')->with('success', 'Berhasil login!'); });
-Route::post('/logout', function() { return redirect()->route('login'); })->name('logout');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard
-Route::get('/', function() { return view('dashboard'); })->name('dashboard');
+// Group protected routes
+Route::middleware('admin.login')->group(function () {
+    // Dashboard
+    Route::get('/', function() { return view('dashboard'); })->name('dashboard');
 
-use App\Http\Controllers\KebunController;
-use App\Http\Controllers\KaryawanController;
-use App\Http\Controllers\JabatanController;
+    use App\Http\Controllers\KebunController;
+    use App\Http\Controllers\KaryawanController;
+    use App\Http\Controllers\JabatanController;
 
-// Master Data
-Route::resource('kebun', KebunController::class);
-Route::resource('karyawan', KaryawanController::class);
-Route::resource('jabatan', JabatanController::class);
-Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
-Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
+    // Master Data
+    Route::resource('kebun', KebunController::class);
+    Route::resource('karyawan', KaryawanController::class);
+    Route::resource('jabatan', JabatanController::class);
+    Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
+    Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 
-use App\Http\Controllers\AbsensiController;
+    use App\Http\Controllers\AbsensiController;
 
-// Pencatatan Harian
-Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
-Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
-Route::post('/absensi/add', [AbsensiController::class, 'addKaryawan'])->name('absensi.add');
-Route::post('/absensi/remove', [AbsensiController::class, 'removeKaryawan'])->name('absensi.remove');
-Route::get('/panen', function() { return view('dashboard'); })->name('panen.index'); // Placeholder
+    // Pencatatan Harian
+    Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+    Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
+    Route::post('/absensi/add', [AbsensiController::class, 'addKaryawan'])->name('absensi.add');
+    Route::post('/absensi/remove', [AbsensiController::class, 'removeKaryawan'])->name('absensi.remove');
+    Route::get('/panen', function() { return view('dashboard'); })->name('panen.index'); // Placeholder
 
-// Penggajian
-Route::get('/penggajian/gaji-bulanan', function() { return view('dashboard'); })->name('gaji.index'); // Placeholder
-Route::get('/penggajian/upah-harian', function() { return view('dashboard'); })->name('upah-harian.index'); // Placeholder
-Route::get('/penggajian/upah-borongan', function() { return view('upah-borongan.index'); })->name('upah-borongan.index');
+    // Penggajian
+    Route::get('/penggajian/gaji-bulanan', function() { return view('dashboard'); })->name('gaji.index'); // Placeholder
+    Route::get('/penggajian/upah-harian', function() { return view('dashboard'); })->name('upah-harian.index'); // Placeholder
+    Route::get('/penggajian/upah-borongan', function() { return view('upah-borongan.index'); })->name('upah-borongan.index');
 
-use App\Http\Controllers\LaporanController;
+    use App\Http\Controllers\LaporanController;
 
-// Keuangan & Laporan
-Route::get('/transaksi', function() { return view('dashboard'); })->name('transaksi.index'); // Placeholder
-Route::get('/laporan/rekap-mingguan', [LaporanController::class, 'index'])->name('laporan.rekap-mingguan');
-Route::get('/laporan/rekap-mingguan/word', [LaporanController::class, 'exportWord'])->name('laporan.rekap-mingguan.word');
+    // Keuangan & Laporan
+    Route::get('/transaksi', function() { return view('dashboard'); })->name('transaksi.index'); // Placeholder
+    Route::get('/laporan/rekap-mingguan', [LaporanController::class, 'index'])->name('laporan.rekap-mingguan');
+    Route::get('/laporan/rekap-mingguan/word', [LaporanController::class, 'exportWord'])->name('laporan.rekap-mingguan.word');
+});
