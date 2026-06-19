@@ -85,6 +85,12 @@ class PengajuanController extends Controller
         return redirect()->route('pengajuan.index')->with('error', 'Fitur edit belum tersedia.');
     }
 
+    public function print(Pengajuan $pengajuan)
+    {
+        $pengajuan->load('items');
+        return view('pengajuan.print', compact('pengajuan'));
+    }
+
     public function update(Request $request, Pengajuan $pengajuan)
     {
         //

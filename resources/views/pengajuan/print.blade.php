@@ -1,27 +1,29 @@
-@extends('layouts.app')
-@section('title', 'Detail Pengajuan Barang')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Invoice - {{ $pengajuan->judul_pengajuan }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    </style>
+</head>
+<body class="bg-white p-8 max-w-4xl mx-auto" onload="window.print()">
 
-@section('content')
-<div class="max-w-5xl mx-auto pb-10">
-    <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-            <a href="{{ route('pengajuan.index') }}" class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors mb-4">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali ke Daftar
-            </a>
-            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Invoice Pengajuan</h2>
-            <p class="text-sm text-gray-500 mt-1">Ref: INV-{{ str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) }}</p>
-        </div>
-        <div class="flex gap-3">
-            <a href="{{ route('pengajuan.print', $pengajuan->id) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                Cetak / Simpan PDF
-            </a>
-        </div>
-    </div>
-
-    <!-- Invoice Card -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" id="printable-area">
+    <div class="border border-gray-100 rounded-xl">
         <div class="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start gap-6">
             <div class="flex items-center gap-4">
                 <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-16 h-16 object-contain rounded bg-white p-1 border border-gray-100 shadow-sm">
@@ -99,28 +101,6 @@
             </div>
         </div>
     </div>
-</div>
 
-<style>
-@media print {
-    body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-    body * {
-        visibility: hidden;
-    }
-    #printable-area, #printable-area * {
-        visibility: visible;
-    }
-    #printable-area {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        border: none;
-        box-shadow: none;
-    }
-}
-</style>
-@endsection
+</body>
+</html>
