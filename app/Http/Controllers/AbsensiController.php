@@ -18,28 +18,41 @@ class AbsensiController extends Controller
         $masterJabatans = Jabatan::orderBy('nama')->get();
         
         // Fitur "Remember Last Selection" menggunakan Session
-        if (!$request->has('lokasi') && !$request->has('week')) {
-            if (session()->has('absensi_last_lokasi') || session()->has('absensi_last_week')) {
+        if (!$request->has('lokasi') && !$request->has('week') && !$request->has('filter_start_date') && !$request->has('filter_end_date')) {
+            if (session()->has('absensi_last_lokasi') || session()->has('absensi_last_week') || session()->has('absensi_last_start')) {
                 return redirect()->route('absensi.index', [
                     'lokasi' => session('absensi_last_lokasi', $lokasiList->first()),
-                    'week' => session('absensi_last_week', Carbon::now()->format('Y-\WW'))
+                    'week' => session('absensi_last_week'),
+                    'filter_start_date' => session('absensi_last_start'),
+                    'filter_end_date' => session('absensi_last_end'),
                 ]);
             }
         }
 
         if ($request->has('lokasi')) session(['absensi_last_lokasi' => $request->lokasi]);
-        if ($request->has('week')) session(['absensi_last_week' => $request->week]);
+        if ($request->has('week') || $request->has('filter_start_date')) {
+            // Update session base on user's active filter
+            session(['absensi_last_week' => $request->week]);
+            session(['absensi_last_start' => $request->filter_start_date]);
+            session(['absensi_last_end' => $request->filter_end_date]);
+        }
 
         $selectedLokasi = $request->get('lokasi', $lokasiList->first());
-        
-        // Weekly mechanism (Monday to Saturday)
-        if ($request->has('week') && preg_match('/^(\d{4})-W(\d{2})$/', $request->get('week'), $matches)) {
+        $selectedWeek = $request->get('week');
+        $filterStartDate = $request->get('filter_start_date');
+        $filterEndDate = $request->get('filter_end_date');
+
+        // Logic for custom date range OR weekly mechanism
+        if (!empty($filterStartDate) && !empty($filterEndDate)) {
+            $startDate = $filterStartDate;
+            $endDate = $filterEndDate;
+            $selectedWeek = null; // Clear week visually if custom range is active
+        } elseif ($selectedWeek && preg_match('/^(\d{4})-W(\d{2})$/', $selectedWeek, $matches)) {
             $year = $matches[1];
             $week = $matches[2];
             $now = Carbon::now()->setISODate($year, $week);
             $startDate = $now->startOfWeek()->format('Y-m-d');
             $endDate = $now->endOfWeek()->subDay()->format('Y-m-d'); // Monday to Saturday
-            $selectedWeek = $request->get('week');
         } else {
             $now = Carbon::now();
             $startDate = $now->startOfWeek()->format('Y-m-d');
@@ -106,6 +119,8 @@ class AbsensiController extends Controller
             'startDate',
             'endDate',
             'selectedWeek',
+            'filterStartDate',
+            'filterEndDate',
             'karyawans',
             'allKaryawans',
             'period',

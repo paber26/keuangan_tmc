@@ -19,8 +19,19 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Minggu</label>
-                <input type="week" name="week" value="{{ $selectedWeek }}" class="w-56 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" required>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Minggu (Default)</label>
+                <input type="week" name="week" value="{{ $selectedWeek }}" class="w-52 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            </div>
+            <div class="flex items-center gap-2 pb-2">
+                <span class="text-sm font-bold text-gray-400">ATAU</span>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Tgl Mulai (Kustom)</label>
+                <input type="date" name="filter_start_date" value="{{ $filterStartDate }}" class="w-36 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Tgl Akhir (Kustom)</label>
+                <input type="date" name="filter_end_date" value="{{ $filterEndDate }}" class="w-36 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
             </div>
             <button type="submit" class="px-6 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition shadow-sm">
                 Tampilkan
