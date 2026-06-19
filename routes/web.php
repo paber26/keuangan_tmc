@@ -9,6 +9,7 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PanenController;
 use App\Http\Controllers\KupasController;
+use App\Http\Controllers\DashboardController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -18,7 +19,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Group protected routes
 Route::middleware('admin.login')->group(function () {
     // Dashboard
-    Route::get('/', function() { return view('dashboard'); })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Master Data
     Route::resource('kebun', KebunController::class);
