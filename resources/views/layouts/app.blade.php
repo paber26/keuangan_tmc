@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'TMC') — Sistem Pencatatan Keuangan Perkebunan</title>
     <meta name="description" content="Sistem pencatatan keuangan perkebunan untuk supervisor — panen, gaji, upah harian & borongan">
-    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('logo.jpg') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -51,14 +51,12 @@
             <div class="px-6 py-5 border-b border-white/10">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
                     <div class="w-12 h-12 bg-white rounded flex items-center justify-center p-1 shadow-lg shadow-black/20">
-                        <img src="{{ asset('logo.png') }}" alt="TMC Logo" class="w-full h-full object-contain">
+                        <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <h1 class="text-white font-bold text-lg tracking-tight">TMC Finance</h1>
                         <p class="text-gray-400 text-[11px] tracking-wide uppercase">Pencatatan Keuangan</p>
                     </div>
-                </a>
-            </div>
                 </a>
             </div>
 
