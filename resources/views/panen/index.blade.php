@@ -12,6 +12,7 @@
             <div>
                 <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pilih Lokasi Kebun</label>
                 <select name="lokasi" class="w-64 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" onchange="this.form.submit()">
+                    <option value="Semua Kebun" {{ $selectedLokasi == 'Semua Kebun' ? 'selected' : '' }}>-- Semua Kebun (Total Keseluruhan) --</option>
                     @foreach($lokasiList as $lokasi)
                         <option value="{{ $lokasi }}" {{ $selectedLokasi == $lokasi ? 'selected' : '' }}>{{ $lokasi }}</option>
                     @endforeach
@@ -30,7 +31,7 @@
             <h3 class="text-lg font-bold text-emerald-800">
                 Data Akumulasi (Lifetime)
             </h3>
-            <p class="text-sm text-emerald-600 mt-1">Total pohon kelapa yang dipanjat di kebun <span class="font-bold">{{ $selectedLokasi }}</span>.</p>
+            <p class="text-sm text-emerald-600 mt-1">Total pohon kelapa yang dipanjat di <span class="font-bold">{{ $selectedLokasi == 'Semua Kebun' ? 'seluruh lokasi kebun' : 'kebun ' . $selectedLokasi }}</span>.</p>
         </div>
         <div class="text-right">
             <p class="text-sm font-semibold text-emerald-600 uppercase tracking-wider">Grand Total Pohon</p>

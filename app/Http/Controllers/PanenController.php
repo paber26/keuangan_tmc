@@ -16,19 +16,22 @@ class PanenController extends Controller
         if (!$request->has('lokasi')) {
             if (session()->has('panen_last_lokasi')) {
                 return redirect()->route('panen.index', [
-                    'lokasi' => session('panen_last_lokasi', $lokasiList->first()),
+                    'lokasi' => session('panen_last_lokasi', 'Semua Kebun'),
                 ]);
             }
         }
 
         if ($request->has('lokasi')) session(['panen_last_lokasi' => $request->lokasi]);
 
-        $selectedLokasi = $request->get('lokasi', $lokasiList->first());
+        $selectedLokasi = $request->get('lokasi', 'Semua Kebun');
 
-        $absensis = Absensi::with('karyawan')
-            ->where('lokasi', $selectedLokasi)
-            ->where('jabatan', 'Pemanjat Kelapa')
-            ->get();
+        $query = Absensi::with('karyawan')->where('jabatan', 'Pemanjat Kelapa');
+        
+        if ($selectedLokasi !== 'Semua Kebun') {
+            $query->where('lokasi', $selectedLokasi);
+        }
+
+        $absensis = $query->get();
 
         $dataRekap = [];
         $grandTotalPohon = 0;
