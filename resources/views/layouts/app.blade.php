@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'KebunFinance') — Sistem Pencatatan Keuangan Perkebunan</title>
+    <title>@yield('title', 'TMC') — Sistem Pencatatan Keuangan Perkebunan</title>
     <meta name="description" content="Sistem pencatatan keuangan perkebunan untuk supervisor — panen, gaji, upah harian & borongan">
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -49,15 +50,15 @@
             {{-- Logo --}}
             <div class="px-6 py-5 border-b border-white/10">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
+                    <div class="w-12 h-12 bg-white rounded flex items-center justify-center p-1 shadow-lg shadow-black/20">
+                        <img src="{{ asset('logo.png') }}" alt="TMC Logo" class="w-full h-full object-contain">
                     </div>
                     <div>
-                        <h1 class="text-white font-bold text-lg tracking-tight">KebunFinance</h1>
+                        <h1 class="text-white font-bold text-lg tracking-tight">TMC Finance</h1>
                         <p class="text-gray-400 text-[11px] tracking-wide uppercase">Pencatatan Keuangan</p>
                     </div>
+                </a>
+            </div>
                 </a>
             </div>
 
