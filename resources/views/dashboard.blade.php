@@ -57,14 +57,14 @@
 </div>
 
 <!-- Charts -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Panen 6 Bulan Terakhir</h3>
         <div id="harvestChart" class="w-full h-72"></div>
     </div>
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h3 class="text-lg font-bold text-gray-800 mb-4">Komposisi Pekerja (Bulan Ini)</h3>
-        <div id="jobChart" class="w-full h-72 flex justify-center items-center"></div>
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Kupas 6 Bulan Terakhir</h3>
+        <div id="kupasChart" class="w-full h-72"></div>
     </div>
 </div>
 
@@ -151,36 +151,45 @@
         var harvestChart = new ApexCharts(document.querySelector("#harvestChart"), harvestOptions);
         harvestChart.render();
 
-        // Donut Chart
-        var jobOptions = {
-            series: @json($komposisiData),
-            labels: @json($komposisiLabels),
+        // Area Chart Kupas
+        var kupasOptions = {
+            series: [{
+                name: 'Kupas (butir)',
+                data: @json($trenKupas)
+            }],
             chart: {
-                type: 'donut',
                 height: 280,
+                type: 'area',
+                toolbar: { show: false },
                 fontFamily: 'Inter, sans-serif',
             },
-            colors: ['#3b82f6', '#f59e0b', '#8b5cf6', '#64748b', '#10b981', '#ec4899'],
-            plotOptions: {
-                pie: {
-                    donut: { size: '65%' }
+            colors: ['#a855f7'], // Purple color
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.4,
+                    opacityTo: 0.05,
+                    stops: [0, 100]
                 }
             },
             dataLabels: { enabled: false },
-            legend: {
-                position: 'bottom',
-                markers: { radius: 12 }
+            stroke: { curve: 'smooth', width: 3 },
+            xaxis: {
+                categories: @json($trenBulanLabels),
+                axisBorder: { show: false },
+                axisTicks: { show: false },
             },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val.toLocaleString('id-ID') + " absensi";
-                    }
-                }
+            yaxis: {
+                labels: { formatter: function (val) { return val.toLocaleString('id-ID'); } }
+            },
+            grid: {
+                borderColor: '#f1f5f9',
+                strokeDashArray: 4,
             }
         };
-        var jobChart = new ApexCharts(document.querySelector("#jobChart"), jobOptions);
-        jobChart.render();
+        var kupasChart = new ApexCharts(document.querySelector("#kupasChart"), kupasOptions);
+        kupasChart.render();
     });
 </script>
 @endpush

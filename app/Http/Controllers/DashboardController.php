@@ -34,28 +34,25 @@ class DashboardController extends Controller
             ->whereYear('tanggal', $thisYear)
             ->sum('volume');
 
-        // Tren Panen (6 Bulan Terakhir)
+        // Tren Panen & Kupas (6 Bulan Terakhir)
         $trenPanen = [];
+        $trenKupas = [];
         $trenBulanLabels = [];
         for ($i = 5; $i >= 0; $i--) {
             $month = Carbon::now()->subMonths($i);
-            $sum = Absensi::where('jabatan', 'Pemanjat Kelapa')
+            $sumPanen = Absensi::where('jabatan', 'Pemanjat Kelapa')
                 ->whereMonth('tanggal', $month->month)
                 ->whereYear('tanggal', $month->year)
                 ->sum('volume');
-            $trenPanen[] = $sum;
+            $sumKupas = Absensi::where('jabatan', 'Kupas Kelapa')
+                ->whereMonth('tanggal', $month->month)
+                ->whereYear('tanggal', $month->year)
+                ->sum('volume');
+                
+            $trenPanen[] = $sumPanen;
+            $trenKupas[] = $sumKupas;
             $trenBulanLabels[] = $month->translatedFormat('M y');
         }
-
-        // Komposisi Pekerja
-        $komposisi = Absensi::select('jabatan', DB::raw('count(*) as total'))
-            ->whereMonth('tanggal', $thisMonth)
-            ->whereYear('tanggal', $thisYear)
-            ->groupBy('jabatan')
-            ->get();
-            
-        $komposisiLabels = $komposisi->pluck('jabatan')->toArray();
-        $komposisiData = $komposisi->pluck('total')->toArray();
 
         // Aktivitas Terbaru
         $aktivitasTerbaru = Absensi::with('karyawan')
@@ -69,9 +66,8 @@ class DashboardController extends Controller
             'pohonBulanIni',
             'kupasBulanIni',
             'trenPanen',
+            'trenKupas',
             'trenBulanLabels',
-            'komposisiLabels',
-            'komposisiData',
             'aktivitasTerbaru'
         ));
     }
