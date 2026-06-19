@@ -43,16 +43,34 @@
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-4">{{ $index + 1 }}</td>
                     <td class="px-6 py-4 font-bold text-gray-800">{{ $karyawan->nama }}</td>
-                    <td class="px-6 py-4 text-gray-500">{{ $karyawan->jabatan ?? '-' }}</td>
+                    <td class="px-6 py-4 text-gray-500">
+                        @if($karyawan->jabatans->count() > 0)
+                            <div class="flex flex-wrap gap-1">
+                                @foreach($karyawan->jabatans as $jabatan)
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">{{ $jabatan->nama }}</span>
+                                @endforeach
+                            </div>
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td class="px-6 py-4 text-gray-500">{{ $karyawan->lokasi ?? '-' }}</td>
                     <td class="px-6 py-4 text-gray-500">{{ $karyawan->no_hp ?? '-' }}</td>
                     <td class="px-6 py-4 text-center">
-                        @if($karyawan->tipe_gaji === 'Tetap')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Tetap</span>
-                        @elseif($karyawan->tipe_gaji === 'Borongan')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Borongan</span>
+                        @if($karyawan->jabatans->count() > 0)
+                            <div class="flex flex-wrap justify-center gap-1">
+                                @foreach($karyawan->jabatans->unique('tipe_gaji') as $jabatan)
+                                    @if($jabatan->tipe_gaji === 'Tetap')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Tetap</span>
+                                    @elseif($jabatan->tipe_gaji === 'Borongan')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Borongan</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Harian</span>
+                                    @endif
+                                @endforeach
+                            </div>
                         @else
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Harian</span>
+                            -
                         @endif
                     </td>
                     <td class="px-6 py-4 text-center">

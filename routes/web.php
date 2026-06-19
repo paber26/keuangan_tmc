@@ -18,10 +18,12 @@ Route::get('/', function() { return view('dashboard'); })->name('dashboard');
 
 use App\Http\Controllers\KebunController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\JabatanController;
 
 // Master Data
 Route::resource('kebun', KebunController::class);
 Route::resource('karyawan', KaryawanController::class);
+Route::resource('jabatan', JabatanController::class);
 Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
 Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 

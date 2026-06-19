@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Absensi;
 use App\Models\Karyawan;
 use App\Models\Kebun;
+use App\Models\Jabatan;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ class AbsensiController extends Controller
     public function index(Request $request)
     {
         $lokasiList = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        $masterJabatans = Jabatan::orderBy('nama')->get();
         
         $selectedLokasi = $request->get('lokasi', $lokasiList->first());
         
@@ -48,7 +50,7 @@ class AbsensiController extends Controller
             
             foreach ($absensis as $absensi) {
                 // If it's old data and has no jabatan, fallback to the master data or 'Tidak Diketahui'
-                $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatan ?? 'Tidak Diketahui');
+                $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatans->first()->nama ?? 'Tidak Diketahui');
                 
                 $absensiData[$absensi->karyawan_id][$jabatan][$absensi->tanggal] = $absensi;
                 
@@ -84,7 +86,8 @@ class AbsensiController extends Controller
             'karyawans',
             'allKaryawans',
             'period',
-            'absensiData'
+            'absensiData',
+            'masterJabatans'
         ));
     }
 

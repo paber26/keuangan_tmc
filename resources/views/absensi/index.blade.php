@@ -241,20 +241,80 @@
             <input type="hidden" name="start_date" value="{{ $startDate }}">
             <input type="hidden" name="end_date" value="{{ $endDate }}">
             
-            <select name="karyawan_id" class="w-64 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm" required>
-                <option value="">-- Pilih Pekerja --</option>
-                @foreach($allKaryawans as $k)
-                    <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                @endforeach
-            </select>
+            <div x-data="{
+                open: false,
+                search: '',
+                selectedId: '',
+                selectedName: '-- Pilih Pekerja --',
+                options: [
+                    @foreach($allKaryawans as $k)
+                        { id: '{{ $k->id }}', name: '{{ addslashes($k->nama) }}' },
+                    @endforeach
+                ],
+                get filteredOptions() {
+                    if (this.search === '') return this.options;
+                    return this.options.filter(opt => opt.name.toLowerCase().includes(this.search.toLowerCase()));
+                },
+                selectOption(opt) {
+                    this.selectedId = opt.id;
+                    this.selectedName = opt.name;
+                    this.open = false;
+                    this.search = '';
+                }
+            }" class="relative w-64" @click.away="open = false">
+                <!-- Hidden actual input for form submission -->
+                <input type="hidden" name="karyawan_id" :value="selectedId" required>
+
+                <!-- Dropdown Toggle -->
+                <button type="button" @click="open = !open; if(open) setTimeout(() => $refs.searchInput.focus(), 100)" 
+                    class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm">
+                    <span x-text="selectedName" :class="selectedId === '' ? 'text-gray-500' : 'text-gray-900'" class="truncate"></span>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open" style="display: none;" 
+                    class="absolute z-50 w-full mb-1 bottom-full bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 scale-95 translate-y-2">
+                    
+                    <!-- Search Input -->
+                    <div class="p-2 border-b border-gray-100 bg-gray-50">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <input type="text" x-model="search" x-ref="searchInput" @click.stop 
+                                class="w-full pl-9 pr-3 py-1.5 text-sm bg-white border border-gray-300 rounded focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" 
+                                placeholder="Cari nama pekerja...">
+                        </div>
+                    </div>
+
+                    <!-- Options List -->
+                    <ul class="max-h-60 overflow-y-auto py-1">
+                        <template x-for="opt in filteredOptions" :key="opt.id">
+                            <li @click="selectOption(opt)" 
+                                class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+                                :class="selectedId == opt.id ? 'bg-emerald-50 text-emerald-700 font-medium' : ''">
+                                <span x-text="opt.name"></span>
+                            </li>
+                        </template>
+                        <li x-show="filteredOptions.length === 0" class="px-4 py-3 text-sm text-center text-gray-500">
+                            Pekerja tidak ditemukan
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             <select name="jabatan_pekerjaan" class="w-56 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm" required>
                 <option value="">-- Sebagai (Peran) --</option>
-                <option value="Harian Kumpul">Harian Kumpul</option>
-                <option value="Kupas Kelapa">Kupas Kelapa</option>
-                <option value="Momaras Mesin">Momaras Mesin</option>
-                <option value="Pemanjat Kelapa">Pemanjat Kelapa</option>
-                <option value="Lainnya">Lainnya...</option>
+                @foreach($masterJabatans as $jabatan)
+                    <option value="{{ $jabatan->nama }}">{{ $jabatan->nama }}</option>
+                @endforeach
             </select>
 
             <button type="submit" class="px-6 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg shadow-sm transition">

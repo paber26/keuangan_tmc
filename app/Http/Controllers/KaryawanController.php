@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
 use App\Models\Kebun;
+use App\Models\Jabatan;
 use Illuminate\Http\Request;
 
 class KaryawanController extends Controller
@@ -13,7 +14,7 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        $karyawans = Karyawan::latest()->get();
+        $karyawans = Karyawan::with('jabatans')->latest()->get();
         return view('karyawan.index', compact('karyawans'));
     }
 
@@ -23,7 +24,8 @@ class KaryawanController extends Controller
     public function create()
     {
         $lokasiKebuns = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
-        return view('karyawan.create', compact('lokasiKebuns'));
+        $jabatans = Jabatan::orderBy('nama')->get();
+        return view('karyawan.create', compact('lokasiKebuns', 'jabatans'));
     }
 
     /**
@@ -33,14 +35,18 @@ class KaryawanController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'jabatan' => 'nullable|string|max:255',
             'lokasi' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
-            'tipe_gaji' => 'required|in:Tetap,Harian,Borongan',
             'status' => 'required|in:Aktif,Nonaktif',
+            'jabatans' => 'nullable|array',
+            'jabatans.*' => 'exists:jabatans,id',
         ]);
 
-        Karyawan::create($validated);
+        $karyawan = Karyawan::create($validated);
+        
+        if (!empty($validated['jabatans'])) {
+            $karyawan->jabatans()->sync($validated['jabatans']);
+        }
 
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil ditambahkan!');
     }
@@ -51,7 +57,8 @@ class KaryawanController extends Controller
     public function edit(Karyawan $karyawan)
     {
         $lokasiKebuns = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
-        return view('karyawan.edit', compact('karyawan', 'lokasiKebuns'));
+        $jabatans = Jabatan::orderBy('nama')->get();
+        return view('karyawan.edit', compact('karyawan', 'lokasiKebuns', 'jabatans'));
     }
 
     /**
@@ -61,14 +68,20 @@ class KaryawanController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'jabatan' => 'nullable|string|max:255',
             'lokasi' => 'nullable|string|max:255',
             'no_hp' => 'nullable|string|max:20',
-            'tipe_gaji' => 'required|in:Tetap,Harian,Borongan',
             'status' => 'required|in:Aktif,Nonaktif',
+            'jabatans' => 'nullable|array',
+            'jabatans.*' => 'exists:jabatans,id',
         ]);
 
         $karyawan->update($validated);
+        
+        if (isset($validated['jabatans'])) {
+            $karyawan->jabatans()->sync($validated['jabatans']);
+        } else {
+            $karyawan->jabatans()->detach();
+        }
 
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil diperbarui!');
     }
