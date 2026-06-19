@@ -7,6 +7,7 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PanenController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -30,7 +31,7 @@ Route::middleware('admin.login')->group(function () {
     Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
     Route::post('/absensi/add', [AbsensiController::class, 'addKaryawan'])->name('absensi.add');
     Route::post('/absensi/remove', [AbsensiController::class, 'removeKaryawan'])->name('absensi.remove');
-    Route::get('/panen', function() { return view('dashboard'); })->name('panen.index'); // Placeholder
+    Route::get('/panen', [PanenController::class, 'index'])->name('panen.index');
 
     // Penggajian
     Route::get('/penggajian/gaji-bulanan', function() { return view('dashboard'); })->name('gaji.index'); // Placeholder
