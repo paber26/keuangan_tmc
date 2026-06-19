@@ -17,6 +17,19 @@ class AbsensiController extends Controller
         $lokasiList = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
         $masterJabatans = Jabatan::orderBy('nama')->get();
         
+        // Fitur "Remember Last Selection" menggunakan Session
+        if (!$request->has('lokasi') && !$request->has('week')) {
+            if (session()->has('absensi_last_lokasi') || session()->has('absensi_last_week')) {
+                return redirect()->route('absensi.index', [
+                    'lokasi' => session('absensi_last_lokasi', $lokasiList->first()),
+                    'week' => session('absensi_last_week', Carbon::now()->format('Y-\WW'))
+                ]);
+            }
+        }
+
+        if ($request->has('lokasi')) session(['absensi_last_lokasi' => $request->lokasi]);
+        if ($request->has('week')) session(['absensi_last_week' => $request->week]);
+
         $selectedLokasi = $request->get('lokasi', $lokasiList->first());
         
         // Weekly mechanism (Monday to Saturday)
