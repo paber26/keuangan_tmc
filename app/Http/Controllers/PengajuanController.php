@@ -6,6 +6,7 @@ use App\Models\Pengajuan;
 use App\Models\PengajuanItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengajuanController extends Controller
 {
@@ -91,7 +92,11 @@ class PengajuanController extends Controller
     public function print(Pengajuan $pengajuan)
     {
         $pengajuan->load('items');
-        return view('pengajuan.print', compact('pengajuan'));
+        
+        $pdf = Pdf::loadView('pengajuan.print-pdf', compact('pengajuan'));
+        
+        // Portrait by default is fine for Invoice
+        return $pdf->stream('Pengajuan-'.$pengajuan->id.'.pdf');
     }
 
     public function update(Request $request, Pengajuan $pengajuan)

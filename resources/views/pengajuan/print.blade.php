@@ -19,12 +19,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        /* 1. Menghilangkan Header (URL) & Footer bawaan browser */
+        @page {
+            size: A4 portrait;
+            margin: 0mm; 
+        }
+
+        /* 2. Styling khusus saat masuk mode Print */
+        @media print {
+            html, body {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                /* Kurangi padding buatan agar tabel bisa melebar penuh */
+                padding: 10mm !important; 
+            }
+            
+            /* Menghilangkan border "Card" luar agar terlihat seperti dokumen resmi */
+            .print-doc {
+                border: none !important;
+                border-radius: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            /* Menyesuaikan padding bagian atas karena border luar hilang */
+            .print-header {
+                padding-top: 0 !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
     </style>
 </head>
-<body class="bg-white p-8 max-w-4xl mx-auto" onload="window.print()">
+<body class="bg-white p-4 md:p-8 max-w-4xl mx-auto" onload="window.print()">
 
-    <div class="border border-gray-100 rounded-xl">
-        <div class="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start gap-6">
+    <div class="border border-gray-200 rounded-xl print-doc">
+        <div class="p-4 md:p-8 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start gap-6 print-header">
             <div class="flex items-center gap-4">
                 <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-16 h-16 object-contain rounded bg-white p-1 border border-gray-100 shadow-sm">
                 <div>

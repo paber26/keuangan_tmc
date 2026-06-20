@@ -49,4 +49,5 @@ Route::middleware('admin.login')->group(function () {
     Route::get('/transaksi', function() { return view('dashboard'); })->name('transaksi.index'); // Placeholder
     Route::get('/laporan/rekap-mingguan', [LaporanController::class, 'index'])->name('laporan.rekap-mingguan');
     Route::get('/laporan/rekap-mingguan/word', [LaporanController::class, 'exportWord'])->name('laporan.rekap-mingguan.word');
+    Route::get('/laporan/rekap-mingguan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.rekap-mingguan.pdf');
 });

@@ -9,7 +9,12 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 Kembali ke Daftar
             </a>
-            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Invoice Pengajuan</h2>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight flex items-center gap-3">
+                Invoice Pengajuan
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium border {{ $pengajuan->status == 'Disetujui' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : ($pengajuan->status == 'Ditolak' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200') }}">
+                    {{ $pengajuan->status }}
+                </span>
+            </h2>
             <p class="text-sm text-gray-500 mt-1">Ref: INV-{{ str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) }}</p>
         </div>
         <div class="flex gap-3">
@@ -42,15 +47,7 @@
                         <td class="text-gray-500 pr-2 pb-1">:</td>
                         <td class="font-medium text-gray-800 pb-1">{{ $pengajuan->judul_pengajuan }}</td>
                     </tr>
-                    <tr>
-                        <td class="text-gray-500 pr-4">Status</td>
-                        <td class="text-gray-500 pr-2">:</td>
-                        <td class="font-medium text-gray-800">
-                            <span class="{{ $pengajuan->status == 'Disetujui' ? 'text-emerald-600' : ($pengajuan->status == 'Ditolak' ? 'text-red-600' : 'text-amber-600') }}">
-                                {{ $pengajuan->status }}
-                            </span>
-                        </td>
-                    </tr>
+
                 </table>
             </div>
         </div>

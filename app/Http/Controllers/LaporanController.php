@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
@@ -20,5 +21,14 @@ class LaporanController extends Controller
         header("Expires: 0");
 
         return view('laporan.export.rekap-mingguan-word');
+    }
+
+    public function exportPdf()
+    {
+        $pdf = Pdf::loadView('laporan.export.rekap-mingguan-pdf');
+        
+        $pdf->setPaper('A4', 'landscape');
+        
+        return $pdf->stream('Rekap-Mingguan-TMC.pdf');
     }
 }
