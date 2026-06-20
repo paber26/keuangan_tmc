@@ -24,6 +24,80 @@ class PemakaianBBMController extends Controller
         return view('pemakaian-bbm.create', compact('kebun', 'karyawan'));
     }
 
+    public function edit(string $id)
+    {
+        $pemakaian_bbm = PemakaianBBM::with('items')->findOrFail($id);
+        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
+        $karyawan = Karyawan::orderBy('nama')->get();
+        return view('pemakaian-bbm.edit', compact('pemakaian_bbm', 'kebun', 'karyawan'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'kebun_id' => 'required|exists:kebuns,id',
+            'karyawan_id' => 'required|exists:karyawans,id',
+            'tanggal' => 'required|date',
+            'judul_laporan' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+            'keterangan_pemakaian' => 'required|array|min:1',
+            'keterangan_pemakaian.*' => 'required|string|max:255',
+            'tanggal_pemakaian' => 'required|array|min:1',
+            'tanggal_pemakaian.*' => 'required|date',
+            'tipe_bbm' => 'required|array|min:1',
+            'tipe_bbm.*' => 'required|in:Solar,Pertalite',
+            'jumlah_liter' => 'required|array|min:1',
+            'jumlah_liter.*' => 'required|numeric|min:0.01',
+            'harga_per_liter' => 'required|array',
+            'harga_per_liter.*' => 'required|numeric|min:0',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $pemakaian = PemakaianBBM::findOrFail($id);
+            $pemakaian->update([
+                'kebun_id' => $request->kebun_id,
+                'karyawan_id' => $request->karyawan_id,
+                'tanggal' => $request->tanggal,
+                'judul_laporan' => $request->judul_laporan,
+                'keterangan' => $request->keterangan,
+            ]);
+
+            // Delete existing items
+            $pemakaian->items()->delete();
+
+            $grandTotal = 0;
+            foreach ($request->keterangan_pemakaian as $index => $ket) {
+                $liter = $request->jumlah_liter[$index];
+                $harga = $request->harga_per_liter[$index];
+                $total = $liter * $harga;
+                $grandTotal += $total;
+
+                PemakaianBBMItem::create([
+                    'pemakaian_bbm_id' => $pemakaian->id,
+                    'tanggal' => $request->tanggal_pemakaian[$index],
+                    'tipe_bbm' => $request->tipe_bbm[$index],
+                    'keterangan_pemakaian' => $ket,
+                    'jumlah_liter' => $liter,
+                    'harga_per_liter' => $harga,
+                    'total_harga' => $total,
+                ]);
+            }
+
+            $pemakaian->update(['grand_total' => $grandTotal]);
+
+            DB::commit();
+            return redirect()->route('pemakaian-bbm.index')->with('success', 'Laporan pemakaian BBM berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage())->withInput();
+        }
+    }
+
     public function store(Request $request)
     {
         $request->validate([
