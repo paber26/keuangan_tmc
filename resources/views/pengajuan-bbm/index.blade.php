@@ -88,17 +88,32 @@
 <script>
 function confirmMath(event) {
     event.preventDefault();
+    const form = event.target;
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
-    const answer = prompt(`Peringatan: Anda akan menghapus data ini secara permanen.\n\nUntuk melanjutkan, mohon ketikkan hasil dari: ${num1} + ${num2}`);
     
-    if (answer === null) return false;
-    
-    if (parseInt(answer) === (num1 + num2)) {
-        event.target.submit();
-    } else {
-        alert('Jawaban salah! Penghapusan dibatalkan untuk keamanan.');
-    }
+    Swal.fire({
+        title: 'Konfirmasi Penghapusan',
+        html: `Anda akan menghapus data ini secara permanen.<br><br>Untuk memvalidasi, ketikkan hasil dari: <b>${num1} + ${num2}</b>`,
+        icon: 'warning',
+        input: 'number',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Ya, Hapus Data',
+        cancelButtonText: 'Batal',
+        preConfirm: (answer) => {
+            if (!answer || parseInt(answer) !== (num1 + num2)) {
+                Swal.showValidationMessage('Jawaban salah! Penghapusan dibatalkan.');
+                return false;
+            }
+            return true;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
 }
 </script>
 @endsection
