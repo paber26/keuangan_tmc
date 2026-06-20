@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PemakaianBBM;
 use App\Models\PemakaianBBMItem;
 use App\Models\Kebun;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,20 +13,22 @@ class PemakaianBBMController extends Controller
 {
     public function index()
     {
-        $pemakaian = PemakaianBBM::with('kebun')->orderBy('tanggal', 'desc')->get();
+        $pemakaian = PemakaianBBM::with(['kebun', 'karyawan'])->orderBy('tanggal', 'desc')->get();
         return view('pemakaian-bbm.index', compact('pemakaian'));
     }
 
     public function create()
     {
         $kebun = Kebun::orderBy('nama')->get();
-        return view('pemakaian-bbm.create', compact('kebun'));
+        $karyawan = Karyawan::orderBy('nama')->get();
+        return view('pemakaian-bbm.create', compact('kebun', 'karyawan'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'kebun_id' => 'required|exists:kebuns,id',
+            'karyawan_id' => 'required|exists:karyawans,id',
             'tanggal' => 'required|date',
             'judul_laporan' => 'required|string|max:255',
             'keterangan' => 'nullable|string',
@@ -47,6 +50,7 @@ class PemakaianBBMController extends Controller
 
             $pemakaian = PemakaianBBM::create([
                 'kebun_id' => $request->kebun_id,
+                'karyawan_id' => $request->karyawan_id,
                 'tanggal' => $request->tanggal,
                 'judul_laporan' => $request->judul_laporan,
                 'keterangan' => $request->keterangan,
@@ -74,7 +78,7 @@ class PemakaianBBMController extends Controller
 
     public function show(PemakaianBBM $pemakaian_bbm)
     {
-        $pemakaian_bbm->load(['items', 'kebun']);
+        $pemakaian_bbm->load(['items', 'kebun', 'karyawan']);
         return view('pemakaian-bbm.show', compact('pemakaian_bbm'));
     }
 

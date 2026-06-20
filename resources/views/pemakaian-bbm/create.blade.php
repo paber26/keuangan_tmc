@@ -31,12 +31,21 @@
         <div class="p-6 md:p-8 border-b border-gray-100">
             <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Laporan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Lokasi / Kebun <span class="text-red-500">*</span></label>
                     <select name="kebun_id" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
                         <option value="" disabled selected>-- Pilih Lokasi / Kebun --</option>
                         @foreach($kebun as $k)
                             <option value="{{ $k->id }}">{{ $k->nama }} (Lokasi: {{ $k->lokasi }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pengambil (Karyawan) <span class="text-red-500">*</span></label>
+                    <select name="karyawan_id" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
+                        <option value="" disabled selected>-- Pilih Karyawan --</option>
+                        @foreach($karyawan as $k)
+                            <option value="{{ $k->id }}">{{ $k->nama }} ({{ $k->status }})</option>
                         @endforeach
                     </select>
                 </div>

@@ -21,6 +21,7 @@
                     <tr class="bg-gray-50/50 border-b border-gray-100">
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Kebun</th>
+                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Karyawan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Judul Laporan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Grand Total</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Aksi</th>
@@ -33,6 +34,7 @@
                         <td class="py-4 px-6 text-sm font-semibold text-emerald-600">
                             {{ $item->kebun ? $item->kebun->nama . ' (' . $item->kebun->lokasi . ')' : '-' }}
                         </td>
+                        <td class="py-4 px-6 text-sm text-gray-800">{{ $item->karyawan ? $item->karyawan->nama : '-' }}</td>
                         <td class="py-4 px-6">
                             <p class="text-sm font-medium text-gray-800">{{ $item->judul_laporan }}</p>
                             @if($item->keterangan)

@@ -25,6 +25,10 @@
                     <p class="text-base font-semibold text-emerald-600">{{ $pemakaian_bbm->kebun ? $pemakaian_bbm->kebun->nama . ' (' . $pemakaian_bbm->kebun->lokasi . ')' : '-' }}</p>
                 </div>
                 <div>
+                    <p class="text-sm text-gray-500 mb-1">Nama Pengambil (Karyawan)</p>
+                    <p class="text-base font-semibold text-emerald-600">{{ $pemakaian_bbm->karyawan ? $pemakaian_bbm->karyawan->nama : '-' }}</p>
+                </div>
+                <div>
                     <p class="text-sm text-gray-500 mb-1">Tanggal Laporan</p>
                     <p class="text-base font-semibold text-gray-800">{{ \Carbon\Carbon::parse($pemakaian_bbm->tanggal)->format('d M Y') }}</p>
                 </div>

@@ -25,6 +25,10 @@
                     <p class="text-base font-semibold text-emerald-600">{{ $pengajuan_bbm->kebun ? $pengajuan_bbm->kebun->nama . ' (' . $pengajuan_bbm->kebun->lokasi . ')' : '-' }}</p>
                 </div>
                 <div>
+                    <p class="text-sm text-gray-500 mb-1">Nama Pemohon (Karyawan)</p>
+                    <p class="text-base font-semibold text-emerald-600">{{ $pengajuan_bbm->karyawan ? $pengajuan_bbm->karyawan->nama : '-' }}</p>
+                </div>
+                <div>
                     <p class="text-sm text-gray-500 mb-1">Tanggal Pengajuan</p>
                     <p class="text-base font-semibold text-gray-800">{{ \Carbon\Carbon::parse($pengajuan_bbm->tanggal)->format('d M Y') }}</p>
                 </div>
