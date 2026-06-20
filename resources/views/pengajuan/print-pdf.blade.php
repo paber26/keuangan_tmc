@@ -25,8 +25,8 @@
         .items-table th, .items-table td { border: 1px solid #333; padding: 8px; text-align: left; }
         .items-table th { background-color: #3B6653; color: white; text-align: center; font-weight: bold; }
         
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
+        .text-center { text-align: center !important; }
+        .text-right { text-align: right !important; }
         .font-bold { font-weight: bold; }
         .bg-light { background-color: #f9fafb; }
     </style>
@@ -94,7 +94,7 @@
         </tbody>
         <tfoot>
             <tr class="bg-light">
-                <td colspan="2" class="text-right font-bold">GRAND TOTAL</td>
+                <td colspan="2" class="text-right font-bold">TOTAL</td>
                 <td class="text-center font-bold">{{ number_format($totalQty, 0, ',', '.') }}</td>
                 <td></td>
                 <td class="text-right font-bold">{{ number_format($pengajuan->grand_total, 0, ',', '.') }}</td>
