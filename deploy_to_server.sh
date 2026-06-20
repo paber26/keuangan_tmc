@@ -12,6 +12,9 @@ cd /www/wwwroot/tmc.kuydinas.id/keuangan_tmc
 echo \"➡️ Menarik pembaruan dari Git (git pull)...\"
 git pull origin main
 
+echo \"➡️ Menginstall dependensi baru (composer install)...\"
+composer install --no-dev --optimize-autoloader
+
 echo \"➡️ Menjalankan migrasi database (php artisan migrate)...\"
 php artisan migrate --force
 
