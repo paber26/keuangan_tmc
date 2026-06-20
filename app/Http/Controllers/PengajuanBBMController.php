@@ -36,6 +36,8 @@ class PengajuanBBMController extends Controller
             'keterangan_pengajuan.*' => 'required|string|max:255',
             'tanggal_pengajuan' => 'required|array|min:1',
             'tanggal_pengajuan.*' => 'required|date',
+            'tipe_bbm' => 'required|array|min:1',
+            'tipe_bbm.*' => 'required|in:Solar,Pertalite',
             'jumlah_liter' => 'required|array|min:1',
             'jumlah_liter.*' => 'required|numeric|min:0.01',
             'harga_per_liter' => 'required|array',
@@ -68,6 +70,7 @@ class PengajuanBBMController extends Controller
                 PengajuanBBMItem::create([
                     'pengajuan_bbm_id' => $pengajuan->id,
                     'tanggal' => $request->tanggal_pengajuan[$index],
+                    'tipe_bbm' => $request->tipe_bbm[$index],
                     'keterangan_pengajuan' => $ket,
                     'jumlah_liter' => $liter,
                     'harga_per_liter' => $harga,

@@ -36,6 +36,8 @@ class PemakaianBBMController extends Controller
             'keterangan_pemakaian.*' => 'required|string|max:255',
             'tanggal_pemakaian' => 'required|array|min:1',
             'tanggal_pemakaian.*' => 'required|date',
+            'tipe_bbm' => 'required|array|min:1',
+            'tipe_bbm.*' => 'required|in:Solar,Pertalite',
             'jumlah_liter' => 'required|array|min:1',
             'jumlah_liter.*' => 'required|numeric|min:0.01',
             'harga_per_liter' => 'required|array',
@@ -65,6 +67,7 @@ class PemakaianBBMController extends Controller
                 PemakaianBBMItem::create([
                     'pemakaian_bbm_id' => $pemakaian->id,
                     'tanggal' => $request->tanggal_pemakaian[$index],
+                    'tipe_bbm' => $request->tipe_bbm[$index],
                     'keterangan_pemakaian' => $ket,
                     'jumlah_liter' => $liter,
                     'harga_per_liter' => $harga,
