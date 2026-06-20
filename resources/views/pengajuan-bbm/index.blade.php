@@ -20,7 +20,7 @@
                 <thead>
                     <tr class="bg-gray-50/50 border-b border-gray-100">
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
-                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Kebun</th>
+                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Lokasi Kebun</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Karyawan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Judul Pengajuan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Grand Total</th>
@@ -33,7 +33,7 @@
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="py-4 px-6 text-sm text-gray-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                         <td class="py-4 px-6 text-sm font-semibold text-emerald-600">
-                            {{ $item->kebun ? $item->kebun->nama . ' (' . $item->kebun->lokasi . ')' : '-' }}
+                            {{ $item->kebun ? $item->kebun->lokasi : '-' }}
                         </td>
                         <td class="py-4 px-6 text-sm text-gray-800">{{ $item->karyawan ? $item->karyawan->nama : '-' }}</td>
                         <td class="py-4 px-6">

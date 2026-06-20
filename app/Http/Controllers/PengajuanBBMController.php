@@ -19,7 +19,7 @@ class PengajuanBBMController extends Controller
 
     public function create()
     {
-        $kebun = Kebun::orderBy('nama')->get();
+        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
         $karyawan = Karyawan::orderBy('nama')->get();
         return view('pengajuan-bbm.create', compact('kebun', 'karyawan'));
     }
