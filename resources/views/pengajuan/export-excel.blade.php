@@ -10,7 +10,7 @@
                 <td colspan="5" style="font-weight: bold; font-size: 16px;">PT. TRI MUSTIKA COCOMINAESA</td>
             </tr>
             <tr>
-                <td colspan="5">Form Pengajuan Barang & Keperluan</td>
+                <td colspan="5">Form Pengajuan Barang &amp; Keperluan</td>
             </tr>
             <tr>
                 <td colspan="5"></td>

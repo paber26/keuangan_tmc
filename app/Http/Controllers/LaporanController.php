@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\LaporanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
@@ -30,5 +32,10 @@ class LaporanController extends Controller
         $pdf->setPaper('A4', 'landscape');
         
         return $pdf->stream('Rekap-Mingguan-TMC.pdf');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new LaporanExport, 'Rekap-Mingguan-TMC.xlsx');
     }
 }

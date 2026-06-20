@@ -27,8 +27,9 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('karyawan', KaryawanController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::resource('pengajuan', PengajuanController::class);
-    Route::patch('pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
+    Route::patch('pengajuan/{pengajuan}/status', [PengajuanController::class, 'updateStatus'])->name('pengajuan.update-status');
     Route::get('pengajuan/{pengajuan}/print', [PengajuanController::class, 'print'])->name('pengajuan.print');
+    Route::get('pengajuan/{pengajuan}/excel', [PengajuanController::class, 'exportExcel'])->name('pengajuan.excel');
     Route::get('/komoditas', function() { return view('dashboard'); })->name('komoditas.index'); // Placeholder
     Route::get('/tarif-kupas', function() { return view('dashboard'); })->name('tarif-kupas.index'); // Placeholder
 
@@ -50,4 +51,5 @@ Route::middleware('admin.login')->group(function () {
     Route::get('/laporan/rekap-mingguan', [LaporanController::class, 'index'])->name('laporan.rekap-mingguan');
     Route::get('/laporan/rekap-mingguan/word', [LaporanController::class, 'exportWord'])->name('laporan.rekap-mingguan.word');
     Route::get('/laporan/rekap-mingguan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.rekap-mingguan.pdf');
+    Route::get('/laporan/rekap-mingguan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.rekap-mingguan.excel');
 });

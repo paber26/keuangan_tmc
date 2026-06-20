@@ -7,6 +7,8 @@ use App\Models\PengajuanItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\PengajuanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuanController extends Controller
 {
@@ -99,6 +101,12 @@ class PengajuanController extends Controller
         return $pdf->stream('Pengajuan-'.$pengajuan->id.'.pdf');
     }
 
+    public function exportExcel(Pengajuan $pengajuan)
+    {
+        $pengajuan->load('items');
+        return Excel::download(new PengajuanExport($pengajuan), 'Pengajuan-'.$pengajuan->id.'.xlsx');
+    }
+
     public function update(Request $request, Pengajuan $pengajuan)
     {
         if ($pengajuan->status !== 'Menunggu') {
@@ -158,10 +166,11 @@ class PengajuanController extends Controller
         }
     }
 
-    public function approve(Pengajuan $pengajuan)
+    public function updateStatus(Request $request, Pengajuan $pengajuan)
     {
-        $pengajuan->update(['status' => 'Disetujui']);
-        return back()->with('success', 'Pengajuan berhasil disetujui!');
+        $request->validate(['status' => 'required|in:Menunggu,Disetujui,Ditolak']);
+        $pengajuan->update(['status' => $request->status]);
+        return back()->with('success', 'Status pengajuan berhasil diperbarui!');
     }
 
     public function destroy(Pengajuan $pengajuan)

@@ -11,13 +11,23 @@
             </a>
             <h2 class="text-2xl font-bold text-gray-800 tracking-tight flex items-center gap-3">
                 Invoice Pengajuan
-                <span class="px-2.5 py-1 rounded-full text-xs font-medium border {{ $pengajuan->status == 'Disetujui' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : ($pengajuan->status == 'Ditolak' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200') }}">
-                    {{ $pengajuan->status }}
-                </span>
+                <form action="{{ route('pengajuan.update-status', $pengajuan->id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('PATCH')
+                    <select name="status" onchange="this.form.submit()" class="pl-2.5 pr-7 py-1 rounded-full text-xs font-medium border cursor-pointer focus:ring-0 {{ $pengajuan->status == 'Disetujui' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : ($pengajuan->status == 'Ditolak' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200') }}">
+                        <option value="Menunggu" {{ $pengajuan->status == 'Menunggu' ? 'selected' : '' }} class="bg-white text-gray-800">Menunggu</option>
+                        <option value="Disetujui" {{ $pengajuan->status == 'Disetujui' ? 'selected' : '' }} class="bg-white text-gray-800">Disetujui</option>
+                        <option value="Ditolak" {{ $pengajuan->status == 'Ditolak' ? 'selected' : '' }} class="bg-white text-gray-800">Ditolak</option>
+                    </select>
+                </form>
             </h2>
             <p class="text-sm text-gray-500 mt-1">Ref: INV-{{ str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) }}</p>
         </div>
         <div class="flex gap-3">
+            <a href="{{ route('pengajuan.excel', $pengajuan->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-700 text-sm font-medium rounded-lg shadow-sm transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Export Excel
+            </a>
             <a href="{{ route('pengajuan.print', $pengajuan->id) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 Cetak / Simpan PDF

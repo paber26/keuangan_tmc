@@ -14,12 +14,7 @@
         </a>
     </div>
 
-    @if(session('success'))
-    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center gap-3">
-        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="text-sm font-medium">{{ session('success') }}</span>
-    </div>
-    @endif
+
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
@@ -44,9 +39,15 @@
                             @endif
                         </td>
                         <td class="py-4 px-6">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium {{ $item->status == 'Disetujui' ? 'bg-emerald-100 text-emerald-800' : ($item->status == 'Ditolak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800') }}">
-                                {{ $item->status }}
-                            </span>
+                            <form action="{{ route('pengajuan.update-status', $item->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('PATCH')
+                                <select name="status" onchange="this.form.submit()" class="pl-3 pr-8 py-1 text-xs font-medium rounded-full border-0 focus:ring-0 cursor-pointer shadow-sm {{ $item->status == 'Disetujui' ? 'bg-emerald-100 text-emerald-800' : ($item->status == 'Ditolak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800') }}">
+                                    <option value="Menunggu" {{ $item->status == 'Menunggu' ? 'selected' : '' }} class="bg-white text-gray-800">Menunggu</option>
+                                    <option value="Disetujui" {{ $item->status == 'Disetujui' ? 'selected' : '' }} class="bg-white text-gray-800">Disetujui</option>
+                                    <option value="Ditolak" {{ $item->status == 'Ditolak' ? 'selected' : '' }} class="bg-white text-gray-800">Ditolak</option>
+                                </select>
+                            </form>
                         </td>
                         <td class="py-4 px-6 text-sm font-semibold text-gray-800 text-right whitespace-nowrap">
                             Rp {{ number_format($item->grand_total, 0, ',', '.') }}
@@ -57,13 +58,7 @@
                                 <a href="{{ route('pengajuan.edit', $item->id) }}" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit Pengajuan">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                 </a>
-                                <form action="{{ route('pengajuan.approve', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Setujui pengajuan ini?');">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Setujui">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                    </button>
-                                </form>
+
                                 @endif
                                 <a href="{{ route('pengajuan.show', $item->id) }}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Lihat Invoice">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
