@@ -11,20 +11,6 @@
         <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Buat Pengajuan BBM</h2>
     </div>
 
-    @if($errors->any())
-    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-        <div class="flex items-center gap-3 text-red-800 mb-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span class="font-medium">Terdapat kesalahan pada input Anda:</span>
-        </div>
-        <ul class="list-disc list-inside text-sm text-red-700 ml-8">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
     <form action="{{ route('pengajuan-bbm.store') }}" method="POST" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" id="form-pengajuan">
         @csrf
         
