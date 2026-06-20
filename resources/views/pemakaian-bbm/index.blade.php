@@ -2,7 +2,7 @@
 @section('page-title', 'Data Pemakaian BBM')
 
 @section('content')
-<div class="max-w-7xl mx-auto pb-10">
+<div class="w-full pb-10">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
             <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Data Pemakaian BBM</h2>
@@ -23,7 +23,7 @@
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Lokasi Kebun</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Karyawan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Judul Laporan</th>
-                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Grand Total</th>
+                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Total</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -50,7 +50,7 @@
                                 <a href="{{ route('pemakaian-bbm.edit', $item->id) }}" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded transition-colors" title="Edit Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                 </a>
-                                <form action="{{ route('pemakaian-bbm.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                <form action="{{ route('pemakaian-bbm.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirmMath(event);">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
@@ -72,4 +72,21 @@
         </div>
     </div>
 </div>
+
+<script>
+function confirmMath(event) {
+    event.preventDefault();
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    const answer = prompt(`Peringatan: Anda akan menghapus data ini secara permanen.\n\nUntuk melanjutkan, mohon ketikkan hasil dari: ${num1} + ${num2}`);
+    
+    if (answer === null) return false;
+    
+    if (parseInt(answer) === (num1 + num2)) {
+        event.target.submit();
+    } else {
+        alert('Jawaban salah! Penghapusan dibatalkan untuk keamanan.');
+    }
+}
+</script>
 @endsection

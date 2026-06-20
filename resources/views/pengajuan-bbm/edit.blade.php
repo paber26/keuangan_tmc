@@ -2,7 +2,7 @@
 @section('page-title', 'Edit Pengajuan BBM')
 
 @section('content')
-<div class="max-w-5xl mx-auto pb-10">
+<div class="w-full pb-10">
     <div class="mb-8">
         <a href="{{ route('pengajuan-bbm.index') }}" class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -111,7 +111,7 @@
                                 <input type="number" step="0.01" name="jumlah_liter[]" value="{{ $item->jumlah_liter }}" required min="0.01" placeholder="0.00" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
                             </td>
                             <td class="py-3 px-4">
-                                <input type="number" name="harga_per_liter[]" value="{{ $item->harga_per_liter }}" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
+                                <input type="number" name="harga_per_liter[]" value="{{ round($item->harga_per_liter) }}" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
                             </td>
                             <td class="py-3 px-4 text-right">
                                 <span class="text-sm font-semibold text-gray-800 row-total">{{ number_format($item->total_harga, 0, ',', '.') }}</span>
@@ -126,7 +126,7 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-100 border-t border-gray-200">
-                            <td colspan="4" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Grand Total</td>
+                            <td colspan="6" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
                             <td class="py-4 px-4 text-right">
                                 <span class="text-lg font-bold text-emerald-600" id="grand-total">0</span>
                             </td>
