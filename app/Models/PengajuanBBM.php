@@ -12,6 +12,7 @@ class PengajuanBBM extends Model
     protected $table = 'pengajuan_bbm';
 
     protected $fillable = [
+        'kebun_id',
         'tanggal',
         'judul_pengajuan',
         'keterangan',
@@ -22,5 +23,10 @@ class PengajuanBBM extends Model
     public function items()
     {
         return $this->hasMany(PengajuanBBMItem::class, 'pengajuan_bbm_id');
+    }
+
+    public function kebun()
+    {
+        return $this->belongsTo(Kebun::class, 'kebun_id');
     }
 }

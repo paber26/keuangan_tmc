@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PengajuanBBM;
 use App\Models\PengajuanBBMItem;
+use App\Models\Kebun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,18 +12,20 @@ class PengajuanBBMController extends Controller
 {
     public function index()
     {
-        $pengajuan = PengajuanBBM::orderBy('tanggal', 'desc')->get();
+        $pengajuan = PengajuanBBM::with('kebun')->orderBy('tanggal', 'desc')->get();
         return view('pengajuan-bbm.index', compact('pengajuan'));
     }
 
     public function create()
     {
-        return view('pengajuan-bbm.create');
+        $kebun = Kebun::orderBy('nama')->get();
+        return view('pengajuan-bbm.create', compact('kebun'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'kebun_id' => 'required|exists:kebuns,id',
             'tanggal' => 'required|date',
             'judul_pengajuan' => 'required|string|max:255',
             'keterangan' => 'nullable|string',
@@ -43,6 +46,7 @@ class PengajuanBBMController extends Controller
             }
 
             $pengajuan = PengajuanBBM::create([
+                'kebun_id' => $request->kebun_id,
                 'tanggal' => $request->tanggal,
                 'judul_pengajuan' => $request->judul_pengajuan,
                 'keterangan' => $request->keterangan,
@@ -71,7 +75,7 @@ class PengajuanBBMController extends Controller
 
     public function show(PengajuanBBM $pengajuan_bbm)
     {
-        $pengajuan_bbm->load('items');
+        $pengajuan_bbm->load(['items', 'kebun']);
         return view('pengajuan-bbm.show', compact('pengajuan_bbm'));
     }
 
