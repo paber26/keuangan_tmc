@@ -22,7 +22,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Lokasi Kebun</p>
-                    <p class="text-base font-semibold text-emerald-600">{{ $pemakaian_bbm->kebun ? $pemakaian_bbm->kebun->nama : '-' }}</p>
+                    <p class="text-base font-semibold text-emerald-600">{{ $pemakaian_bbm->kebun ? $pemakaian_bbm->kebun->nama . ' (' . $pemakaian_bbm->kebun->lokasi . ')' : '-' }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Tanggal Laporan</p>

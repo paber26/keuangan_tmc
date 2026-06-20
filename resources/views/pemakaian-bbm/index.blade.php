@@ -30,7 +30,9 @@
                     @forelse($pemakaian as $item)
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="py-4 px-6 text-sm text-gray-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
-                        <td class="py-4 px-6 text-sm font-semibold text-emerald-600">{{ $item->kebun ? $item->kebun->nama : '-' }}</td>
+                        <td class="py-4 px-6 text-sm font-semibold text-emerald-600">
+                            {{ $item->kebun ? $item->kebun->nama . ' (' . $item->kebun->lokasi . ')' : '-' }}
+                        </td>
                         <td class="py-4 px-6">
                             <p class="text-sm font-medium text-gray-800">{{ $item->judul_laporan }}</p>
                             @if($item->keterangan)
