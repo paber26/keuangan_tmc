@@ -58,8 +58,9 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50 border-y border-gray-200">
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Keterangan Kebutuhan</th>
+                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-16">No</th>
+                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Keterangan Kebutuhan</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">Liter</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">Harga / Liter</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">Total Biaya</th>
@@ -68,8 +69,9 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach($pengajuan_bbm->items as $index => $item)
                         <tr>
-                            <td class="py-4 px-4 text-sm text-gray-600">{{ $index + 1 }}</td>
-                            <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $item->keterangan_pengajuan }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-500 text-center">{{ $loop->iteration }}</td>
+                                <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
+                                <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $item->keterangan_pengajuan }}</td>
                             <td class="py-4 px-4 text-sm text-gray-600 text-right">{{ number_format($item->jumlah_liter, 2, ',', '.') }} L</td>
                             <td class="py-4 px-4 text-sm text-gray-600 text-right">Rp {{ number_format($item->harga_per_liter, 0, ',', '.') }}</td>
                             <td class="py-4 px-4 text-sm font-semibold text-gray-800 text-right">Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
@@ -78,7 +80,7 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-50 border-t-2 border-gray-200">
-                            <td colspan="4" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Grand Total</td>
+                            <td colspan="5" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Grand Total</td>
                             <td class="py-4 px-4 text-right text-lg font-bold text-emerald-600">
                                 Rp {{ number_format($pengajuan_bbm->grand_total, 0, ',', '.') }}
                             </td>

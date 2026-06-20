@@ -81,7 +81,8 @@
                     <thead>
                         <tr class="bg-gray-100 border-y border-gray-200">
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[250px]">Keterangan Kebutuhan</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Tanggal</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Keterangan Kebutuhan</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[120px]">Liter</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[180px]">Harga Per Liter (Rp)</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[200px] text-right">Total Biaya (Rp)</th>
@@ -91,6 +92,9 @@
                     <tbody id="items-container" class="divide-y divide-gray-100 bg-white">
                         <tr class="item-row">
                             <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">1</td>
+                            <td class="py-3 px-4">
+                                <input type="date" name="tanggal_pengajuan[]" required value="{{ date('Y-m-d') }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                            </td>
                             <td class="py-3 px-4">
                                 <input type="text" name="keterangan_pengajuan[]" required placeholder="Cth: Solar Genset" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
                             </td>
@@ -212,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const firstRow = container.querySelector('.item-row');
         const newRow = firstRow.cloneNode(true);
         
+        newRow.querySelector('input[name="tanggal_pengajuan[]"]').value = '{{ date('Y-m-d') }}';
         newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = '';
         newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
         newRow.querySelector('input[name="harga_per_liter[]"]').value = '';

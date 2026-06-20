@@ -13,6 +13,7 @@ class PengajuanBBMItem extends Model
 
     protected $fillable = [
         'pengajuan_bbm_id',
+        'tanggal',
         'keterangan_pengajuan',
         'jumlah_liter',
         'harga_per_liter',

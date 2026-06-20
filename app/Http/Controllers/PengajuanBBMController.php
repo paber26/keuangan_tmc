@@ -32,9 +32,11 @@ class PengajuanBBMController extends Controller
             'tanggal' => 'required|date',
             'judul_pengajuan' => 'required|string|max:255',
             'keterangan' => 'nullable|string',
-            'keterangan_pengajuan' => 'required|array',
-            'keterangan_pengajuan.*' => 'required|string',
-            'jumlah_liter' => 'required|array',
+            'keterangan_pengajuan' => 'required|array|min:1',
+            'keterangan_pengajuan.*' => 'required|string|max:255',
+            'tanggal_pengajuan' => 'required|array|min:1',
+            'tanggal_pengajuan.*' => 'required|date',
+            'jumlah_liter' => 'required|array|min:1',
             'jumlah_liter.*' => 'required|numeric|min:0.01',
             'harga_per_liter' => 'required|array',
             'harga_per_liter.*' => 'required|numeric|min:0',
@@ -58,14 +60,18 @@ class PengajuanBBMController extends Controller
                 'status' => 'Pending'
             ]);
 
-            for ($i = 0; $i < count($request->keterangan_pengajuan); $i++) {
-                $totalHarga = $request->jumlah_liter[$i] * $request->harga_per_liter[$i];
+            foreach ($request->keterangan_pengajuan as $index => $ket) {
+                $liter = $request->jumlah_liter[$index];
+                $harga = $request->harga_per_liter[$index];
+                $total = $liter * $harga;
+
                 PengajuanBBMItem::create([
                     'pengajuan_bbm_id' => $pengajuan->id,
-                    'keterangan_pengajuan' => $request->keterangan_pengajuan[$i],
-                    'jumlah_liter' => $request->jumlah_liter[$i],
-                    'harga_per_liter' => $request->harga_per_liter[$i],
-                    'total_harga' => $totalHarga
+                    'tanggal' => $request->tanggal_pengajuan[$index],
+                    'keterangan_pengajuan' => $ket,
+                    'jumlah_liter' => $liter,
+                    'harga_per_liter' => $harga,
+                    'total_harga' => $total,
                 ]);
             }
 

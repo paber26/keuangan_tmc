@@ -32,9 +32,11 @@ class PemakaianBBMController extends Controller
             'tanggal' => 'required|date',
             'judul_laporan' => 'required|string|max:255',
             'keterangan' => 'nullable|string',
-            'keterangan_pemakaian' => 'required|array',
-            'keterangan_pemakaian.*' => 'required|string',
-            'jumlah_liter' => 'required|array',
+            'keterangan_pemakaian' => 'required|array|min:1',
+            'keterangan_pemakaian.*' => 'required|string|max:255',
+            'tanggal_pemakaian' => 'required|array|min:1',
+            'tanggal_pemakaian.*' => 'required|date',
+            'jumlah_liter' => 'required|array|min:1',
             'jumlah_liter.*' => 'required|numeric|min:0.01',
             'harga_per_liter' => 'required|array',
             'harga_per_liter.*' => 'required|numeric|min:0',
@@ -44,9 +46,6 @@ class PemakaianBBMController extends Controller
             DB::beginTransaction();
 
             $grandTotal = 0;
-            for ($i = 0; $i < count($request->keterangan_pemakaian); $i++) {
-                $grandTotal += ($request->jumlah_liter[$i] * $request->harga_per_liter[$i]);
-            }
 
             $pemakaian = PemakaianBBM::create([
                 'kebun_id' => $request->kebun_id,
@@ -54,19 +53,26 @@ class PemakaianBBMController extends Controller
                 'tanggal' => $request->tanggal,
                 'judul_laporan' => $request->judul_laporan,
                 'keterangan' => $request->keterangan,
-                'grand_total' => $grandTotal
+                'grand_total' => 0
             ]);
 
-            for ($i = 0; $i < count($request->keterangan_pemakaian); $i++) {
-                $totalHarga = $request->jumlah_liter[$i] * $request->harga_per_liter[$i];
+            foreach ($request->keterangan_pemakaian as $index => $ket) {
+                $liter = $request->jumlah_liter[$index];
+                $harga = $request->harga_per_liter[$index];
+                $total = $liter * $harga;
+                $grandTotal += $total;
+
                 PemakaianBBMItem::create([
                     'pemakaian_bbm_id' => $pemakaian->id,
-                    'keterangan_pemakaian' => $request->keterangan_pemakaian[$i],
-                    'jumlah_liter' => $request->jumlah_liter[$i],
-                    'harga_per_liter' => $request->harga_per_liter[$i],
-                    'total_harga' => $totalHarga
+                    'tanggal' => $request->tanggal_pemakaian[$index],
+                    'keterangan_pemakaian' => $ket,
+                    'jumlah_liter' => $liter,
+                    'harga_per_liter' => $harga,
+                    'total_harga' => $total,
                 ]);
             }
+
+            $pemakaian->update(['grand_total' => $grandTotal]);
 
             DB::commit();
             return redirect()->route('pemakaian-bbm.index')->with('success', 'Laporan pemakaian BBM berhasil disimpan.');
