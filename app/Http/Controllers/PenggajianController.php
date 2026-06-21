@@ -181,8 +181,8 @@ class PenggajianController extends Controller
             'totalUpahKupas'
         ));
 
-        // Use landscape to fit the wide table properly
-        $pdf->setPaper('A4', 'landscape');
+        // Use portrait as requested
+        $pdf->setPaper('A4', 'portrait');
         
         return $pdf->stream('Laporan-Penggajian-'.$selectedLokasi.'.pdf');
     }

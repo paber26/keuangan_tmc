@@ -182,7 +182,7 @@
                                     $vol = isset($data['hari'][$d]) ? $data['hari'][$d] : '';
                                     if ($vol) { $sumPerHari[$d] += $vol; }
                                 @endphp
-                                <td class="border border-black p-1 relative">{{ $vol }}</td>
+                                <td class="border border-black p-1 relative">{{ $vol ? number_format($vol, 0, ',', '.') : '' }}</td>
                             @endforeach
                             <td class="border border-black p-1">{{ number_format($data['total_butir'], 0, ',', '.') }}</td>
                             <td class="border border-black p-1 text-left">

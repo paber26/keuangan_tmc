@@ -67,7 +67,7 @@
             width: 100%;
             border-collapse: collapse;
             font-weight: bold;
-            font-size: 9pt;
+            font-size: 7.5pt;
         }
         th, td {
             border: 1px solid black;
@@ -123,12 +123,12 @@
     <table>
         <thead>
             <tr>
-                <th rowspan="2" style="width: 25px;">NO.</th>
-                <th rowspan="2" style="width: 130px;">NAMA</th>
+                <th rowspan="2" style="width: 20px;">NO.</th>
+                <th rowspan="2" style="width: 110px;">NAMA</th>
                 <th colspan="{{ count($period) }}">PERIODE</th>
-                <th rowspan="2" style="width: 40px;">HARI<br>KERJA</th>
-                <th rowspan="2" style="width: 80px;">UPAH<br>PER HARI</th>
-                <th rowspan="2" style="width: 90px;">TOTAL UPAH</th>
+                <th rowspan="2" style="width: 35px;">HARI<br>KERJA</th>
+                <th rowspan="2" style="width: 65px;">UPAH<br>PER HARI</th>
+                <th rowspan="2" style="width: 80px;">TOTAL UPAH</th>
             </tr>
             <tr>
                 @foreach($period as $date)
@@ -203,12 +203,12 @@
     <table>
         <thead>
             <tr>
-                <th rowspan="2" style="width: 25px;">NO.</th>
-                <th rowspan="2" style="width: 130px;">NAMA</th>
+                <th rowspan="2" style="width: 20px;">NO.</th>
+                <th rowspan="2" style="width: 110px;">NAMA</th>
                 <th colspan="{{ count($period) }}">PERIODE</th>
-                <th rowspan="2" style="width: 60px;">JUMLAH<br>BUTIR</th>
-                <th rowspan="2" style="width: 80px;">UPAH<br>PER BUTIR</th>
-                <th rowspan="2" style="width: 90px;">TOTAL UPAH</th>
+                <th rowspan="2" style="width: 45px;">JUMLAH<br>BUTIR</th>
+                <th rowspan="2" style="width: 65px;">UPAH<br>PER BUTIR</th>
+                <th rowspan="2" style="width: 80px;">TOTAL UPAH</th>
             </tr>
             <tr>
                 @foreach($period as $date)
@@ -230,7 +230,7 @@
                             $vol = isset($data['hari'][$d]) ? $data['hari'][$d] : '';
                             if ($vol) { $sumPerHari[$d] += $vol; }
                         @endphp
-                        <td class="text-center">{{ $vol }}</td>
+                        <td class="text-center">{{ $vol ? number_format($vol, 0, ',', '.') : '' }}</td>
                     @endforeach
                     <td class="text-center">{{ number_format($data['total_butir'], 0, ',', '.') }}</td>
                     <td class="text-left">
