@@ -155,7 +155,6 @@
         <!-- Page break before images -->
         <div style="page-break-before: always;"></div>
         <div class="images-wrapper" style="width: 100%; text-align: center;">
-            <h3 style="text-transform: uppercase; font-size: 14px; text-decoration: underline; margin-bottom: 20px;">Dokumentasi / Bukti Lampiran</h3>
             @foreach($pengajuan_bbm->images as $img)
                 @php
                     $path = public_path('storage/' . $img->image_path);
