@@ -21,4 +21,14 @@ class DokumentasiHarian extends Model
     {
         return $this->hasMany(DokumentasiHarianImage::class);
     }
+
+    public function kebun()
+    {
+        return $this->belongsTo(Kebun::class, 'kebun_id');
+    }
+
+    public function karyawan()
+    {
+        return $this->belongsTo(Karyawan::class, 'karyawan_id');
+    }
 }
