@@ -236,6 +236,12 @@
 
     <!-- BORONGAN -->
     @php
+        $dataBorongan = $dataBorongan->map(function($item) {
+            if (empty($item->jabatan)) {
+                $item->jabatan = $item->karyawan->jabatans->first()->nama ?? 'TIDAK DIKETAHUI';
+            }
+            return $item;
+        });
         $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
         $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
     @endphp

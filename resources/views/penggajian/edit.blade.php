@@ -20,19 +20,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tarif Harian (Rp)</label>
-                        <input type="number" name="tarif_harian" value="{{ old('tarif_harian', $penggajian->tarif_harian) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
+                        <input type="number" name="tarif_harian" value="{{ old('tarif_harian', round($penggajian->tarif_harian)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tarif Kupas / Butir (Rp)</label>
-                        <input type="number" name="tarif_kupas" value="{{ old('tarif_kupas', $penggajian->tarif_kupas) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
+                        <input type="number" name="tarif_kupas" value="{{ old('tarif_kupas', round($penggajian->tarif_kupas)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tarif Pemanjat / Pohon (Rp)</label>
-                        <input type="number" name="tarif_pemanjat" value="{{ old('tarif_pemanjat', $penggajian->tarif_pemanjat) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
+                        <input type="number" name="tarif_pemanjat" value="{{ old('tarif_pemanjat', round($penggajian->tarif_pemanjat)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tarif Pemetik / Kg (Rp)</label>
-                        <input type="number" name="tarif_pemetik" value="{{ old('tarif_pemetik', $penggajian->tarif_pemetik) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
+                        <input type="number" name="tarif_pemetik" value="{{ old('tarif_pemetik', round($penggajian->tarif_pemetik)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
                     </div>
                 </div>
 
