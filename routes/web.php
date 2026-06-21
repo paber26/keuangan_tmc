@@ -54,6 +54,10 @@ Route::middleware('admin.login')->group(function () {
     Route::patch('pengajuan-penggajian/{pengajuan_penggajian}/status', [\App\Http\Controllers\PengajuanPenggajianController::class, 'updateStatus'])->name('pengajuan-penggajian.update-status');
     Route::get('pengajuan-penggajian/{pengajuan_penggajian}/print', [\App\Http\Controllers\PengajuanPenggajianController::class, 'print'])->name('pengajuan-penggajian.print');
 
+    // Bukti Kas Kebun
+    Route::resource('bukti-kas-kebun', \App\Http\Controllers\BuktiKasKebunController::class);
+    Route::get('bukti-kas-kebun/{bukti_kas_kebun}/print', [\App\Http\Controllers\BuktiKasKebunController::class, 'print'])->name('bukti-kas-kebun.print');
+
     Route::get('/penggajian/laporan-mingguan', function() {
         return redirect()->route('penggajian.create', request()->all());
     });

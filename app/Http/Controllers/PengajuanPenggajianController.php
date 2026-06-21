@@ -50,6 +50,7 @@ class PengajuanPenggajianController extends Controller
             'berlaku_tgl' => 'nullable|date',
             'revisi' => 'nullable|string',
             'kebun_id' => 'required|exists:kebuns,id',
+            'penggajian_id' => 'nullable|exists:penggajians,id',
             'perihal' => 'required|string',
             
             'uraian' => 'required|array',
@@ -81,6 +82,7 @@ class PengajuanPenggajianController extends Controller
                 'berlaku_tgl' => $request->berlaku_tgl,
                 'revisi' => $request->revisi,
                 'kebun_id' => $request->kebun_id,
+                'penggajian_id' => $request->penggajian_id,
                 'perihal' => $request->perihal,
                 'grand_total' => $grandTotal,
                 'status' => 'Menunggu'
@@ -159,6 +161,7 @@ class PengajuanPenggajianController extends Controller
             'berlaku_tgl' => 'nullable|date',
             'revisi' => 'nullable|string',
             'kebun_id' => 'required|exists:kebuns,id',
+            'penggajian_id' => 'nullable|exists:penggajians,id',
             'perihal' => 'required|string',
             
             'uraian' => 'required|array',
@@ -190,6 +193,7 @@ class PengajuanPenggajianController extends Controller
                 'berlaku_tgl' => $request->berlaku_tgl,
                 'revisi' => $request->revisi,
                 'kebun_id' => $request->kebun_id,
+                'penggajian_id' => $request->penggajian_id,
                 'perihal' => $request->perihal,
                 'grand_total' => $grandTotal
             ]);

@@ -25,4 +25,9 @@ class Penggajian extends Model
     {
         return $this->hasMany(PenggajianDetail::class);
     }
+
+    public function pengajuan_penggajians()
+    {
+        return $this->hasMany(PengajuanPenggajian::class);
+    }
 }

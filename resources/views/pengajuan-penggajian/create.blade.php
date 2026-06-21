@@ -27,6 +27,7 @@
 
     <form action="{{ route('pengajuan-penggajian.store') }}" method="POST" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" id="form-pengajuan">
         @csrf
+        <input type="hidden" name="penggajian_id" id="penggajian_id_input" value="{{ old('penggajian_id') }}">
         
         <div class="p-6 md:p-8 border-b border-gray-100">
             <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Dokumen</h3>
@@ -177,6 +178,7 @@
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-3 px-4 text-center">
                                 <input type="checkbox" class="check-penggajian w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500" 
+                                       data-id="{{ $laporan->id }}"
                                        data-tanggal-mulai="{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }}"
                                        data-tanggal-akhir="{{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}"
                                        data-total="{{ $laporan->total_keseluruhan }}"
@@ -322,8 +324,10 @@ function tambahkanDataPenggajian() {
     const firstRow = container.querySelector('.item-row');
     
     let lastAddedInput = null;
+    let firstPenggajianId = null;
 
     checkboxes.forEach(cb => {
+        if (!firstPenggajianId) firstPenggajianId = cb.getAttribute('data-id');
         const newRow = firstRow.cloneNode(true);
         
         const tanggalMulai = cb.getAttribute('data-tanggal-mulai');
@@ -349,7 +353,12 @@ function tambahkanDataPenggajian() {
     if (!firstUraian && (!firstTotal || firstTotal == 0)) {
         firstRow.remove();
     }
+    
+    if (firstPenggajianId) {
+        document.getElementById('penggajian_id_input').value = firstPenggajianId;
+    }
 
+    calculateTotals();
     document.getElementById('check-all-penggajian').checked = false;
     updateCountSelectedPenggajian();
     closeModalPenggajian();

@@ -16,6 +16,7 @@ class PengajuanPenggajian extends Model
         'berlaku_tgl',
         'revisi',
         'kebun_id',
+        'penggajian_id',
         'perihal',
         'grand_total',
         'status',
@@ -29,5 +30,15 @@ class PengajuanPenggajian extends Model
     public function items()
     {
         return $this->hasMany(PengajuanPenggajianItem::class);
+    }
+
+    public function penggajian()
+    {
+        return $this->belongsTo(Penggajian::class);
+    }
+
+    public function bukti_kas_kebun()
+    {
+        return $this->hasOne(BuktiKasKebun::class);
     }
 }

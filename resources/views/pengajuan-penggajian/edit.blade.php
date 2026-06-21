@@ -29,6 +29,8 @@
         @csrf
         @method('PUT')
         
+        <input type="hidden" name="penggajian_id" id="penggajian_id_input" value="{{ old('penggajian_id', $pengajuan_penggajian->penggajian_id) }}">
+        
         <div class="p-6 md:p-8 border-b border-gray-100">
             <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Dokumen</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -180,10 +182,11 @@
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-3 px-4 text-center">
                                 <input type="checkbox" class="check-penggajian w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500" 
+                                       data-id="{{ $laporan->id }}"
                                        data-tanggal-mulai="{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }}"
                                        data-tanggal-akhir="{{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}"
                                        data-total="{{ $laporan->total_keseluruhan }}"
-                                       data-keterangan="{{ $laporan->keterangan }}">
+                                       data-keterangan="{{ $laporan->generated_keterangan }}">
                             </td>
                             <td class="py-3 px-4 text-sm font-bold text-gray-800">{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}</td>
                             <td class="py-3 px-4 text-sm font-semibold text-emerald-600">{{ $laporan->lokasi_kebun }}</td>
@@ -324,8 +327,10 @@ function tambahkanDataPenggajian() {
     const firstRow = container.querySelector('.item-row');
     
     let lastAddedInput = null;
+    let firstPenggajianId = null;
 
     checkboxes.forEach(cb => {
+        if (!firstPenggajianId) firstPenggajianId = cb.getAttribute('data-id');
         const newRow = firstRow.cloneNode(true);
         
         const tanggalMulai = cb.getAttribute('data-tanggal-mulai');
@@ -352,6 +357,10 @@ function tambahkanDataPenggajian() {
     const firstTotal = firstRow.querySelector('input[name="total_harga[]"]').value;
     if (!firstUraian && (!firstTotal || firstTotal == 0)) {
         firstRow.remove();
+    }
+    
+    if (firstPenggajianId) {
+        document.getElementById('penggajian_id_input').value = firstPenggajianId;
     }
 
     document.getElementById('check-all-penggajian').checked = false;
