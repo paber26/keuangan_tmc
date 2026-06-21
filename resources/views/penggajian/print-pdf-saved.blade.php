@@ -189,14 +189,14 @@
                 </tr>
             @empty
                 <tr>
-                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td>
+                    <td class="text-center" colspan="{{ count($period) + 4 }}">Belum ada data harian.</td>
                 </tr>
             @endforelse
             
             @if(count($dataHarian) > 0)
             <tr class="totals-row">
-                <td colspan="{{ count($period) + 2 }}" style="text-align: right;">TOTAL UPAH HARIAN</td>
-                <td colspan="2" style="text-align: left;">
+                <td colspan="{{ count($period) + 4 }}" style="text-align: right; padding-right: 10px;">TOTAL UPAH HARIAN</td>
+                <td colspan="1" style="text-align: left; background-color: #f3f4f6;">
                     <div class="currency">
                         <span class="curr-sym">Rp</span>
                         <span class="curr-val">{{ number_format($penggajian->total_upah_harian, 0, ',', '.') }}</span>
@@ -263,8 +263,8 @@
             
             @if(count($dataKupas) > 0)
             <tr class="totals-row">
-                <td colspan="{{ count($period) + 2 }}" style="text-align: right;">TOTAL UPAH KUPAS</td>
-                <td colspan="2" style="text-align: left;">
+                <td colspan="{{ count($period) + 4 }}" style="text-align: right; padding-right: 10px;">TOTAL UPAH KUPAS</td>
+                <td colspan="1" style="text-align: left; background-color: #f3f4f6;">
                     <div class="currency">
                         <span class="curr-sym">Rp</span>
                         <span class="curr-val">{{ number_format($penggajian->total_upah_kupas, 0, ',', '.') }}</span>
