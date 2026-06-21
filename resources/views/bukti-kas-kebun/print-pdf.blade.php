@@ -12,11 +12,16 @@
         .rotated-text {
             -webkit-transform: rotate(-90deg);
             transform: rotate(-90deg);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             font-style: italic;
             letter-spacing: 2px;
             white-space: nowrap;
+            width: 300px;
+            text-align: center;
+            position: absolute;
+            top: 250px;
+            left: -140px;
         }
 
         .main-box {
@@ -168,9 +173,9 @@
     <table style="border: none;">
         <tr>
             <!-- Rotated Text Area -->
-            <td style="width: 20px; vertical-align: middle; padding: 0;">
-                <div style="position: relative; width: 20px;">
-                    <div class="rotated-text" style="position: absolute; top: 200px; left: -140px;">
+            <td style="width: 30px; vertical-align: middle; padding: 0;">
+                <div style="position: relative; width: 30px; height: 100%;">
+                    <div class="rotated-text">
                         HANYA UNTUK INTERN
                     </div>
                 </div>
@@ -284,7 +289,7 @@
 
                         <!-- Footer integrated into Items Table -->
                         <tr>
-                            <td colspan="3" style="padding: 10px; border-right: 2px solid black;">
+                            <td colspan="3" style="padding: 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
                                 <table style="width: 100%; border: none;">
                                     <tr>
                                         <td style="width: 20%; border: none; font-weight: bold; font-size: 16px; font-style: italic; vertical-align: middle;">
@@ -305,7 +310,7 @@
                                     <div style="clear: both;"></div>
                                 </div>
                                 <div style="font-weight: bold; margin-bottom: 40px; text-align: center;">Dibukukan Oleh</div>
-                                <div style="font-size: 11px; font-weight: bold; text-decoration: underline; text-align: center;">Edmon</div>
+                                <div style="font-size: 11px; font-weight: bold; text-align: center;">Edmon</div>
                                 <div style="font-size: 10px; text-align: center; margin-top: 2px;">SPV Accounting</div>
                             </td>
                         </tr>
