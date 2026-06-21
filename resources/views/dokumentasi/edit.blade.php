@@ -83,17 +83,37 @@
 <script>
     const fileUpload = document.getElementById('file-upload');
     const previewContainer = document.getElementById('preview-container');
-    const dt = new DataTransfer();
+    let filesArray = [];
 
-    function addPreview(file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const div = document.createElement('div');
-            div.className = 'relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm';
-            div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-            previewContainer.appendChild(div);
-        }
-        reader.readAsDataURL(file);
+    function renderPreviews() {
+        previewContainer.innerHTML = '';
+        const dt = new DataTransfer();
+        
+        filesArray.forEach((file, index) => {
+            dt.items.add(file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm group';
+                div.innerHTML = `
+                    <img src="${e.target.result}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button type="button" onclick="removeFile(${index})" class="text-white flex items-center gap-2 bg-red-500 px-3 py-1.5 rounded-md hover:bg-red-600 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </div>
+                `;
+                previewContainer.appendChild(div);
+            }
+            reader.readAsDataURL(file);
+        });
+        
+        fileUpload.files = dt.files;
+    }
+
+    window.removeFile = function(index) {
+        filesArray.splice(index, 1);
+        renderPreviews();
     }
 
     // Handle normal file selection
@@ -101,12 +121,10 @@
         const files = Array.from(e.target.files);
         files.forEach(file => {
             if (file.type.startsWith('image/')) {
-                dt.items.add(file);
-                addPreview(file);
+                filesArray.push(file);
             }
         });
-        // Update input files
-        fileUpload.files = dt.files;
+        renderPreviews();
     });
 
     // Handle paste from clipboard
@@ -117,13 +135,12 @@
             for (let i = 0; i < e.clipboardData.files.length; i++) {
                 let file = e.clipboardData.files[i];
                 if (file.type.startsWith('image/')) {
-                    dt.items.add(file);
-                    addPreview(file);
+                    filesArray.push(file);
                     added = true;
                 }
             }
             if (added) {
-                fileUpload.files = dt.files;
+                renderPreviews();
                 
                 // Optional: visual feedback
                 const dropZone = document.getElementById('drop-zone');
