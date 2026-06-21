@@ -19,7 +19,8 @@ class PengajuanPenggajianController extends Controller
 
     public function create()
     {
-        $kebuns = Kebun::orderBy('lokasi', 'asc')->get();
+        $lokasiList = \App\Models\Penggajian::select('lokasi_kebun')->distinct()->pluck('lokasi_kebun');
+        $kebuns = Kebun::whereIn('lokasi', $lokasiList)->orderBy('lokasi', 'asc')->get()->unique('lokasi');
         return view('pengajuan-penggajian.create', compact('kebuns'));
     }
 
@@ -99,7 +100,15 @@ class PengajuanPenggajianController extends Controller
             return redirect()->route('pengajuan-penggajian.index')->with('error', 'Hanya pengajuan dengan status Menunggu yang dapat diedit.');
         }
         $pengajuan_penggajian->load('items');
-        $kebuns = Kebun::orderBy('lokasi', 'asc')->get();
+        
+        $lokasiList = \App\Models\Penggajian::select('lokasi_kebun')->distinct()->pluck('lokasi_kebun');
+        $kebuns = Kebun::whereIn('lokasi', $lokasiList)->orderBy('lokasi', 'asc')->get()->unique('lokasi');
+        
+        // Ensure the currently selected kebun is in the list even if no report exists for it
+        if ($pengajuan_penggajian->kebun && !$kebuns->contains('id', $pengajuan_penggajian->kebun_id)) {
+            $kebuns->push($pengajuan_penggajian->kebun);
+        }
+        
         return view('pengajuan-penggajian.edit', compact('pengajuan_penggajian', 'kebuns'));
     }
 
