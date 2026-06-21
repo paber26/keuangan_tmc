@@ -51,6 +51,7 @@ Route::middleware('admin.login')->group(function () {
 
     // Penggajian
     Route::get('/penggajian/laporan-mingguan', [\App\Http\Controllers\PenggajianController::class, 'index'])->name('penggajian.index');
+    Route::get('/penggajian/laporan-mingguan/print', [\App\Http\Controllers\PenggajianController::class, 'print'])->name('penggajian.print');
 
     // Keuangan & Laporan
     Route::get('/transaksi', function() { return view('transaksi.index'); })->name('transaksi.index');
