@@ -2,7 +2,7 @@
 @section('page-title', 'Edit Dokumentasi Harian')
 
 @section('content')
-<div class="w-full max-w-4xl pb-10">
+<div class="w-full max-w-4xl mx-auto pb-10">
     <div class="mb-8">
         <a href="{{ route('dokumentasi.index') }}" class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -28,8 +28,29 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi Kebun <span class="text-red-500">*</span></label>
+                    <select name="kebun_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
+                        <option value="" disabled {{ !$dokumentasi->kebun_id ? 'selected' : '' }}>-- Pilih Lokasi Kebun --</option>
+                        @foreach($kebun as $k)
+                            <option value="{{ $k->id }}" {{ $dokumentasi->kebun_id == $k->id ? 'selected' : '' }}>{{ $k->lokasi }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Karyawan <span class="text-red-500">*</span></label>
+                    <select name="karyawan_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
+                        <option value="" disabled {{ !$dokumentasi->karyawan_id ? 'selected' : '' }}>-- Pilih Karyawan --</option>
+                        @foreach($karyawan as $kry)
+                            <option value="{{ $kry->id }}" {{ $dokumentasi->karyawan_id == $kry->id ? 'selected' : '' }}>{{ $kry->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2 mt-6">Keterangan Tambahan (Opsional)</label>
                 <textarea name="keterangan" rows="4" placeholder="Tuliskan detail pekerjaan..." class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">{{ $dokumentasi->keterangan }}</textarea>
             </div>
 
@@ -184,3 +205,44 @@
     }
 </script>
 @endsection
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-container .select2-selection--single {
+        height: 42px !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 0.5rem !important;
+        display: flex;
+        align-items: center;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #374151 !important;
+        line-height: 40px !important;
+        padding-left: 1rem !important;
+    }
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border: 1px solid #e5e7eb !important;
+        border-radius: 0.25rem !important;
+    }
+    .select2-container--default .select2-selection--single:focus {
+        border-color: #10b981 !important;
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.searchable-select').select2({
+            width: '100%'
+        });
+    });
+</script>
+@endpush

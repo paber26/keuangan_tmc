@@ -271,7 +271,14 @@ document.addEventListener('DOMContentLoaded', function () {
         
         newRow.querySelector('input[name="tanggal_pemakaian[]"]').value = lastRow.querySelector('input[name="tanggal_pemakaian[]"]').value;
         newRow.querySelector('select[name="tipe_bbm[]"]').value = lastRow.querySelector('select[name="tipe_bbm[]"]').value;
-        newRow.querySelector('input[name="keterangan_pemakaian[]"]').value = '';
+        
+        const category = document.querySelector('input[name="kategori"]:checked')?.value;
+        if (category === 'Sopir') {
+            newRow.querySelector('input[name="keterangan_pemakaian[]"]').value = lastRow.querySelector('input[name="keterangan_pemakaian[]"]').value;
+        } else {
+            newRow.querySelector('input[name="keterangan_pemakaian[]"]').value = '';
+        }
+        
         newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
         newRow.querySelector('input[name="harga_per_liter[]"]').value = lastRow.querySelector('input[name="harga_per_liter[]"]').value;
         newRow.querySelector('.row-total').textContent = '0';

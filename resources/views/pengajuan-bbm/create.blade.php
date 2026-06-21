@@ -111,9 +111,12 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-100 border-t border-gray-200">
-                            <td colspan="2" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">TOTAL PENGAJUAN DANA</td>
-                            <td class="py-4 px-4 text-left">
-                                <span class="text-lg font-bold text-emerald-600" id="grand-total">Rp 0</span>
+                            <td colspan="4" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">TOTAL PENGAJUAN DANA</td>
+                            <td class="py-4 px-4">
+                                <div class="flex justify-between items-center text-lg font-bold text-emerald-600">
+                                    <span>Rp</span>
+                                    <span id="grand-total">0</span>
+                                </div>
                             </td>
                             <td colspan="2"></td>
                         </tr>
@@ -272,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
             grandTotal += total;
         });
 
-        grandTotalEl.textContent = 'Rp ' + formatRp(grandTotal);
+        grandTotalEl.textContent = formatRp(grandTotal);
     };
 
     btnAdd.addEventListener('click', () => {

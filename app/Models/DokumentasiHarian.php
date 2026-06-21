@@ -13,6 +13,8 @@ class DokumentasiHarian extends Model
         'tanggal',
         'judul',
         'keterangan',
+        'kebun_id',
+        'karyawan_id',
     ];
 
     public function images()

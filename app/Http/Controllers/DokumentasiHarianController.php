@@ -18,7 +18,9 @@ class DokumentasiHarianController extends Controller
 
     public function create()
     {
-        return view('dokumentasi.create');
+        $kebun = \App\Models\Kebun::orderBy('lokasi', 'asc')->get();
+        $karyawan = \App\Models\Karyawan::orderBy('nama', 'asc')->get();
+        return view('dokumentasi.create', compact('kebun', 'karyawan'));
     }
 
     public function store(Request $request)
@@ -26,6 +28,8 @@ class DokumentasiHarianController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'judul' => 'required|string|max:255',
+            'kebun_id' => 'required|exists:kebuns,id',
+            'karyawan_id' => 'required|exists:karyawans,id',
             'keterangan' => 'nullable|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120' // max 5MB
         ]);
@@ -37,6 +41,8 @@ class DokumentasiHarianController extends Controller
                 'tanggal' => $request->tanggal,
                 'judul' => $request->judul,
                 'keterangan' => $request->keterangan,
+                'kebun_id' => $request->kebun_id,
+                'karyawan_id' => $request->karyawan_id,
             ]);
 
             if ($request->hasFile('images')) {
@@ -66,7 +72,9 @@ class DokumentasiHarianController extends Controller
     public function edit(string $id)
     {
         $dokumentasi = DokumentasiHarian::with('images')->findOrFail($id);
-        return view('dokumentasi.edit', compact('dokumentasi'));
+        $kebun = \App\Models\Kebun::orderBy('lokasi', 'asc')->get();
+        $karyawan = \App\Models\Karyawan::orderBy('nama', 'asc')->get();
+        return view('dokumentasi.edit', compact('dokumentasi', 'kebun', 'karyawan'));
     }
 
     public function update(Request $request, string $id)
@@ -74,6 +82,8 @@ class DokumentasiHarianController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'judul' => 'required|string|max:255',
+            'kebun_id' => 'required|exists:kebuns,id',
+            'karyawan_id' => 'required|exists:karyawans,id',
             'keterangan' => 'nullable|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120'
         ]);
@@ -86,6 +96,8 @@ class DokumentasiHarianController extends Controller
                 'tanggal' => $request->tanggal,
                 'judul' => $request->judul,
                 'keterangan' => $request->keterangan,
+                'kebun_id' => $request->kebun_id,
+                'karyawan_id' => $request->karyawan_id,
             ]);
 
             // Handle deleted images if any
