@@ -31,6 +31,15 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8">
         <h3 class="text-lg font-bold text-gray-800 mb-4">Keterangan</h3>
         <p class="text-gray-600 whitespace-pre-line">{{ $dokumentasi->keterangan ?: 'Tidak ada keterangan yang ditambahkan.' }}</p>
+
+        <h3 class="text-lg font-bold text-gray-800 mt-6 mb-2">Karyawan Terlibat</h3>
+        <p class="text-gray-600">
+            @if($dokumentasi->karyawans->count() > 0)
+                {{ $dokumentasi->karyawans->pluck('nama')->join(', ') }}
+            @else
+                -
+            @endif
+        </p>
     </div>
 
     <h3 class="text-xl font-bold text-gray-800 mb-6">Galeri Foto ({{ $dokumentasi->images->count() }})</h3>

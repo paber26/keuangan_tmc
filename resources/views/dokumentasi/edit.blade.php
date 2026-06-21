@@ -40,10 +40,9 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Karyawan <span class="text-red-500">*</span></label>
-                    <select name="karyawan_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
-                        <option value="" disabled {{ !$dokumentasi->karyawan_id ? 'selected' : '' }}>-- Pilih Karyawan --</option>
+                    <select name="karyawan_ids[]" multiple required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white" data-placeholder="-- Pilih Beberapa Karyawan --">
                         @foreach($karyawan as $kry)
-                            <option value="{{ $kry->id }}" {{ $dokumentasi->karyawan_id == $kry->id ? 'selected' : '' }}>{{ $kry->nama }}</option>
+                            <option value="{{ $kry->id }}" {{ $dokumentasi->karyawans->contains('id', $kry->id) ? 'selected' : '' }}>{{ $kry->nama }}</option>
                         @endforeach
                     </select>
                 </div>

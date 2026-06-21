@@ -27,8 +27,8 @@ class DokumentasiHarian extends Model
         return $this->belongsTo(Kebun::class, 'kebun_id');
     }
 
-    public function karyawan()
+    public function karyawans()
     {
-        return $this->belongsTo(Karyawan::class, 'karyawan_id');
+        return $this->belongsToMany(Karyawan::class, 'dokumentasi_karyawan');
     }
 }

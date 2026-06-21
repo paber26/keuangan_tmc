@@ -105,7 +105,7 @@ class PenggajianController extends Controller
 
         $dokumentasi = [];
         if ($startDate && $endDate && $selectedLokasi) {
-            $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawan', 'kebun'])
+            $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawans', 'kebun'])
                 ->whereDate('tanggal', '>=', $startDate)
                 ->whereDate('tanggal', '<=', $endDate)
                 ->whereHas('kebun', function($q) use ($selectedLokasi) {
@@ -275,7 +275,7 @@ class PenggajianController extends Controller
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
         $dataBorongan = $penggajian->details->where('tipe_pekerjaan', 'Borongan');
 
-        $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawan', 'kebun'])
+        $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawans', 'kebun'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
             ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
             ->whereHas('kebun', function($q) use ($penggajian) {

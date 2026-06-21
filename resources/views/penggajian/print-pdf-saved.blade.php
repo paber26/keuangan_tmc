@@ -82,6 +82,16 @@
             margin-bottom: 5px;
             margin-top: 15px;
         }
+        .table-title {
+            text-align: left !important;
+            background-color: transparent !important;
+            border: none !important;
+            font-size: 11pt !important;
+            padding-left: 0 !important;
+            padding-bottom: 5px !important;
+            font-weight: bold !important;
+            text-transform: uppercase;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -157,9 +167,13 @@
     
     @if(count($dataHarian) > 0)
         @foreach($groupedHarian as $jabatan => $items)
-        <div class="section-title" style="{{ $loop->first ? '' : 'margin-top: 20px;' }}">HARIAN - {{ strtoupper($jabatan ?: 'TIDAK DIKETAHUI') }}</div>
-        <table>
+        <table style="{{ $loop->first ? '' : 'margin-top: 20px;' }}">
             <thead>
+                <tr>
+                    <th colspan="{{ count($period) + 5 }}" class="table-title">
+                        HARIAN - {{ strtoupper($jabatan ?: 'TIDAK DIKETAHUI') }}
+                    </th>
+                </tr>
                 <tr>
                     <th rowspan="2" style="width: 20px;">NO.</th>
                     <th rowspan="2" style="width: 110px;">NAMA</th>
@@ -230,11 +244,17 @@
         </table>
         @endforeach
     @else
-        <div class="section-title">HARIAN</div>
         <table>
-            <tr>
-                <td class="text-center" colspan="{{ count($period) + 4 }}">Belum ada data harian.</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th colspan="{{ count($period) + 5 }}" class="table-title">HARIAN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td>
+                </tr>
+            </tbody>
         </table>
     @endif
 
@@ -260,9 +280,13 @@
         $tarifLabel = $isKupas ? 'PER BUTIR' : ($isPemanjat ? 'PER POHON' : ($isPemetik ? 'PER KG' : 'PER VOLUME'));
         $tarifVal = $isKupas ? $penggajian->tarif_kupas : ($isPemanjat ? $penggajian->tarif_pemanjat : ($isPemetik ? $penggajian->tarif_pemetik : 0));
     @endphp
-    <div class="section-title">BORONGAN - {{ strtoupper($jabatan) }}</div>
-    <table>
+    <table style="margin-top: 20px;">
         <thead>
+            <tr>
+                <th colspan="{{ count($period) + 5 }}" class="table-title">
+                    BORONGAN - {{ strtoupper($jabatan) }}
+                </th>
+            </tr>
             <tr>
                 <th rowspan="2" style="width: 20px;">NO.</th>
                 <th rowspan="2" style="width: 110px;">NAMA</th>
@@ -322,11 +346,17 @@
         </tbody>
     </table>
     @empty
-        <div class="section-title">BORONGAN</div>
-        <table>
-            <tr>
-                <td class="text-center" colspan="{{ count($period) + 4 }}">Belum ada data borongan.</td>
-            </tr>
+        <table style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th colspan="{{ count($period) + 5 }}" class="table-title">BORONGAN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data borongan.</td>
+                </tr>
+            </tbody>
         </table>
     @endforelse
 

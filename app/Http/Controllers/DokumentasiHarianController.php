@@ -12,7 +12,7 @@ class DokumentasiHarianController extends Controller
 {
     public function index(Request $request)
     {
-        $query = DokumentasiHarian::with(['images', 'kebun', 'karyawan']);
+        $query = DokumentasiHarian::with(['images', 'kebun', 'karyawans']);
 
         if ($request->filled('start_date')) {
             $query->whereDate('tanggal', '>=', $request->start_date);
@@ -47,7 +47,8 @@ class DokumentasiHarianController extends Controller
             'tanggal' => 'required|date',
             'judul' => 'required|string|max:255',
             'kebun_id' => 'required|exists:kebuns,id',
-            'karyawan_id' => 'required|exists:karyawans,id',
+            'karyawan_ids' => 'required|array',
+            'karyawan_ids.*' => 'exists:karyawans,id',
             'keterangan' => 'nullable|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120' // max 5MB
         ]);
@@ -60,8 +61,10 @@ class DokumentasiHarianController extends Controller
                 'judul' => $request->judul,
                 'keterangan' => $request->keterangan,
                 'kebun_id' => $request->kebun_id,
-                'karyawan_id' => $request->karyawan_id,
+                'karyawan_id' => null, // Legacy column, can be removed later
             ]);
+
+            $dokumentasi->karyawans()->sync($request->karyawan_ids);
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
@@ -83,13 +86,13 @@ class DokumentasiHarianController extends Controller
 
     public function show(string $id)
     {
-        $dokumentasi = DokumentasiHarian::with('images')->findOrFail($id);
+        $dokumentasi = DokumentasiHarian::with(['images', 'karyawans'])->findOrFail($id);
         return view('dokumentasi.show', compact('dokumentasi'));
     }
 
     public function edit(string $id)
     {
-        $dokumentasi = DokumentasiHarian::with('images')->findOrFail($id);
+        $dokumentasi = DokumentasiHarian::with(['images', 'karyawans'])->findOrFail($id);
         $kebun = \App\Models\Kebun::orderBy('lokasi', 'asc')->get()->unique('lokasi');
         $karyawan = \App\Models\Karyawan::orderBy('nama', 'asc')->get();
         return view('dokumentasi.edit', compact('dokumentasi', 'kebun', 'karyawan'));
@@ -101,7 +104,8 @@ class DokumentasiHarianController extends Controller
             'tanggal' => 'required|date',
             'judul' => 'required|string|max:255',
             'kebun_id' => 'required|exists:kebuns,id',
-            'karyawan_id' => 'required|exists:karyawans,id',
+            'karyawan_ids' => 'required|array',
+            'karyawan_ids.*' => 'exists:karyawans,id',
             'keterangan' => 'nullable|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120'
         ]);
@@ -115,8 +119,10 @@ class DokumentasiHarianController extends Controller
                 'judul' => $request->judul,
                 'keterangan' => $request->keterangan,
                 'kebun_id' => $request->kebun_id,
-                'karyawan_id' => $request->karyawan_id,
+                'karyawan_id' => null, // Legacy column
             ]);
+
+            $dokumentasi->karyawans()->sync($request->karyawan_ids);
 
             // Handle deleted images if any
             if ($request->has('deleted_images')) {

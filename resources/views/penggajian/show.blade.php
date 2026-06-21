@@ -309,7 +309,10 @@
                             <div class="flex justify-end items-start mb-1">
                                 <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
                             </div>
-                            <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{{ $doc->judul }}</h3>
+                            <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1">{{ $doc->judul }}</h3>
+                            <div class="text-xs text-emerald-600 font-medium mb-2 truncate" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
+                                {{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}
+                            </div>
                             <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ $doc->keterangan ?: 'Tidak ada keterangan' }}</p>
                             <a href="{{ route('dokumentasi.index') }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Detail &rarr;</a>
                         </div>

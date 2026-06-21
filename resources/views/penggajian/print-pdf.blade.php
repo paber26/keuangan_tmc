@@ -63,6 +63,16 @@
             margin-bottom: 5px;
             margin-top: 15px;
         }
+        .table-title {
+            text-align: left !important;
+            background-color: transparent !important;
+            border: none !important;
+            font-size: 11pt !important;
+            padding-left: 0 !important;
+            padding-bottom: 5px !important;
+            font-weight: bold !important;
+            text-transform: uppercase;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -119,9 +129,11 @@
     </div>
 
     <!-- HARIAN -->
-    <div class="section-title">HARIAN</div>
     <table>
         <thead>
+            <tr>
+                <th colspan="{{ count($period) + 5 }}" class="table-title">HARIAN</th>
+            </tr>
             <tr>
                 <th rowspan="2" style="width: 20px;">NO.</th>
                 <th rowspan="2" style="width: 110px;">NAMA</th>
@@ -199,9 +211,11 @@
     </table>
 
     <!-- KUPAS KELAPA -->
-    <div class="section-title">KUPAS KELAPA</div>
-    <table>
+    <table style="margin-top: 20px;">
         <thead>
+            <tr>
+                <th colspan="{{ count($period) + 5 }}" class="table-title">KUPAS KELAPA</th>
+            </tr>
             <tr>
                 <th rowspan="2" style="width: 20px;">NO.</th>
                 <th rowspan="2" style="width: 110px;">NAMA</th>
