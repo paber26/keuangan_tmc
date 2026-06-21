@@ -51,6 +51,12 @@
 
             {{-- Tabel HARIAN --}}
             @php
+                $dataHarian = $dataHarian->map(function($item) {
+                    if (empty($item->jabatan)) {
+                        $item->jabatan = $item->karyawan->jabatans->first()->nama ?? 'TIDAK DIKETAHUI';
+                    }
+                    return $item;
+                });
                 $groupedHarian = $dataHarian->groupBy('jabatan');
             @endphp
             
@@ -124,18 +130,6 @@
                     </tbody>
                 </table>
                 @endforeach
-                
-                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
-                    <tr>
-                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH HARIAN</td>
-                        <td class="border border-black p-1 text-left font-bold text-emerald-600 bg-emerald-50">
-                            <div class="flex justify-between">
-                                <span>Rp</span>
-                                <span>{{ number_format($penggajian->total_upah_harian, 0, ',', '.') }}</span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
             @else
                 <div class="mb-2 font-bold text-sm">HARIAN</div>
                 <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
@@ -143,16 +137,31 @@
                 </table>
             @endif
 
-            {{-- Tabel KUPAS KELAPA --}}
-            <div class="mb-2 font-bold text-sm">KUPAS KELAPA</div>
+            {{-- Tabel BORONGAN --}}
+            @php
+                $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
+                $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
+            @endphp
+            
+            @forelse($groupedBorongan as $jabatan => $items)
+            @php
+                $isKupas = $jabatan === 'Kupas Kelapa';
+                $isPemanjat = $jabatan === 'Pemanjat Kelapa';
+                $isPemetik = $jabatan === 'Pemetik Cengkeh';
+                
+                $volLabel = $isKupas ? 'BUTIR' : ($isPemanjat ? 'POHON' : ($isPemetik ? 'KG' : 'VOLUME'));
+                $tarifLabel = $isKupas ? 'PER BUTIR' : ($isPemanjat ? 'PER POHON' : ($isPemetik ? 'PER KG' : 'PER VOLUME'));
+                $tarifVal = $isKupas ? $penggajian->tarif_kupas : ($isPemanjat ? $penggajian->tarif_pemanjat : ($isPemetik ? $penggajian->tarif_pemetik : 0));
+            @endphp
+            <div class="mb-2 font-bold text-sm mt-4 uppercase">BORONGAN - {{ $jabatan }}</div>
             <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
                 <thead class="bg-[#FFE600]">
                     <tr>
                         <th class="border border-black p-1 align-middle" rowspan="2" style="width: 30px;">NO.</th>
                         <th class="border border-black p-1 align-middle" rowspan="2" style="width: 180px;">NAMA</th>
                         <th class="border border-black p-1" colspan="{{ count($period) }}">PERIODE</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 70px;">JUMLAH<br>BUTIR</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>PER BUTIR</th>
+                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 70px;">JUMLAH<br>{{ $volLabel }}</th>
+                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>{{ $tarifLabel }}</th>
                         <th class="border border-black p-1 align-middle" rowspan="2" style="width: 100px;">TOTAL UPAH</th>
                     </tr>
                     <tr>
@@ -162,8 +171,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $no = 1; @endphp
-                    @forelse($dataKupas as $data)
+                    @php $no = 1; $totalUpahGroup = 0; @endphp
+                    @foreach($items as $data)
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="border border-black p-1">{{ $no++ }}</td>
                             <td class="border border-black p-1 text-left uppercase">{{ $data->nama_karyawan }}</td>
@@ -178,7 +187,7 @@
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($penggajian->tarif_kupas, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($tarifVal, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                             <td class="border border-black p-1 text-left bg-gray-100">
@@ -188,26 +197,27 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td class="border border-black p-2" colspan="{{ count($period) + 5 }}">Belum ada data kupas kelapa.</td>
-                        </tr>
-                    @endforelse
+                        @php $totalUpahGroup += $data->total_upah; @endphp
+                    @endforeach
                     
-                    {{-- Footer Kupas --}}
-                    @if(count($dataKupas) > 0)
+                    {{-- Footer Group --}}
                     <tr>
-                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH KUPAS</td>
+                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH BORONGAN - {{ $jabatan }}</td>
                         <td class="border border-black p-1 text-left font-bold text-blue-600 bg-blue-50">
                             <div class="flex justify-between">
                                 <span>Rp</span>
-                                <span>{{ number_format($penggajian->total_upah_kupas, 0, ',', '.') }}</span>
+                                <span>{{ number_format($totalUpahGroup, 0, ',', '.') }}</span>
                             </div>
                         </td>
                     </tr>
-                    @endif
                 </tbody>
             </table>
+            @empty
+                <div class="mb-2 font-bold text-sm">BORONGAN</div>
+                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
+                    <tr><td class="border border-black p-2 text-center" colspan="{{ count($period) + 5 }}">Belum ada data borongan.</td></tr>
+                </table>
+            @endforelse
 
             {{-- Tabel AKUMULASI --}}
             <div class="w-full md:w-1/2 mt-8">
@@ -235,11 +245,11 @@
                         </tr>
                         <tr>
                             <td class="border border-black p-1 text-center">2</td>
-                            <td class="border border-black p-1">KUPAS KELAPA</td>
+                            <td class="border border-black p-1">BORONGAN</td>
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($penggajian->total_upah_kupas, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($totalUpahBorongan, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -286,8 +296,7 @@
                             @endif
                         </div>
                         <div class="p-5">
-                            <div class="flex justify-between items-start mb-1">
-                                <div class="text-xs font-semibold text-emerald-600">{{ \Carbon\Carbon::parse($doc->tanggal)->format('H:i') }} WIB</div>
+                            <div class="flex justify-end items-start mb-1">
                                 <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
                             </div>
                             <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{{ $doc->judul }}</h3>

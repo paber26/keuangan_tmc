@@ -30,13 +30,15 @@ class PenggajianController extends Controller
         
         $tarifHarian = $request->get('tarif_harian', 125000);
         $tarifKupas = $request->get('tarif_kupas', 200);
+        $tarifPemanjat = $request->get('tarif_pemanjat', 10000);
+        $tarifPemetik = $request->get('tarif_pemetik', 14000);
 
         $period = [];
         $dataHarian = [];
-        $dataKupas = [];
+        $dataBorongan = [];
         
         $totalUpahHarian = 0;
-        $totalUpahKupas = 0;
+        $totalUpahBorongan = 0;
 
         if ($selectedLokasi && $startDate && $endDate) {
             $start = Carbon::parse($startDate);
@@ -54,18 +56,19 @@ class PenggajianController extends Controller
                 $karyawanId = $absensi->karyawan_id;
                 $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
 
-                if ($jabatan === 'Kupas Kelapa') {
-                    if (!isset($dataKupas[$karyawanId])) {
-                        $dataKupas[$karyawanId] = [
+                if (in_array($jabatan, ['Kupas Kelapa', 'Pemanjat Kelapa', 'Pemetik Cengkeh'])) {
+                    if (!isset($dataBorongan[$karyawanId])) {
+                        $dataBorongan[$karyawanId] = [
                             'karyawan_id' => $karyawanId,
                             'nama' => $nama,
+                            'jabatan' => $jabatan,
                             'hari' => [],
-                            'total_butir' => 0,
+                            'total_volume' => 0,
                             'total_upah' => 0
                         ];
                     }
-                    $dataKupas[$karyawanId]['hari'][$absensi->tanggal] = $absensi->volume;
-                    $dataKupas[$karyawanId]['total_butir'] += $absensi->volume;
+                    $dataBorongan[$karyawanId]['hari'][$absensi->tanggal] = $absensi->volume;
+                    $dataBorongan[$karyawanId]['total_volume'] += $absensi->volume;
                 } else {
                     if (!isset($dataHarian[$karyawanId])) {
                         $dataHarian[$karyawanId] = [
@@ -87,9 +90,14 @@ class PenggajianController extends Controller
                 $data['total_upah'] = $data['total_hari'] * $tarifHarian;
                 $totalUpahHarian += $data['total_upah'];
             }
-            foreach ($dataKupas as $id => &$data) {
-                $data['total_upah'] = $data['total_butir'] * $tarifKupas;
-                $totalUpahKupas += $data['total_upah'];
+            foreach ($dataBorongan as $id => &$data) {
+                $tarif = 0;
+                if ($data['jabatan'] === 'Kupas Kelapa') $tarif = $tarifKupas;
+                elseif ($data['jabatan'] === 'Pemanjat Kelapa') $tarif = $tarifPemanjat;
+                elseif ($data['jabatan'] === 'Pemetik Cengkeh') $tarif = $tarifPemetik;
+                
+                $data['total_upah'] = $data['total_volume'] * $tarif;
+                $totalUpahBorongan += $data['total_upah'];
             }
         }
 
@@ -115,11 +123,13 @@ class PenggajianController extends Controller
             'endDate',
             'tarifHarian',
             'tarifKupas',
+            'tarifPemanjat',
+            'tarifPemetik',
             'period',
             'dataHarian',
-            'dataKupas',
+            'dataBorongan',
             'totalUpahHarian',
-            'totalUpahKupas',
+            'totalUpahBorongan',
             'dokumentasi'
         ));
     }
@@ -132,6 +142,8 @@ class PenggajianController extends Controller
             'lokasi_kebun' => 'required|string',
             'tarif_harian' => 'required|numeric',
             'tarif_kupas' => 'required|numeric',
+            'tarif_pemanjat' => 'required|numeric',
+            'tarif_pemetik' => 'required|numeric',
         ]);
 
         // Re-calculate to ensure data integrity before saving
@@ -145,8 +157,11 @@ class PenggajianController extends Controller
             ->get();
 
         $dataHarian = [];
-        $dataKupas = [];
+        $dataBorongan = [];
         $totalUpahHarian = 0;
+        $totalUpahBorongan = 0;
+        $totalUpahPemanjat = 0;
+        $totalUpahPemetik = 0;
         $totalUpahKupas = 0;
 
         foreach ($absensis as $absensi) {
@@ -154,18 +169,18 @@ class PenggajianController extends Controller
             $karyawanId = $absensi->karyawan_id;
             $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
 
-            if ($jabatan === 'Kupas Kelapa') {
-                if (!isset($dataKupas[$karyawanId])) {
-                    $dataKupas[$karyawanId] = [
+            if (in_array($jabatan, ['Kupas Kelapa', 'Pemanjat Kelapa', 'Pemetik Cengkeh'])) {
+                if (!isset($dataBorongan[$karyawanId])) {
+                    $dataBorongan[$karyawanId] = [
                         'nama' => $nama,
                         'jabatan' => $jabatan,
                         'hari' => [],
-                        'total_butir' => 0,
+                        'total_volume' => 0,
                         'total_upah' => 0
                     ];
                 }
-                $dataKupas[$karyawanId]['hari'][$absensi->tanggal] = $absensi->volume;
-                $dataKupas[$karyawanId]['total_butir'] += $absensi->volume;
+                $dataBorongan[$karyawanId]['hari'][$absensi->tanggal] = $absensi->volume;
+                $dataBorongan[$karyawanId]['total_volume'] += $absensi->volume;
             } else {
                 if (!isset($dataHarian[$karyawanId])) {
                     $dataHarian[$karyawanId] = [
@@ -185,9 +200,18 @@ class PenggajianController extends Controller
             $dataHarian[$id]['total_upah'] = $dataHarian[$id]['total_hari'] * $request->tarif_harian;
             $totalUpahHarian += $dataHarian[$id]['total_upah'];
         }
-        foreach ($dataKupas as $id => $data) {
-            $dataKupas[$id]['total_upah'] = $dataKupas[$id]['total_butir'] * $request->tarif_kupas;
-            $totalUpahKupas += $dataKupas[$id]['total_upah'];
+        foreach ($dataBorongan as $id => $data) {
+            $tarif = 0;
+            if ($data['jabatan'] === 'Kupas Kelapa') $tarif = $request->tarif_kupas;
+            elseif ($data['jabatan'] === 'Pemanjat Kelapa') $tarif = $request->tarif_pemanjat;
+            elseif ($data['jabatan'] === 'Pemetik Cengkeh') $tarif = $request->tarif_pemetik;
+            
+            $dataBorongan[$id]['total_upah'] = $data['total_volume'] * $tarif;
+            $totalUpahBorongan += $dataBorongan[$id]['total_upah'];
+
+            if ($data['jabatan'] === 'Kupas Kelapa') $totalUpahKupas += $dataBorongan[$id]['total_upah'];
+            elseif ($data['jabatan'] === 'Pemanjat Kelapa') $totalUpahPemanjat += $dataBorongan[$id]['total_upah'];
+            elseif ($data['jabatan'] === 'Pemetik Cengkeh') $totalUpahPemetik += $dataBorongan[$id]['total_upah'];
         }
 
         // Create Penggajian
@@ -197,9 +221,13 @@ class PenggajianController extends Controller
             'lokasi_kebun' => $request->lokasi_kebun,
             'tarif_harian' => $request->tarif_harian,
             'tarif_kupas' => $request->tarif_kupas,
+            'tarif_pemanjat' => $request->tarif_pemanjat,
+            'tarif_pemetik' => $request->tarif_pemetik,
             'total_upah_harian' => $totalUpahHarian,
             'total_upah_kupas' => $totalUpahKupas,
-            'total_keseluruhan' => $totalUpahHarian + $totalUpahKupas,
+            'total_upah_pemanjat' => $totalUpahPemanjat,
+            'total_upah_pemetik' => $totalUpahPemetik,
+            'total_keseluruhan' => $totalUpahHarian + $totalUpahBorongan,
         ]);
 
         // Insert Details
@@ -217,15 +245,15 @@ class PenggajianController extends Controller
             ]);
         }
 
-        foreach ($dataKupas as $karyawanId => $data) {
+        foreach ($dataBorongan as $karyawanId => $data) {
             PenggajianDetail::create([
                 'penggajian_id' => $penggajian->id,
                 'karyawan_id' => $karyawanId,
                 'nama_karyawan' => $data['nama'],
-                'jabatan' => $data['jabatan'] ?? 'Kupas Kelapa',
-                'tipe_pekerjaan' => 'Kupas Kelapa',
+                'jabatan' => $data['jabatan'] ?? 'Borongan',
+                'tipe_pekerjaan' => 'Borongan',
                 'jumlah_hari_kerja' => 0,
-                'jumlah_volume' => $data['total_butir'],
+                'jumlah_volume' => $data['total_volume'],
                 'total_upah' => $data['total_upah'],
                 'rincian_harian' => $data['hari']
             ]);
@@ -236,11 +264,11 @@ class PenggajianController extends Controller
 
     public function show($id)
     {
-        $penggajian = Penggajian::with('details')->findOrFail($id);
+        $penggajian = Penggajian::with(['details.karyawan.jabatans'])->findOrFail($id);
         $period = CarbonPeriod::create(Carbon::parse($penggajian->tanggal_mulai), Carbon::parse($penggajian->tanggal_akhir));
 
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
-        $dataKupas = $penggajian->details->where('tipe_pekerjaan', 'Kupas Kelapa');
+        $dataBorongan = $penggajian->details->where('tipe_pekerjaan', 'Borongan');
 
         $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawan', 'kebun'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
@@ -254,7 +282,64 @@ class PenggajianController extends Controller
                 return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
             });
 
-        return view('penggajian.show', compact('penggajian', 'period', 'dataHarian', 'dataKupas', 'dokumentasi'));
+        return view('penggajian.show', compact('penggajian', 'period', 'dataHarian', 'dataBorongan', 'dokumentasi'));
+    }
+
+    public function edit($id)
+    {
+        $penggajian = Penggajian::findOrFail($id);
+        return view('penggajian.edit', compact('penggajian'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tarif_harian' => 'required|numeric|min:0',
+            'tarif_kupas' => 'required|numeric|min:0',
+            'tarif_pemanjat' => 'required|numeric|min:0',
+            'tarif_pemetik' => 'required|numeric|min:0',
+        ]);
+
+        $penggajian = Penggajian::with('details')->findOrFail($id);
+
+        $penggajian->tarif_harian = $request->tarif_harian;
+        $penggajian->tarif_kupas = $request->tarif_kupas;
+        $penggajian->tarif_pemanjat = $request->tarif_pemanjat;
+        $penggajian->tarif_pemetik = $request->tarif_pemetik;
+
+        $totalHarian = 0;
+        $totalKupas = 0;
+        $totalPemanjat = 0;
+        $totalPemetik = 0;
+
+        foreach ($penggajian->details as $detail) {
+            if ($detail->tipe_pekerjaan === 'Harian') {
+                $detail->total_upah = $detail->jumlah_hari_kerja * $request->tarif_harian;
+                $totalHarian += $detail->total_upah;
+                $detail->save();
+            } else if ($detail->tipe_pekerjaan === 'Borongan') {
+                if ($detail->jabatan === 'Kupas Kelapa') {
+                    $detail->total_upah = $detail->jumlah_volume * $request->tarif_kupas;
+                    $totalKupas += $detail->total_upah;
+                } else if ($detail->jabatan === 'Pemanjat Kelapa') {
+                    $detail->total_upah = $detail->jumlah_volume * $request->tarif_pemanjat;
+                    $totalPemanjat += $detail->total_upah;
+                } else if ($detail->jabatan === 'Pemetik Cengkeh') {
+                    $detail->total_upah = $detail->jumlah_volume * $request->tarif_pemetik;
+                    $totalPemetik += $detail->total_upah;
+                }
+                $detail->save();
+            }
+        }
+
+        $penggajian->total_upah_harian = $totalHarian;
+        $penggajian->total_upah_kupas = $totalKupas;
+        $penggajian->total_upah_pemanjat = $totalPemanjat;
+        $penggajian->total_upah_pemetik = $totalPemetik;
+        $penggajian->total_keseluruhan = $totalHarian + $totalKupas + $totalPemanjat + $totalPemetik;
+        $penggajian->save();
+
+        return redirect()->route('penggajian.show', $penggajian->id)->with('success', 'Tarif penggajian berhasil diperbarui dan total upah telah dihitung ulang.');
     }
 
     public function destroy($id)
@@ -270,11 +355,11 @@ class PenggajianController extends Controller
         ini_set('memory_limit', '1024M');
         set_time_limit(300);
 
-        $penggajian = Penggajian::with('details')->findOrFail($id);
+        $penggajian = Penggajian::with(['details.karyawan.jabatans'])->findOrFail($id);
         $period = CarbonPeriod::create(Carbon::parse($penggajian->tanggal_mulai), Carbon::parse($penggajian->tanggal_akhir));
 
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
-        $dataKupas = $penggajian->details->where('tipe_pekerjaan', 'Kupas Kelapa');
+        $dataBorongan = $penggajian->details->where('tipe_pekerjaan', 'Borongan');
 
         $dokumentasi = \App\Models\DokumentasiHarian::with(['images'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
@@ -289,7 +374,7 @@ class PenggajianController extends Controller
             });
 
         return view('penggajian.print-pdf-saved', compact(
-            'penggajian', 'period', 'dataHarian', 'dataKupas', 'dokumentasi'
+            'penggajian', 'period', 'dataHarian', 'dataBorongan', 'dokumentasi'
         ));
     }
 }

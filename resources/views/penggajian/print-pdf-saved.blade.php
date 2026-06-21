@@ -142,6 +142,12 @@
 
     <!-- HARIAN -->
     @php
+        $dataHarian = $dataHarian->map(function($item) {
+            if (empty($item->jabatan)) {
+                $item->jabatan = $item->karyawan->jabatans->first()->nama ?? 'TIDAK DIKETAHUI';
+            }
+            return $item;
+        });
         $groupedHarian = $dataHarian->groupBy('jabatan');
     @endphp
     
@@ -219,19 +225,6 @@
             </tbody>
         </table>
         @endforeach
-        
-        <table style="margin-top: -1px;">
-            <tr class="totals-row">
-                <td colspan="{{ count($period) + 4 }}" style="text-align: right; padding-right: 10px;">TOTAL UPAH HARIAN</td>
-                <td colspan="1" style="text-align: left; background-color: #f3f4f6;">
-                    <div class="currency">
-                        <span class="curr-sym">Rp</span>
-                        <span class="curr-val">{{ number_format($penggajian->total_upah_harian, 0, ',', '.') }}</span>
-                        <div class="clear"></div>
-                    </div>
-                </td>
-            </tr>
-        </table>
     @else
         <div class="section-title">HARIAN</div>
         <table>
@@ -241,16 +234,31 @@
         </table>
     @endif
 
-    <!-- KUPAS KELAPA -->
-    <div class="section-title">KUPAS KELAPA</div>
+    <!-- BORONGAN -->
+    @php
+        $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
+        $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
+    @endphp
+    
+    @forelse($groupedBorongan as $jabatan => $items)
+    @php
+        $isKupas = $jabatan === 'Kupas Kelapa';
+        $isPemanjat = $jabatan === 'Pemanjat Kelapa';
+        $isPemetik = $jabatan === 'Pemetik Cengkeh';
+        
+        $volLabel = $isKupas ? 'BUTIR' : ($isPemanjat ? 'POHON' : ($isPemetik ? 'KG' : 'VOLUME'));
+        $tarifLabel = $isKupas ? 'PER BUTIR' : ($isPemanjat ? 'PER POHON' : ($isPemetik ? 'PER KG' : 'PER VOLUME'));
+        $tarifVal = $isKupas ? $penggajian->tarif_kupas : ($isPemanjat ? $penggajian->tarif_pemanjat : ($isPemetik ? $penggajian->tarif_pemetik : 0));
+    @endphp
+    <div class="section-title">BORONGAN - {{ strtoupper($jabatan) }}</div>
     <table>
         <thead>
             <tr>
                 <th rowspan="2" style="width: 20px;">NO.</th>
                 <th rowspan="2" style="width: 110px;">NAMA</th>
                 <th colspan="{{ count($period) }}">PERIODE</th>
-                <th rowspan="2" style="width: 45px;">JUMLAH<br>BUTIR</th>
-                <th rowspan="2" style="width: 65px;">UPAH<br>PER BUTIR</th>
+                <th rowspan="2" style="width: 45px;">JUMLAH<br>{{ $volLabel }}</th>
+                <th rowspan="2" style="width: 65px;">UPAH<br>{{ $tarifLabel }}</th>
                 <th rowspan="2" style="width: 80px;">TOTAL UPAH</th>
             </tr>
             <tr>
@@ -260,8 +268,8 @@
             </tr>
         </thead>
         <tbody>
-            @php $no = 1; @endphp
-            @forelse($dataKupas as $data)
+            @php $no = 1; $totalUpahGroup = 0; @endphp
+            @foreach($items as $data)
                 <tr>
                     <td class="text-center">{{ $no++ }}</td>
                     <td class="text-left uppercase">{{ $data->nama_karyawan }}</td>
@@ -276,7 +284,7 @@
                     <td class="text-left">
                         <div class="currency">
                             <span class="curr-sym">Rp</span>
-                            <span class="curr-val">{{ number_format($penggajian->tarif_kupas, 0, ',', '.') }}</span>
+                            <span class="curr-val">{{ number_format($tarifVal, 0, ',', '.') }}</span>
                             <div class="clear"></div>
                         </div>
                     </td>
@@ -288,26 +296,29 @@
                         </div>
                     </td>
                 </tr>
-            @empty
-                <tr>
-                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data kupas kelapa.</td>
-                </tr>
-            @endforelse
+                @php $totalUpahGroup += $data->total_upah; @endphp
+            @endforeach
             
-            @if(count($dataKupas) > 0)
             <tr class="totals-row">
-                <td colspan="{{ count($period) + 4 }}" style="text-align: right; padding-right: 10px;">TOTAL UPAH KUPAS</td>
+                <td colspan="{{ count($period) + 4 }}" style="text-align: right; padding-right: 10px;">TOTAL UPAH BORONGAN - {{ strtoupper($jabatan) }}</td>
                 <td colspan="1" style="text-align: left; background-color: #f3f4f6;">
                     <div class="currency">
                         <span class="curr-sym">Rp</span>
-                        <span class="curr-val">{{ number_format($penggajian->total_upah_kupas, 0, ',', '.') }}</span>
+                        <span class="curr-val">{{ number_format($totalUpahGroup, 0, ',', '.') }}</span>
                         <div class="clear"></div>
                     </div>
                 </td>
             </tr>
-            @endif
         </tbody>
     </table>
+    @empty
+        <div class="section-title">BORONGAN</div>
+        <table>
+            <tr>
+                <td class="text-center" colspan="{{ count($period) + 4 }}">Belum ada data borongan.</td>
+            </tr>
+        </table>
+    @endforelse
 
     <!-- AKUMULASI -->
     <div class="akumulasi-container">
@@ -329,11 +340,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: left;">Upah Kupas Kelapa</td>
+                    <td style="text-align: left;">Upah Borongan</td>
                     <td style="text-align: left;">
                         <div class="currency">
                             <span class="curr-sym">Rp</span>
-                            <span class="curr-val">{{ number_format($penggajian->total_upah_kupas, 0, ',', '.') }}</span>
+                            <span class="curr-val">{{ number_format($totalUpahBorongan, 0, ',', '.') }}</span>
                             <div class="clear"></div>
                         </div>
                     </td>

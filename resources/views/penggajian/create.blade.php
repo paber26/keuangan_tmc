@@ -37,6 +37,14 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tarif Kupas/Butir (Rp)</label>
                     <input type="number" name="tarif_kupas" value="{{ $tarifKupas }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
+                <div class="min-w-[150px]">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tarif Pemanjat/Pohon (Rp)</label>
+                    <input type="number" name="tarif_pemanjat" value="{{ $tarifPemanjat }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                </div>
+                <div class="min-w-[150px]">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tarif Pemetik/Kg (Rp)</label>
+                    <input type="number" name="tarif_pemetik" value="{{ $tarifPemetik }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                </div>
                 <div>
                     <button type="submit" class="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -148,18 +156,6 @@
                     </tbody>
                 </table>
                 @endforeach
-                
-                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
-                    <tr>
-                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH HARIAN</td>
-                        <td class="border border-black p-1 text-left font-bold text-emerald-600 bg-emerald-50">
-                            <div class="flex justify-between">
-                                <span>Rp</span>
-                                <span>{{ number_format($totalUpahHarian, 0, ',', '.') }}</span>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
             @else
                 <div class="mb-2 font-bold text-sm">HARIAN</div>
                 <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
@@ -167,16 +163,30 @@
                 </table>
             @endif
 
-            {{-- Tabel KUPAS KELAPA --}}
-            <div class="mb-2 font-bold text-sm">KUPAS KELAPA</div>
+            {{-- Tabel BORONGAN --}}
+            @php
+                $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
+            @endphp
+            
+            @forelse($groupedBorongan as $jabatan => $items)
+            @php
+                $isKupas = $jabatan === 'Kupas Kelapa';
+                $isPemanjat = $jabatan === 'Pemanjat Kelapa';
+                $isPemetik = $jabatan === 'Pemetik Cengkeh';
+                
+                $volLabel = $isKupas ? 'BUTIR' : ($isPemanjat ? 'POHON' : ($isPemetik ? 'KG' : 'VOLUME'));
+                $tarifLabel = $isKupas ? 'PER BUTIR' : ($isPemanjat ? 'PER POHON' : ($isPemetik ? 'PER KG' : 'PER VOLUME'));
+                $tarifVal = $isKupas ? $tarifKupas : ($isPemanjat ? $tarifPemanjat : ($isPemetik ? $tarifPemetik : 0));
+            @endphp
+            <div class="mb-2 font-bold text-sm mt-4 uppercase">BORONGAN - {{ $jabatan }}</div>
             <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
                 <thead class="bg-[#FFE600]">
                     <tr>
                         <th class="border border-black p-1 align-middle" rowspan="2" style="width: 30px;">NO.</th>
                         <th class="border border-black p-1 align-middle" rowspan="2" style="width: 180px;">NAMA</th>
                         <th class="border border-black p-1" colspan="{{ count($period) }}">PERIODE</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 70px;">JUMLAH<br>BUTIR</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>PER BUTIR</th>
+                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 70px;">JUMLAH<br>{{ $volLabel }}</th>
+                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>{{ $tarifLabel }}</th>
                         <th class="border border-black p-1 align-middle" rowspan="2" style="width: 100px;">TOTAL UPAH</th>
                     </tr>
                     <tr>
@@ -186,10 +196,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php $no = 1; $grandTotalButir = 0; $sumPerHari = []; @endphp
+                    @php $no = 1; $grandTotalVol = 0; $sumPerHari = []; $totalUpahGroup = 0; @endphp
                     @foreach($period as $date) @php $sumPerHari[$date->format('Y-m-d')] = 0; @endphp @endforeach
 
-                    @forelse($dataKupas as $karyawanId => $data)
+                    @foreach($items as $data)
                         <tr>
                             <td class="border border-black p-1">{{ $no++ }}</td>
                             <td class="border border-black p-1 text-left uppercase">{{ $data['nama'] }}</td>
@@ -201,11 +211,11 @@
                                 @endphp
                                 <td class="border border-black p-1 relative">{{ $vol ? number_format($vol, 0, ',', '.') : '' }}</td>
                             @endforeach
-                            <td class="border border-black p-1">{{ number_format($data['total_butir'], 0, ',', '.') }}</td>
+                            <td class="border border-black p-1">{{ number_format($data['total_volume'], 0, ',', '.') }}</td>
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($tarifKupas, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($tarifVal, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                             <td class="border border-black p-1 text-left bg-gray-100">
@@ -215,38 +225,41 @@
                                 </div>
                             </td>
                         </tr>
-                        @php $grandTotalButir += $data['total_butir']; @endphp
-                    @empty
-                        <tr>
-                            <td class="border border-black p-2" colspan="{{ count($period) + 5 }}">Belum ada data kupas kelapa.</td>
-                        </tr>
-                    @endforelse
+                        @php 
+                            $grandTotalVol += $data['total_volume'];
+                            $totalUpahGroup += $data['total_upah'];
+                        @endphp
+                    @endforeach
                     
-                    {{-- Footer Kupas --}}
-                    @if(count($dataKupas) > 0)
+                    {{-- Footer Group --}}
                     <tr>
                         <td class="border border-black p-1 text-left uppercase" colspan="2">JUMLAH</td>
                         @foreach($period as $date)
                             @php $d = $date->format('Y-m-d'); @endphp
                             <td class="border border-black p-1 bg-gray-100">{{ $sumPerHari[$d] > 0 ? number_format($sumPerHari[$d], 0, ',', '.') : '0' }}</td>
                         @endforeach
-                        <td class="border border-black p-1">{{ number_format($grandTotalButir, 0, ',', '.') }}</td>
+                        <td class="border border-black p-1">{{ number_format($grandTotalVol, 0, ',', '.') }}</td>
                         <td class="border border-black p-1 text-left">
                             <div class="flex justify-between">
                                 <span>Rp</span>
-                                <span>{{ number_format($tarifKupas, 0, ',', '.') }}</span>
+                                <span>{{ number_format($tarifVal, 0, ',', '.') }}</span>
                             </div>
                         </td>
                         <td class="border border-black p-1 text-left bg-gray-100">
                             <div class="flex justify-between">
                                 <span>Rp</span>
-                                <span>{{ number_format($totalUpahKupas, 0, ',', '.') }}</span>
+                                <span>{{ number_format($totalUpahGroup, 0, ',', '.') }}</span>
                             </div>
                         </td>
                     </tr>
-                    @endif
                 </tbody>
             </table>
+            @empty
+                <div class="mb-2 font-bold text-sm">BORONGAN</div>
+                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
+                    <tr><td class="border border-black p-2 text-center" colspan="{{ count($period) + 5 }}">Belum ada data borongan.</td></tr>
+                </table>
+            @endforelse
 
             {{-- Tabel AKUMULASI --}}
             <div class="w-full md:w-1/2 mt-8">
@@ -274,11 +287,11 @@
                         </tr>
                         <tr>
                             <td class="border border-black p-1 text-center">2</td>
-                            <td class="border border-black p-1">KUPAS KELAPA</td>
+                            <td class="border border-black p-1">BORONGAN</td>
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($totalUpahKupas, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($totalUpahBorongan, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -287,7 +300,7 @@
                             <td class="border border-black p-1 border-t-2 text-left bg-gray-100">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($totalUpahHarian + $totalUpahKupas, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($totalUpahHarian + $totalUpahBorongan, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -297,7 +310,7 @@
             
         </div>
 
-        @if(!empty($dataHarian) || !empty($dataKupas))
+        @if(!empty($dataHarian) || !empty($dataBorongan))
             <div class="mt-8 flex justify-end pb-8">
                 <form action="{{ route('penggajian.store') }}" method="POST">
                     @csrf
@@ -306,6 +319,8 @@
                     <input type="hidden" name="lokasi_kebun" value="{{ $selectedLokasi }}">
                     <input type="hidden" name="tarif_harian" value="{{ $tarifHarian }}">
                     <input type="hidden" name="tarif_kupas" value="{{ $tarifKupas }}">
+                    <input type="hidden" name="tarif_pemanjat" value="{{ $tarifPemanjat }}">
+                    <input type="hidden" name="tarif_pemetik" value="{{ $tarifPemetik }}">
                     <button type="submit" class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-100 text-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
                         Simpan Penggajian
@@ -342,8 +357,7 @@
                             @endif
                         </div>
                         <div class="p-5">
-                            <div class="flex justify-between items-start mb-1">
-                                <div class="text-xs font-semibold text-emerald-600">{{ \Carbon\Carbon::parse($doc->tanggal)->format('H:i') }} WIB</div>
+                            <div class="flex justify-end items-start mb-1">
                                 <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
                             </div>
                             <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{{ $doc->judul }}</h3>
