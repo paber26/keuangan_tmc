@@ -100,7 +100,7 @@
                                 <input type="date" name="tanggal_pemakaian[]" required value="{{ date('Y-m-d') }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
                             </td>
                             <td class="py-3 px-4">
-                                <select name="tipe_bbm[]" required class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                                <select name="tipe_bbm[]" required class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm tipe-bbm-select">
                                     <option value="Solar">Solar</option>
                                     <option value="Pertalite">Pertalite</option>
                                 </select>
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
         newRow.querySelector('select[name="tipe_bbm[]"]').value = 'Solar';
         newRow.querySelector('input[name="keterangan_pemakaian[]"]').value = '';
         newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
-        newRow.querySelector('input[name="harga_per_liter[]"]').value = '';
+        newRow.querySelector('input[name="harga_per_liter[]"]').value = '16000';
         newRow.querySelector('.row-total').textContent = '0';
         
         container.appendChild(newRow);
@@ -271,6 +271,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     container.addEventListener('input', (e) => {
         if (e.target.classList.contains('input-qty') || e.target.classList.contains('input-harga')) {
+            calculateTotals();
+        }
+    });
+
+    container.addEventListener('change', (e) => {
+        if (e.target.classList.contains('tipe-bbm-select')) {
+            const row = e.target.closest('.item-row');
+            const hargaInput = row.querySelector('.input-harga');
+            if (e.target.value === 'Solar') {
+                hargaInput.value = '16000';
+            } else if (e.target.value === 'Pertalite') {
+                hargaInput.value = '13000';
+            }
             calculateTotals();
         }
     });
