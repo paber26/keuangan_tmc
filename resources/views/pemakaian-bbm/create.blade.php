@@ -106,7 +106,7 @@
                                 </select>
                             </td>
                             <td class="py-3 px-4">
-                                <input type="text" name="keterangan_pemakaian[]" required placeholder="Cth: Pick Up Grand Max" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                                <input type="text" name="keterangan_pemakaian[]" list="keterangan-list" required placeholder="Cth: Pick Up Grand Max" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
                             </td>
                             <td class="py-3 px-4">
                                 <input type="number" step="0.01" name="jumlah_liter[]" required min="0.01" placeholder="0.00" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
@@ -143,6 +143,12 @@
             </button>
         </div>
     </form>
+    
+    <datalist id="keterangan-list">
+        @foreach($keterangan_list as $ket)
+            <option value="{{ $ket }}"></option>
+        @endforeach
+    </datalist>
 </div>
 @endsection
 
@@ -255,14 +261,15 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     btnAdd.addEventListener('click', () => {
-        const firstRow = container.querySelector('.item-row');
-        const newRow = firstRow.cloneNode(true);
+        const rows = container.querySelectorAll('.item-row');
+        const lastRow = rows[rows.length - 1];
+        const newRow = lastRow.cloneNode(true);
         
-        newRow.querySelector('input[name="tanggal_pemakaian[]"]').value = '{{ date('Y-m-d') }}';
-        newRow.querySelector('select[name="tipe_bbm[]"]').value = 'Solar';
+        newRow.querySelector('input[name="tanggal_pemakaian[]"]').value = lastRow.querySelector('input[name="tanggal_pemakaian[]"]').value;
+        newRow.querySelector('select[name="tipe_bbm[]"]').value = lastRow.querySelector('select[name="tipe_bbm[]"]').value;
         newRow.querySelector('input[name="keterangan_pemakaian[]"]').value = '';
         newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
-        newRow.querySelector('input[name="harga_per_liter[]"]').value = '16000';
+        newRow.querySelector('input[name="harga_per_liter[]"]').value = lastRow.querySelector('input[name="harga_per_liter[]"]').value;
         newRow.querySelector('.row-total').textContent = '0';
         
         container.appendChild(newRow);

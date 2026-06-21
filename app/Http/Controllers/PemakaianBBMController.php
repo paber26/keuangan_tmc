@@ -27,7 +27,13 @@ class PemakaianBBMController extends Controller
     {
         $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
         $karyawan = Karyawan::orderBy('nama')->get();
-        return view('pemakaian-bbm.create', compact('kebun', 'karyawan'));
+        $keterangan_list = PemakaianBBMItem::select('keterangan_pemakaian')
+            ->whereNotNull('keterangan_pemakaian')
+            ->where('keterangan_pemakaian', '!=', '')
+            ->distinct()
+            ->pluck('keterangan_pemakaian');
+            
+        return view('pemakaian-bbm.create', compact('kebun', 'karyawan', 'keterangan_list'));
     }
 
     public function store(Request $request)
@@ -104,7 +110,13 @@ class PemakaianBBMController extends Controller
         $pemakaian_bbm = PemakaianBBM::with('items')->findOrFail($id);
         $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
         $karyawan = Karyawan::orderBy('nama')->get();
-        return view('pemakaian-bbm.edit', compact('pemakaian_bbm', 'kebun', 'karyawan'));
+        $keterangan_list = PemakaianBBMItem::select('keterangan_pemakaian')
+            ->whereNotNull('keterangan_pemakaian')
+            ->where('keterangan_pemakaian', '!=', '')
+            ->distinct()
+            ->pluck('keterangan_pemakaian');
+            
+        return view('pemakaian-bbm.edit', compact('pemakaian_bbm', 'kebun', 'karyawan', 'keterangan_list'));
     }
 
     public function update(Request $request, string $id)
