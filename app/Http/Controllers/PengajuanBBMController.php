@@ -9,6 +9,7 @@ use App\Models\Kebun;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengajuanBBMController extends Controller
 {
@@ -101,5 +102,14 @@ class PengajuanBBMController extends Controller
     {
         $pengajuan_bbm->delete();
         return redirect()->route('pengajuan-bbm.index')->with('success', 'Pengajuan BBM berhasil dihapus.');
+    }
+
+    public function print(PengajuanBBM $pengajuan_bbm)
+    {
+        $pengajuan_bbm->load('items', 'karyawan', 'kebun');
+        
+        $pdf = Pdf::loadView('pengajuan-bbm.print-pdf', compact('pengajuan_bbm'));
+        
+        return $pdf->stream('Pengajuan-BBM-'.$pengajuan_bbm->id.'.pdf');
     }
 }

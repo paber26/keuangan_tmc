@@ -44,6 +44,7 @@ Route::middleware('admin.login')->group(function () {
     // Manajemen BBM
     Route::resource('pemakaian-bbm', \App\Http\Controllers\PemakaianBBMController::class);
     Route::resource('pengajuan-bbm', \App\Http\Controllers\PengajuanBBMController::class);
+    Route::get('pengajuan-bbm/{pengajuan_bbm}/print', [\App\Http\Controllers\PengajuanBBMController::class, 'print'])->name('pengajuan-bbm.print');
     Route::patch('pengajuan-bbm/{pengajuan_bbm}/status', [\App\Http\Controllers\PengajuanBBMController::class, 'updateStatus'])->name('pengajuan-bbm.update-status');
 
     // Penggajian
