@@ -56,5 +56,80 @@
         </div>
     </div>
 
+    <!-- Rincian Pengeluaran -->
+    @php
+        $pengajuan = $bukti_kas_kebun->pengajuan_penggajian;
+        $penggajian = $pengajuan->penggajian;
+        
+        $grouped = [];
+        $total = 0;
+        
+        if ($penggajian && $penggajian->details) {
+            foreach($penggajian->details as $detail) {
+                $jabatanName = $detail->jabatan ?: ($detail->tipe_pekerjaan ?: 'Lain-lain');
+                
+                if(!isset($grouped[$jabatanName])) {
+                    $grouped[$jabatanName] = 0;
+                }
+                $grouped[$jabatanName] += $detail->total_upah;
+                $total += $detail->total_upah;
+            }
+        } else {
+            foreach($pengajuan->items as $item) {
+                if(!isset($grouped[$item->uraian])) {
+                    $grouped[$item->uraian] = 0;
+                }
+                $grouped[$item->uraian] += $item->total_harga;
+                $total += $item->total_harga;
+            }
+        }
+    @endphp
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="p-6 md:p-8">
+            <h3 class="text-lg font-bold text-gray-800 mb-6">Rincian Pengeluaran</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-600 text-sm border-b border-gray-200">
+                            <th class="px-4 py-3 font-semibold">No Urut</th>
+                            <th class="px-4 py-3 font-semibold">Keterangan</th>
+                            <th class="px-4 py-3 font-semibold text-right">Sub Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr class="border-b border-gray-100">
+                            <td class="px-4 py-3"></td>
+                            <td class="px-4 py-3 font-bold text-gray-800">BEBAN UPAH KEBUN {{ strtoupper($pengajuan->kebun->lokasi) }}</td>
+                            <td class="px-4 py-3"></td>
+                        </tr>
+                        <tr class="border-b border-gray-100">
+                            <td class="px-4 py-3"></td>
+                            @if($penggajian)
+                            <td class="px-4 py-3 font-bold text-gray-800">PERIODE : {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d') }}-{{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->translatedFormat('d F Y') }}</td>
+                            @else
+                            <td class="px-4 py-3 font-bold text-gray-800">PERIODE : {{ \Carbon\Carbon::parse($pengajuan->tanggal)->translatedFormat('F Y') }}</td>
+                            @endif
+                            <td class="px-4 py-3"></td>
+                        </tr>
+                        @foreach($grouped as $tipe => $jumlah)
+                        <tr class="border-b border-gray-100">
+                            <td class="px-4 py-3"></td>
+                            <td class="px-4 py-3 text-gray-700">{{ strtoupper($tipe) }}</td>
+                            <td class="px-4 py-3 text-right font-medium text-gray-900">Rp {{ number_format($jumlah, 0, ',', '.') }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-50">
+                            <td colspan="2" class="px-4 py-4 text-right font-bold text-gray-800">JUMLAH</td>
+                            <td class="px-4 py-4 text-right font-bold text-emerald-600 text-lg">Rp {{ number_format($total, 0, ',', '.') }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
