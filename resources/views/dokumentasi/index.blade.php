@@ -90,7 +90,7 @@
                         <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1">{{ $doc->judul }}</h3>
-                    <div class="text-xs text-emerald-600 font-medium mb-2 truncate" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
+                    <div class="text-xs text-emerald-600 font-medium mb-2 whitespace-normal leading-relaxed" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
                         {{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}
                     </div>
                     <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ $doc->keterangan ?: 'Tidak ada keterangan' }}</p>
@@ -148,7 +148,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-700">
-                                <div class="text-xs font-medium mb-1 truncate max-w-[150px]" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
+                                <div class="text-xs font-medium mb-1 whitespace-normal max-w-xs leading-relaxed" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
                                     {{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : '-' }}
                                 </div>
                             </td>
