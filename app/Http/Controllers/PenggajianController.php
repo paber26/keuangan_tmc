@@ -29,6 +29,7 @@ class PenggajianController extends Controller
         $endDate = $request->get('end_date', $now->endOfWeek()->subDay()->format('Y-m-d'));
         
         $tarifHarian = $request->get('tarif_harian', 125000);
+        $tarifMemaras = $request->get('tarif_memaras', 250000);
         $tarifKupas = $request->get('tarif_kupas', 200);
         $tarifPemanjat = $request->get('tarif_pemanjat', 10000);
         $tarifPemetik = $request->get('tarif_pemetik', 14000);
@@ -87,7 +88,8 @@ class PenggajianController extends Controller
 
             // Calculate Upah
             foreach ($dataHarian as $id => &$data) {
-                $data['total_upah'] = $data['total_hari'] * $tarifHarian;
+                $tarif = $data['jabatan'] === 'Memaras Mesin' ? $tarifMemaras : $tarifHarian;
+                $data['total_upah'] = $data['total_hari'] * $tarif;
                 $totalUpahHarian += $data['total_upah'];
             }
             foreach ($dataBorongan as $id => &$data) {
@@ -122,6 +124,7 @@ class PenggajianController extends Controller
             'startDate',
             'endDate',
             'tarifHarian',
+            'tarifMemaras',
             'tarifKupas',
             'tarifPemanjat',
             'tarifPemetik',
@@ -197,7 +200,8 @@ class PenggajianController extends Controller
         }
 
         foreach ($dataHarian as $id => $data) {
-            $dataHarian[$id]['total_upah'] = $dataHarian[$id]['total_hari'] * $request->tarif_harian;
+            $tarif = $data['jabatan'] === 'Memaras Mesin' ? $request->tarif_memaras : $request->tarif_harian;
+            $dataHarian[$id]['total_upah'] = $dataHarian[$id]['total_hari'] * $tarif;
             $totalUpahHarian += $dataHarian[$id]['total_upah'];
         }
         foreach ($dataBorongan as $id => $data) {
@@ -220,6 +224,7 @@ class PenggajianController extends Controller
             'tanggal_akhir' => $request->tanggal_akhir,
             'lokasi_kebun' => $request->lokasi_kebun,
             'tarif_harian' => $request->tarif_harian,
+            'tarif_memaras' => $request->tarif_memaras,
             'tarif_kupas' => $request->tarif_kupas,
             'tarif_pemanjat' => $request->tarif_pemanjat,
             'tarif_pemetik' => $request->tarif_pemetik,
@@ -295,6 +300,7 @@ class PenggajianController extends Controller
     {
         $request->validate([
             'tarif_harian' => 'required|numeric|min:0',
+            'tarif_memaras' => 'required|numeric|min:0',
             'tarif_kupas' => 'required|numeric|min:0',
             'tarif_pemanjat' => 'required|numeric|min:0',
             'tarif_pemetik' => 'required|numeric|min:0',
@@ -303,6 +309,7 @@ class PenggajianController extends Controller
         $penggajian = Penggajian::with('details')->findOrFail($id);
 
         $penggajian->tarif_harian = $request->tarif_harian;
+        $penggajian->tarif_memaras = $request->tarif_memaras;
         $penggajian->tarif_kupas = $request->tarif_kupas;
         $penggajian->tarif_pemanjat = $request->tarif_pemanjat;
         $penggajian->tarif_pemetik = $request->tarif_pemetik;
@@ -314,7 +321,8 @@ class PenggajianController extends Controller
 
         foreach ($penggajian->details as $detail) {
             if ($detail->tipe_pekerjaan === 'Harian') {
-                $detail->total_upah = $detail->jumlah_hari_kerja * $request->tarif_harian;
+                $tarif = $detail->jabatan === 'Memaras Mesin' ? $request->tarif_memaras : $request->tarif_harian;
+                $detail->total_upah = $detail->jumlah_hari_kerja * $tarif;
                 $totalHarian += $detail->total_upah;
                 $detail->save();
             } else if ($detail->tipe_pekerjaan === 'Borongan') {

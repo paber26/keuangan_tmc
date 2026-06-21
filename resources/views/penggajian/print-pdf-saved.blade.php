@@ -20,7 +20,11 @@
         }
         
         @media print {
-            body { background: #fff; }
+            body { 
+                background: #fff; 
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
             .page-container { margin: 0; padding: 0; box-shadow: none; max-width: none; }
             @page { size: A4 portrait; margin: 10mm; }
             .no-print { display: none !important; }

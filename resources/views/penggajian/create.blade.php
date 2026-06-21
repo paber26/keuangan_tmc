@@ -34,6 +34,10 @@
                     <input type="number" name="tarif_harian" value="{{ $tarifHarian }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
                 <div class="min-w-[150px]">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tarif Memaras (Rp)</label>
+                    <input type="number" name="tarif_memaras" value="{{ $tarifMemaras }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                </div>
+                <div class="min-w-[150px]">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tarif Kupas/Butir (Rp)</label>
                     <input type="number" name="tarif_kupas" value="{{ $tarifKupas }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
@@ -318,6 +322,7 @@
                     <input type="hidden" name="tanggal_akhir" value="{{ $endDate }}">
                     <input type="hidden" name="lokasi_kebun" value="{{ $selectedLokasi }}">
                     <input type="hidden" name="tarif_harian" value="{{ $tarifHarian }}">
+                    <input type="hidden" name="tarif_memaras" value="{{ $tarifMemaras }}">
                     <input type="hidden" name="tarif_kupas" value="{{ $tarifKupas }}">
                     <input type="hidden" name="tarif_pemanjat" value="{{ $tarifPemanjat }}">
                     <input type="hidden" name="tarif_pemetik" value="{{ $tarifPemetik }}">

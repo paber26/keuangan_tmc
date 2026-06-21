@@ -23,6 +23,10 @@
                         <input type="number" name="tarif_harian" value="{{ old('tarif_harian', round($penggajian->tarif_harian)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tarif Memaras (Rp)</label>
+                        <input type="number" name="tarif_memaras" value="{{ old('tarif_memaras', round($penggajian->tarif_memaras ?? 250000)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Tarif Kupas / Butir (Rp)</label>
                         <input type="number" name="tarif_kupas" value="{{ old('tarif_kupas', round($penggajian->tarif_kupas)) }}" class="w-full rounded-xl border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 font-medium text-gray-900" required>
                     </div>
