@@ -283,16 +283,8 @@ class PenggajianController extends Controller
                 return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
             });
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('penggajian.print-pdf-saved', compact(
-            'penggajian',
-            'period',
-            'dataHarian',
-            'dataKupas',
-            'dokumentasi'
+        return view('penggajian.print-pdf-saved', compact(
+            'penggajian', 'period', 'dataHarian', 'dataKupas', 'dokumentasi'
         ));
-
-        $pdf->setPaper('A4', 'portrait');
-
-        return $pdf->stream('Laporan_Penggajian_' . $penggajian->lokasi_kebun . '.pdf');
     }
 }

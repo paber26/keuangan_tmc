@@ -9,6 +9,21 @@
             font-size: 10pt; 
             margin: 0;
             padding: 0;
+            background: #f0f0f0;
+        }
+        .page-container {
+            background: #fff;
+            max-width: 210mm;
+            margin: 20px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        @media print {
+            body { background: #fff; }
+            .page-container { margin: 0; padding: 0; box-shadow: none; max-width: none; }
+            @page { size: A4 portrait; margin: 10mm; }
+            .no-print { display: none !important; }
         }
         
         /* Kop Surat */
@@ -104,9 +119,15 @@
 </head>
 <body>
 
+    <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+        <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background: #000; color: #fff; border: none; border-radius: 5px;">Print Laporan (Ctrl+P)</button>
+        <button onclick="window.close()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background: #666; color: #fff; border: none; border-radius: 5px; margin-left: 10px;">Tutup</button>
+    </div>
+
+<div class="page-container">
+
     <div class="kop-surat">
-        <!-- Assuming logo.jpg is in public path. DomPDF requires absolute local path usually, but asset() might work depending on setup -->
-        <img src="{{ public_path('logo.jpg') }}" class="logo" alt="Logo">
+        <img src="{{ asset('logo.jpg') }}" class="logo" alt="Logo">
         <div style="padding-left: 80px; padding-right: 80px;">
             <h1 class="kop-title">PT . TRI MUSTIKA COCOMINAESA ( TMC )</h1>
             <p class="kop-address">Jl. Raya A.K.D Km. 90 Kec. Amurang Barat Kab. Minahasa Selatan</p>
@@ -301,7 +322,7 @@
     @if(isset($dokumentasi) && count($dokumentasi) > 0)
     <div class="page-break"></div>
     <div class="kop-surat">
-        <img src="{{ public_path('logo.jpg') }}" class="logo" alt="Logo">
+        <img src="{{ asset('logo.jpg') }}" class="logo" alt="Logo">
         <div style="padding-left: 80px; padding-right: 80px;">
             <h1 class="kop-title">PT . TRI MUSTIKA COCOMINAESA ( TMC )</h1>
             <p class="kop-address">Jl. Raya A.K.D Km. 90 Kec. Amurang Barat Kab. Minahasa Selatan</p>
@@ -340,7 +361,7 @@
                                 </tr><tr>
                             @endif
                             <td style="border: none; padding: 5px; width: 50%; vertical-align: top; text-align: center;">
-                                <img src="{{ storage_path('app/public/' . $img->image_path) }}" style="width: 95%; height: auto; border-radius: 4px; border: 1px solid #ddd;">
+                                <img src="{{ Storage::url($img->image_path) }}" style="width: 95%; height: auto; border-radius: 4px; border: 1px solid #ddd;">
                             </td>
                             @php $imgCount++; @endphp
                         @endforeach
@@ -353,5 +374,15 @@
     @endforeach
     @endif
 
+</div>
+
+<script>
+    window.onload = function() {
+        // Otomatis print saat halaman selesai dimuat
+        setTimeout(function() {
+            window.print();
+        }, 500);
+    }
+</script>
 </body>
 </html>
