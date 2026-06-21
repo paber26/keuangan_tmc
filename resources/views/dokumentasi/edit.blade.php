@@ -83,23 +83,54 @@
 <script>
     const fileUpload = document.getElementById('file-upload');
     const previewContainer = document.getElementById('preview-container');
+    const dt = new DataTransfer();
 
+    function addPreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const div = document.createElement('div');
+            div.className = 'relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm';
+            div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            previewContainer.appendChild(div);
+        }
+        reader.readAsDataURL(file);
+    }
+
+    // Handle normal file selection
     fileUpload.addEventListener('change', function(e) {
-        previewContainer.innerHTML = '';
         const files = Array.from(e.target.files);
-        
         files.forEach(file => {
             if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const div = document.createElement('div');
-                    div.className = 'relative aspect-square rounded-lg overflow-hidden border border-gray-200 shadow-sm';
-                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-                    previewContainer.appendChild(div);
-                }
-                reader.readAsDataURL(file);
+                dt.items.add(file);
+                addPreview(file);
             }
         });
+        // Update input files
+        fileUpload.files = dt.files;
+    });
+
+    // Handle paste from clipboard
+    document.addEventListener('paste', function(e) {
+        if (e.clipboardData && e.clipboardData.files.length > 0) {
+            e.preventDefault();
+            let added = false;
+            for (let i = 0; i < e.clipboardData.files.length; i++) {
+                let file = e.clipboardData.files[i];
+                if (file.type.startsWith('image/')) {
+                    dt.items.add(file);
+                    addPreview(file);
+                    added = true;
+                }
+            }
+            if (added) {
+                fileUpload.files = dt.files;
+                
+                // Optional: visual feedback
+                const dropZone = document.getElementById('drop-zone');
+                dropZone.classList.add('bg-amber-50', 'border-amber-300');
+                setTimeout(() => dropZone.classList.remove('bg-amber-50', 'border-amber-300'), 500);
+            }
+        }
     });
 </script>
 @endsection
