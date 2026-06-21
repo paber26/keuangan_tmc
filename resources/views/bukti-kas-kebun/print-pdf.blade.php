@@ -4,45 +4,95 @@
     <meta charset="UTF-8">
     <title>Bukti Pengeluaran Kas Kebun - {{ $bukti_kas_kebun->no_bukti ?: $bukti_kas_kebun->id }}</title>
     <style>
-        @page { size: A5 landscape; margin: 15px; }
-        body { font-family: 'Arial', sans-serif; font-size: 11px; color: #000; margin: 0; padding: 10px; }
-        .wrapper { width: 100%; border: 2px solid #000; padding: 10px; box-sizing: border-box; }
+        @page { size: A5 landscape; margin: 15px 25px 15px 15px; }
+        body { font-family: 'Arial', sans-serif; font-size: 11px; color: #000; margin: 0; }
+        table { border-collapse: collapse; width: 100%; }
         
-        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
-        
-        .header-table { width: 100%; }
-        .header-table td { vertical-align: top; }
-        .company-name { font-weight: bold; font-size: 14px; text-decoration: underline; margin-bottom: 5px; }
-        .doc-title { font-size: 16px; font-weight: bold; text-align: center; text-decoration: underline; margin-top: 15px; margin-bottom: 5px; }
-        
-        .doc-info-box { border: 2px solid #000; padding: 5px; font-weight: bold; width: 200px; float: right; margin-top: -40px;}
-        .doc-info-box table { width: 100%; font-size: 11px;}
-        .doc-info-box td { padding: 2px; }
-        
-        .info-row { margin-bottom: 5px; }
-        .info-row span.label { display: inline-block; width: 120px; font-weight: bold; }
-        
-        .total-box { margin-top: 10px; margin-bottom: 15px; font-weight: bold; font-size: 12px; border-bottom: 1px dashed #000; padding-bottom: 5px;}
-        .total-box span.label { display: inline-block; width: 120px; }
-        
-        .keterangan-title { font-weight: bold; margin-bottom: 5px; }
-        
-        .detail-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .detail-table th, .detail-table td { border: 1px solid #000; padding: 4px 6px; }
-        .detail-table th { text-align: center; font-weight: bold; background-color: #f5f5f5; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        
-        .sign-area { margin-top: 20px; width: 100%; }
-        .sign-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 10px; }
-        .sign-table td { border: 2px solid #000; padding: 3px; vertical-align: top; }
-        .sign-table .header-cell { padding: 5px; font-weight: bold; border-bottom: 2px solid #000; }
-        .sign-table .role-cell { padding: 3px; font-style: italic; }
-        .sign-table .name-cell { height: 60px; vertical-align: bottom; padding-bottom: 5px; font-weight: bold; }
-        .sign-line { border-bottom: 1px solid #000; display: inline-block; width: 80%; margin-top: 40px;}
-        
-        .clear { clear: both; }
-        .terbilang-box { border: 1px solid #000; padding: 5px; font-style: italic; margin-bottom: 15px; font-weight: bold;}
+        /* Rotated text */
+        .rotated-text {
+            -webkit-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+            font-size: 18px;
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .main-box {
+            border: 2px solid black;
+        }
+
+        .header-table td {
+            border-bottom: 2px solid black;
+            border-right: 2px solid black;
+        }
+        .header-table td:last-child {
+            border-right: none;
+        }
+
+        .sub-header-table td {
+            border-bottom: 2px solid black;
+            border-right: 2px solid black;
+            padding: 6px 10px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .sub-header-table td:last-child {
+            border-right: none;
+        }
+
+        .items-table td {
+            border-bottom: 1px solid black;
+            border-right: 2px solid black;
+            padding: 4px 6px;
+        }
+        .items-table td:last-child {
+            border-right: none;
+        }
+        .items-table th {
+            border-bottom: 2px solid black;
+            border-right: 2px solid black;
+            background-color: #e5e5e5;
+            padding: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+        }
+        .items-table th:last-child {
+            border-right: none;
+        }
+
+        .footer-table td {
+            border-bottom: 2px solid black;
+            border-right: 2px solid black;
+        }
+        .footer-table td:last-child {
+            border-right: none;
+        }
+
+        .sign-table td {
+            border-right: 2px solid black;
+            padding: 4px;
+            text-align: center;
+        }
+        .sign-table td:last-child {
+            border-right: none;
+        }
+        .sign-table .header-cell {
+            border-bottom: 2px solid black;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .flex-rp {
+            display: inline-block;
+            float: left;
+        }
+        .flex-nominal {
+            display: inline-block;
+            float: right;
+        }
     </style>
 </head>
 <body>
@@ -80,143 +130,227 @@
         // Function for terbilang
         function penyebut($nilai) {
             $nilai = abs($nilai);
-            $huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+            $huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
             $temp = "";
             if ($nilai < 12) {
                 $temp = " ". $huruf[$nilai];
             } else if ($nilai <20) {
-                $temp = penyebut($nilai - 10). " belas";
+                $temp = penyebut($nilai - 10). " Belas";
             } else if ($nilai < 100) {
-                $temp = penyebut($nilai/10)." puluh". penyebut($nilai % 10);
+                $temp = penyebut($nilai/10)." Puluh". penyebut($nilai % 10);
             } else if ($nilai < 200) {
-                $temp = " seratus" . penyebut($nilai - 100);
+                $temp = " Seratus" . penyebut($nilai - 100);
             } else if ($nilai < 1000) {
-                $temp = penyebut($nilai/100) . " ratus" . penyebut($nilai % 100);
+                $temp = penyebut($nilai/100) . " Ratus" . penyebut($nilai % 100);
             } else if ($nilai < 2000) {
-                $temp = " seribu" . penyebut($nilai - 1000);
+                $temp = " Seribu" . penyebut($nilai - 1000);
             } else if ($nilai < 1000000) {
-                $temp = penyebut($nilai/1000) . " ribu" . penyebut($nilai % 1000);
+                $temp = penyebut($nilai/1000) . " Ribu" . penyebut($nilai % 1000);
             } else if ($nilai < 1000000000) {
-                $temp = penyebut($nilai/1000000) . " juta" . penyebut($nilai % 1000000);
+                $temp = penyebut($nilai/1000000) . " Juta" . penyebut($nilai % 1000000);
             } else if ($nilai < 1000000000000) {
-                $temp = penyebut($nilai/1000000000) . " milyar" . penyebut(fmod($nilai,1000000000));
+                $temp = penyebut($nilai/1000000000) . " Milyar" . penyebut(fmod($nilai,1000000000));
             } else if ($nilai < 1000000000000000) {
-                $temp = penyebut($nilai/1000000000000) . " trilyun" . penyebut(fmod($nilai,1000000000000));
+                $temp = penyebut($nilai/1000000000000) . " Trilyun" . penyebut(fmod($nilai,1000000000000));
             }     
             return $temp;
         }
         function terbilang($nilai) {
             if($nilai<0) {
-                $hasil = "minus ". trim(penyebut($nilai));
+                $hasil = "Minus ". trim(penyebut($nilai));
             } else {
                 $hasil = trim(penyebut($nilai));
             }           
-            return $hasil . " rupiah";
+            return $hasil . " Rupiah";
         }
     @endphp
 
-    <div class="wrapper">
-        <div class="company-name">PT. TRI MUSTIKA COCOMINAESA</div>
-        
-        <div class="doc-title">BUKTI PENGELUARAN KAS KEBUN</div>
-        
-        <div class="doc-info-box">
-            <table>
-                <tr>
-                    <td width="30%">Tgl</td>
-                    <td width="5%">:</td>
-                    <td>{{ \Carbon\Carbon::parse($bukti_kas_kebun->tanggal)->translatedFormat('d F Y') }}</td>
-                </tr>
-                <tr>
-                    <td>No</td>
-                    <td>:</td>
-                    <td>{{ $bukti_kas_kebun->no_bukti ?: '-' }}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="clear"></div>
+    <table style="border: none;">
+        <tr>
+            <!-- Rotated Text Area -->
+            <td style="width: 20px; vertical-align: middle; padding: 0;">
+                <div style="position: relative; width: 20px;">
+                    <div class="rotated-text" style="position: absolute; top: 200px; left: -140px;">
+                        HANYA UNTUK INTERN
+                    </div>
+                </div>
+            </td>
+            
+            <!-- Main Content Area -->
+            <td style="padding: 0; vertical-align: top;">
+                <div class="main-box">
+                    
+                    <!-- Header -->
+                    <table class="header-table">
+                        <tr>
+                            <td style="width: 35%; padding: 5px;">
+                                <table style="width: 100%; border: none;">
+                                    <tr>
+                                        <td style="width: 40px; border: none; padding: 0;">
+                                            @if(file_exists(public_path('logo.jpg')))
+                                                <img src="{{ public_path('logo.jpg') }}" alt="Logo" style="height: 35px;">
+                                            @else
+                                                <div style="width: 40px; height: 35px; border: 1px solid red;"></div>
+                                            @endif
+                                        </td>
+                                        <td style="border: none; padding-left: 10px; font-weight: bold; font-size: 10px; vertical-align: middle;">
+                                            PT. TRI MUSTIKA COCOMINAESA
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="width: 40%; text-align: center; font-weight: bold; font-size: 18px;">
+                                Bukti Pengeluaran Kas Kebun
+                            </td>
+                            <td style="width: 25%; padding: 5px;">
+                                <table style="width: 100%; font-weight: bold; font-size: 12px; border: none;">
+                                    <tr>
+                                        <td style="width: 30px; border: none; padding: 2px;">No</td>
+                                        <td style="border: none; padding: 2px;">: {{ $bukti_kas_kebun->no_bukti }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: none; padding: 2px;">Tgl</td>
+                                        <td style="border: none; padding: 2px;">: {{ \Carbon\Carbon::parse($bukti_kas_kebun->tanggal)->translatedFormat('d F Y') }}</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
 
-        <div class="info-row" style="margin-top: 10px;">
-            <span class="label">Dibayarkan kepada</span> : <strong>MANDOR / PENERIMA KUASA</strong>
-        </div>
-        <div class="info-row">
-            <span class="label">Bagian / Lokasi</span> : {{ $pengajuan->kebun->lokasi }}
-        </div>
-        <div class="info-row">
-            <span class="label">Alamat</span> : KEBUN
-        </div>
+                    <!-- Sub Header -->
+                    <table class="sub-header-table">
+                        <tr>
+                            <td style="width: 60%;">
+                                Perkiraan No <span style="margin-left: 5px; font-weight: normal; letter-spacing: 2px;">: ................................................................</span>
+                            </td>
+                            <td style="width: 40%;">
+                                Lampiran <span style="margin-left: 5px; font-weight: normal;">:</span>
+                            </td>
+                        </tr>
+                    </table>
 
-        <div class="total-box">
-            <span class="label">Jumlah</span> : Rp. {{ number_format($total, 0, ',', '.') }}
-        </div>
-        
-        <div class="terbilang-box">
-            Terbilang: # {{ ucwords(terbilang($total)) }} #
-        </div>
+                    <!-- Items Table -->
+                    <table class="items-table">
+                        <tr>
+                            <th style="width: 5%;">No<br>Urut</th>
+                            <th style="width: 50%;">Keterangan</th>
+                            <th style="width: 20%;">Sub Total</th>
+                            <th style="width: 25%; font-size: 14px;">JUMLAH</th>
+                        </tr>
+                        
+                        <tr>
+                            <td></td>
+                            <td style="font-weight: bold;">BEBAN UPAH KEBUN {{ strtoupper($pengajuan->kebun->lokasi) }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td></td>
+                            @if($penggajian)
+                            <td style="font-weight: bold;">PERIODE : {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d') }}-{{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->translatedFormat('d F Y') }}</td>
+                            @else
+                            <td style="font-weight: bold;">PERIODE : {{ \Carbon\Carbon::parse($pengajuan->tanggal)->translatedFormat('F Y') }}</td>
+                            @endif
+                            <td></td>
+                            <td></td>
+                        </tr>
 
-        <div class="keterangan-title">
-            Keterangan: {{ $pengajuan->perihal }} 
-            @if($penggajian)
-            (Laporan Tgl {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->format('d/m/Y') }})
-            @endif
-        </div>
+                        @foreach($grouped as $tipe => $jumlah)
+                        <tr>
+                            <td></td>
+                            <td>{{ strtoupper($tipe) }}</td>
+                            <td>
+                                <span class="flex-rp">Rp</span>
+                                <span class="flex-nominal">{{ number_format($jumlah, 0, ',', '.') }}</span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        @endforeach
 
-        <table class="detail-table">
-            <thead>
-                <tr>
-                    <th width="10%">NO</th>
-                    <th width="40%">TIPE UPAH (JABATAN)</th>
-                    <th width="20%">JUMLAH (Rp)</th>
-                    <th width="30%">KETERANGAN</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php $no = 1; @endphp
-                @foreach($grouped as $tipe => $jumlah)
-                <tr>
-                    <td class="text-center">{{ $no++ }}</td>
-                    <td>{{ $tipe }}</td>
-                    <td class="text-right">{{ number_format($jumlah, 0, ',', '.') }}</td>
-                    <td></td>
-                </tr>
-                @endforeach
-                <tr>
-                    <td colspan="2" class="text-right" style="font-weight:bold;">TOTAL</td>
-                    <td class="text-right" style="font-weight:bold;">{{ number_format($total, 0, ',', '.') }}</td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+                        @php 
+                            $itemsCount = count($grouped) + 2; 
+                            $emptyRows = 6 - $itemsCount;
+                        @endphp
+                        @for($i=0; $i<$emptyRows; $i++)
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        @endfor
 
-        <div class="sign-area">
-            <table class="sign-table">
-                <tr>
-                    <td width="16.6%" class="header-cell">Dibuat Oleh:</td>
-                    <td width="16.6%" class="header-cell">Diperiksa Oleh:</td>
-                    <td width="33.2%" colspan="2" class="header-cell">DISETUJUI OLEH:</td>
-                    <td width="16.6%" class="header-cell">Mengetahui,</td>
-                    <td width="16.6%" class="header-cell">Penerima,</td>
-                </tr>
-                <tr>
-                    <td class="role-cell">ADM KEBUN / MANDOR</td>
-                    <td class="role-cell">KTU / KASIR</td>
-                    <td class="role-cell" width="16.6%">ASISTEN / MGR. KEBUN</td>
-                    <td class="role-cell" width="16.6%">GM / MILL MGR</td>
-                    <td class="role-cell">FINANCIAL CONTROLLER</td>
-                    <td class="role-cell"></td>
-                </tr>
-                <tr>
-                    <td class="name-cell"><span class="sign-line"></span></td>
-                    <td class="name-cell"><span class="sign-line"></span></td>
-                    <td class="name-cell"><span class="sign-line"></span></td>
-                    <td class="name-cell"><span class="sign-line"></span></td>
-                    <td class="name-cell"><span class="sign-line"></span></td>
-                    <td class="name-cell"><span class="sign-line"></span></td>
-                </tr>
-            </table>
-        </div>
+                        <tr>
+                            <td style="border-bottom: none; background-color: #f9f9f9;"></td>
+                            <td style="border-bottom: none; background-color: #f9f9f9;"></td>
+                            <td style="border-bottom: none; background-color: #f9f9f9;"></td>
+                            <td style="border-bottom: none; font-weight: bold; font-size: 14px;">
+                                <span class="flex-rp">Rp</span>
+                                <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
+                            </td>
+                        </tr>
+                    </table>
 
-    </div>
+                    <!-- Footer Table -->
+                    <table class="footer-table">
+                        <tr>
+                            <td style="width: 75%; padding: 10px; vertical-align: top;">
+                                <table style="width: 100%; border: none;">
+                                    <tr>
+                                        <td style="width: 20%; border: none; font-weight: bold; font-size: 16px; font-style: italic;">
+                                            Terbilang
+                                        </td>
+                                        <td style="width: 80%; border: none;">
+                                            <div style="background-color: #f0f0f0; padding: 8px 10px; font-weight: bold; font-style: italic; font-size: 12px; min-height: 20px;">
+                                                {{ trim(ucwords(terbilang($total))) }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="width: 25%; text-align: center; vertical-align: top; padding: 10px 5px;">
+                                <div style="font-weight: bold; margin-bottom: 30px;">Diterima Oleh</div>
+                                <div style="font-size: 10px;">Cantumkan Nama</div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Signatures Table -->
+                    <table class="sign-table">
+                        <tr>
+                            <td style="width: 17%;" class="header-cell">DIAJUKAN OLEH :</td>
+                            <td style="width: 17%;" class="header-cell">DIPERIKSA OLEH :</td>
+                            <td style="width: 32%;" class="header-cell" colspan="2">DIKETAHUI OLEH :</td>
+                            <td style="width: 17%;" class="header-cell">DISETUJUI OLEH :</td>
+                            <td style="width: 17%;" class="header-cell">DIBAYAR OLEH :</td>
+                        </tr>
+                        <tr>
+                            <td style="height: 60px; vertical-align: bottom;">
+                                <strong>Aldo</strong><br><span style="font-size: 9px;">Spv.Op Kebun</span>
+                            </td>
+                            <td style="vertical-align: bottom;">
+                                <strong>Hendry</strong><br><span style="font-size: 9px;">Spv.Finance</span>
+                            </td>
+                            <td style="width: 16%; border-right: 1px solid black; vertical-align: bottom;">
+                                <strong>David</strong><br><span style="font-size: 9px;">Manager F&A</span>
+                            </td>
+                            <td style="width: 16%; vertical-align: bottom;">
+                                <strong>Stanly</strong><br><span style="font-size: 9px;">PIC Perkebunan</span>
+                            </td>
+                            <td style="vertical-align: bottom;">
+                                <strong>Willy</strong><br><span style="font-size: 9px;">Dir. F&A Audit</span>
+                            </td>
+                            <td style="vertical-align: bottom;">
+                                <strong>Prisillia</strong><br><span style="font-size: 9px;">Admin Kebun</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </td>
+        </tr>
+    </table>
 
 </body>
 </html>
