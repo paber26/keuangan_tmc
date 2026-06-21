@@ -21,7 +21,8 @@ class PengajuanPenggajianController extends Controller
     {
         $lokasiList = \App\Models\Penggajian::select('lokasi_kebun')->distinct()->pluck('lokasi_kebun');
         $kebuns = Kebun::whereIn('lokasi', $lokasiList)->orderBy('lokasi', 'asc')->get()->unique('lokasi');
-        return view('pengajuan-penggajian.create', compact('kebuns'));
+        $penggajians = \App\Models\Penggajian::orderBy('tanggal_mulai', 'desc')->get();
+        return view('pengajuan-penggajian.create', compact('kebuns', 'penggajians'));
     }
 
     public function store(Request $request)
@@ -109,7 +110,9 @@ class PengajuanPenggajianController extends Controller
             $kebuns->push($pengajuan_penggajian->kebun);
         }
         
-        return view('pengajuan-penggajian.edit', compact('pengajuan_penggajian', 'kebuns'));
+        $penggajians = \App\Models\Penggajian::orderBy('tanggal_mulai', 'desc')->get();
+        
+        return view('pengajuan-penggajian.edit', compact('pengajuan_penggajian', 'kebuns', 'penggajians'));
     }
 
     public function update(Request $request, PengajuanPenggajian $pengajuan_penggajian)

@@ -74,12 +74,18 @@
         </div>
 
         <div class="p-6 md:p-8 bg-gray-50/50">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
                 <h3 class="text-lg font-bold text-gray-800">Daftar Rincian</h3>
-                <button type="button" id="btn-add-item" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Tambah Baris
-                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="openModalPenggajian()" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 hover:border-blue-500 hover:text-blue-600 text-blue-700 text-sm font-medium rounded-lg shadow-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Ambil Data Laporan Penggajian
+                    </button>
+                    <button type="button" id="btn-add-item" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Tambah Baris
+                    </button>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
@@ -141,6 +147,68 @@
             </button>
         </div>
     </form>
+</div>
+
+<!-- Modal Ambil Data Penggajian -->
+<div id="modalPenggajian" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full sm:p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900" id="modal-title">Pilih Data Laporan Penggajian</h3>
+                <button type="button" onclick="closeModalPenggajian()" class="text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">Tutup</span>
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto max-h-[60vh] border border-gray-200 rounded-lg">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 sticky top-0 shadow-sm">
+                        <tr>
+                            <th class="py-3 px-4 w-10 text-center border-b border-gray-200">
+                                <input type="checkbox" id="check-all-penggajian" class="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500">
+                            </th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Periode Tanggal</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Lokasi Kebun</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Keterangan</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase text-right border-b border-gray-200">Total Upah</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($penggajians as $laporan)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="py-3 px-4 text-center">
+                                <input type="checkbox" class="check-penggajian w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500" 
+                                       data-tanggal-mulai="{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }}"
+                                       data-tanggal-akhir="{{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}"
+                                       data-total="{{ $laporan->total_keseluruhan }}"
+                                       data-keterangan="{{ $laporan->keterangan }}">
+                            </td>
+                            <td class="py-3 px-4 text-sm font-bold text-gray-800">{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}</td>
+                            <td class="py-3 px-4 text-sm font-semibold text-emerald-600">{{ $laporan->lokasi_kebun }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ $laporan->keterangan ?? '-' }}</td>
+                            <td class="py-3 px-4 text-sm font-bold text-gray-800 text-right">Rp {{ number_format($laporan->total_keseluruhan, 0, ',', '.') }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="py-8 text-center text-sm text-gray-500">Tidak ada data laporan penggajian.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse gap-2">
+                <button type="button" onclick="tambahkanDataPenggajian()" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:w-auto sm:text-sm transition-all">
+                    Tambahkan Terpilih (<span id="count-selected-penggajian">0</span>)
+                </button>
+                <button type="button" onclick="closeModalPenggajian()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm transition-all">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -219,5 +287,80 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calculateTotals();
 });
+
+// Modal Logic
+function openModalPenggajian() {
+    document.getElementById('modalPenggajian').classList.remove('hidden');
+    updateCountSelectedPenggajian();
+}
+
+function closeModalPenggajian() {
+    document.getElementById('modalPenggajian').classList.add('hidden');
+}
+
+function updateCountSelectedPenggajian() {
+    const count = document.querySelectorAll('.check-penggajian:checked').length;
+    document.getElementById('count-selected-penggajian').textContent = count;
+}
+
+document.getElementById('check-all-penggajian').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.check-penggajian');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+    updateCountSelectedPenggajian();
+});
+
+document.querySelectorAll('.check-penggajian').forEach(cb => {
+    cb.addEventListener('change', updateCountSelectedPenggajian);
+});
+
+function tambahkanDataPenggajian() {
+    const checkboxes = document.querySelectorAll('.check-penggajian:checked');
+    if (checkboxes.length === 0) {
+        alert('Pilih minimal 1 data laporan penggajian!');
+        return;
+    }
+
+    const container = document.getElementById('items-container');
+    const firstRow = container.querySelector('.item-row');
+    
+    let lastAddedInput = null;
+
+    checkboxes.forEach(cb => {
+        const newRow = firstRow.cloneNode(true);
+        
+        const tanggalMulai = cb.getAttribute('data-tanggal-mulai');
+        const tanggalAkhir = cb.getAttribute('data-tanggal-akhir');
+        const total = cb.getAttribute('data-total');
+        let keterangan = cb.getAttribute('data-keterangan') || '';
+        
+        if (keterangan === '-' || keterangan === 'null') keterangan = '';
+
+        newRow.querySelector('textarea[name="uraian[]"]').value = `UPAH PEKERJA PER ${tanggalMulai} S/D ${tanggalAkhir}`.toUpperCase();
+        newRow.querySelector('input[name="banyak_unit[]"]').value = '';
+        newRow.querySelector('input[name="harga_satuan[]"]').value = '';
+        newRow.querySelector('input[name="total_harga[]"]').value = total;
+        newRow.querySelector('textarea[name="keterangan[]"]').value = keterangan;
+        
+        container.appendChild(newRow);
+        lastAddedInput = newRow.querySelector('input[name="total_harga[]"]');
+        cb.checked = false;
+    });
+
+    // We do NOT remove first row in edit mode if it already has data, 
+    // but if it's completely empty we can remove it.
+    const firstUraian = firstRow.querySelector('textarea[name="uraian[]"]').value;
+    const firstTotal = firstRow.querySelector('input[name="total_harga[]"]').value;
+    if (!firstUraian && (!firstTotal || firstTotal == 0)) {
+        firstRow.remove();
+    }
+
+    document.getElementById('check-all-penggajian').checked = false;
+    updateCountSelectedPenggajian();
+    closeModalPenggajian();
+    
+    if (lastAddedInput) {
+        lastAddedInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+}
 </script>
 @endpush
