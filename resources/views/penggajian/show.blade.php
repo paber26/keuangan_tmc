@@ -168,9 +168,9 @@
                     
                     {{-- Footer Kupas --}}
                     @if(count($dataKupas) > 0)
-                    <tr class="bg-gray-50 font-bold border-t-2 border-gray-200">
-                        <td colspan="{{ count($period) + 2 }}" class="border border-black p-1 text-right">TOTAL UPAH KUPAS</td>
-                        <td colspan="2" class="border border-black p-1 text-left text-blue-600">
+                    <tr>
+                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH KUPAS</td>
+                        <td class="border border-black p-1 text-left font-bold text-blue-600 bg-blue-50">
                             <div class="flex justify-between">
                                 <span>Rp</span>
                                 <span>{{ number_format($penggajian->total_upah_kupas, 0, ',', '.') }}</span>
@@ -245,7 +245,7 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
                         <div class="aspect-video bg-gray-100 relative overflow-hidden">
                             @if($doc->images->count() > 0)
-                                <img src="{{ Storage::url($doc->images->first()->image_path) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($doc->images->first()->image_path) }}" alt="Thumbnail" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="zoomImage('{{ Storage::url($doc->images->first()->image_path) }}', '{{ addslashes($doc->judul) }}')">
                                 @if($doc->images->count() > 1)
                                 <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
                                     +{{ $doc->images->count() - 1 }} Foto
@@ -303,6 +303,22 @@
         }
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+function zoomImage(url, title) {
+    Swal.fire({
+        imageUrl: url,
+        imageAlt: title,
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: 'auto',
+        padding: '1em',
+        backdrop: `rgba(0,0,0,0.8)`
+    });
+}
+</script>
 @endpush
 
 @endsection

@@ -311,7 +311,7 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
                         <div class="aspect-video bg-gray-100 relative overflow-hidden">
                             @if($doc->images->count() > 0)
-                                <img src="{{ Storage::url($doc->images->first()->image_path) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($doc->images->first()->image_path) }}" alt="Thumbnail" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="zoomImage('{{ Storage::url($doc->images->first()->image_path) }}', '{{ addslashes($doc->judul) }}')">
                                 @if($doc->images->count() > 1)
                                 <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
                                     +{{ $doc->images->count() - 1 }} Foto
@@ -368,6 +368,22 @@
         }
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+function zoomImage(url, title) {
+    Swal.fire({
+        imageUrl: url,
+        imageAlt: title,
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: 'auto',
+        padding: '1em',
+        backdrop: `rgba(0,0,0,0.8)`
+    });
+}
+</script>
 @endpush
 
 @endsection
