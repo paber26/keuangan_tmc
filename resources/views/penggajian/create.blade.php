@@ -295,6 +295,45 @@
                 </form>
             </div>
         @endif
+        
+        {{-- Dokumentasi Pekerjaan --}}
+        @if(isset($dokumentasi) && count($dokumentasi) > 0)
+        <div class="mt-8 border-t border-gray-200 pt-8 no-print">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Dokumentasi Pekerjaan Terkait
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                @foreach($dokumentasi as $doc)
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="aspect-video bg-gray-100 relative overflow-hidden">
+                        @if($doc->images->count() > 0)
+                            <img src="{{ Storage::url($doc->images->first()->image_path) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                            @if($doc->images->count() > 1)
+                            <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-md backdrop-blur-sm">
+                                +{{ $doc->images->count() - 1 }} Foto
+                            </div>
+                            @endif
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-1">
+                            <div class="text-xs font-semibold text-emerald-600">{{ \Carbon\Carbon::parse($doc->tanggal)->format('d M Y') }}</div>
+                            <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{{ $doc->judul }}</h3>
+                        <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ $doc->keterangan ?: 'Tidak ada keterangan' }}</p>
+                        <a href="{{ route('dokumentasi.index') }}" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Detail &rarr;</a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
     </div>
 
 </div>

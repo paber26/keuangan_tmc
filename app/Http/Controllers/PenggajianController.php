@@ -92,6 +92,18 @@ class PenggajianController extends Controller
             }
         }
 
+        $dokumentasi = [];
+        if ($startDate && $endDate && $selectedLokasi) {
+            $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawan', 'kebun'])
+                ->whereDate('tanggal', '>=', $startDate)
+                ->whereDate('tanggal', '<=', $endDate)
+                ->whereHas('kebun', function($q) use ($selectedLokasi) {
+                    $q->where('lokasi', $selectedLokasi);
+                })
+                ->orderBy('tanggal', 'desc')
+                ->get();
+        }
+
         return view('penggajian.create', compact(
             'lokasiList',
             'selectedLokasi',
@@ -103,7 +115,8 @@ class PenggajianController extends Controller
             'dataHarian',
             'dataKupas',
             'totalUpahHarian',
-            'totalUpahKupas'
+            'totalUpahKupas',
+            'dokumentasi'
         ));
     }
 
@@ -221,7 +234,16 @@ class PenggajianController extends Controller
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
         $dataKupas = $penggajian->details->where('tipe_pekerjaan', 'Kupas Kelapa');
 
-        return view('penggajian.show', compact('penggajian', 'period', 'dataHarian', 'dataKupas'));
+        $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawan', 'kebun'])
+            ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
+            ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
+            ->whereHas('kebun', function($q) use ($penggajian) {
+                $q->where('lokasi', $penggajian->lokasi_kebun);
+            })
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        return view('penggajian.show', compact('penggajian', 'period', 'dataHarian', 'dataKupas', 'dokumentasi'));
     }
 
     public function destroy($id)

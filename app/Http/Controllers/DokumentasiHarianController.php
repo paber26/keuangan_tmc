@@ -29,7 +29,7 @@ class DokumentasiHarianController extends Controller
         $dokumentasi = $query->orderBy('tanggal', 'desc')->get();
         $lokasiList = \App\Models\Kebun::orderBy('lokasi', 'asc')->get()->unique('lokasi');
 
-        $viewMode = $request->get('view', 'grid'); // default to grid
+        $viewMode = $request->get('view', 'table'); // default to table
 
         return view('dokumentasi.index', compact('dokumentasi', 'lokasiList', 'viewMode'));
     }
