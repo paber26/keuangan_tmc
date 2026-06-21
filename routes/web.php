@@ -50,8 +50,12 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('dokumentasi', \App\Http\Controllers\DokumentasiHarianController::class);
 
     // Penggajian
-    Route::get('/penggajian/laporan-mingguan', [\App\Http\Controllers\PenggajianController::class, 'index'])->name('penggajian.index');
-    Route::get('/penggajian/laporan-mingguan/print', [\App\Http\Controllers\PenggajianController::class, 'print'])->name('penggajian.print');
+    Route::get('/penggajian', [\App\Http\Controllers\PenggajianController::class, 'index'])->name('penggajian.index');
+    Route::get('/penggajian/create', [\App\Http\Controllers\PenggajianController::class, 'create'])->name('penggajian.create');
+    Route::post('/penggajian', [\App\Http\Controllers\PenggajianController::class, 'store'])->name('penggajian.store');
+    Route::get('/penggajian/{id}', [\App\Http\Controllers\PenggajianController::class, 'show'])->name('penggajian.show');
+    Route::delete('/penggajian/{id}', [\App\Http\Controllers\PenggajianController::class, 'destroy'])->name('penggajian.destroy');
+    Route::get('/penggajian/{id}/print', [\App\Http\Controllers\PenggajianController::class, 'print'])->name('penggajian.print');
 
     // Keuangan & Laporan
     Route::get('/transaksi', function() { return view('transaksi.index'); })->name('transaksi.index');
