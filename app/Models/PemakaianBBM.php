@@ -35,4 +35,9 @@ class PemakaianBBM extends Model
     {
         return $this->belongsTo(Karyawan::class, 'karyawan_id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(PemakaianBBMImage::class, 'pemakaian_bbm_id');
+    }
 }

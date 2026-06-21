@@ -105,6 +105,28 @@
                 </table>
             </div>
         </div>
+        @if($pemakaian_bbm->images->count() > 0)
+        <div class="px-8 py-6 border-t border-gray-100 bg-gray-50/30">
+            <h3 class="text-sm font-bold text-gray-800 uppercase tracking-widest mb-4">Dokumentasi / Bukti Lampiran</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                @foreach($pemakaian_bbm->images as $img)
+                <button type="button" onclick="openLightbox('{{ Storage::url($img->image_path) }}')" class="block w-full h-full focus:outline-none">
+                    <img src="{{ Storage::url($img->image_path) }}" alt="Dokumentasi" class="w-full aspect-square object-cover rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                </button>
+                @endforeach
+            </div>
+        </div>
+        @endif
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 z-[100] hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeLightbox(event)">
+    <div class="relative w-full max-w-5xl flex items-center justify-center">
+        <button type="button" onclick="closeLightbox(event, true)" class="absolute -top-12 right-0 text-white hover:text-gray-300 p-2 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+        <img id="lightbox-img" src="" class="max-h-[85vh] max-w-full object-contain rounded shadow-2xl scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
     </div>
 </div>
 
@@ -130,4 +152,52 @@
     }
 }
 </style>
+
+<script>
+    function openLightbox(imageSrc) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        
+        lightboxImg.src = imageSrc;
+        lightbox.classList.remove('hidden');
+        
+        // Trigger animation
+        setTimeout(() => {
+            lightbox.classList.remove('opacity-0');
+            lightboxImg.classList.remove('scale-95');
+            lightboxImg.classList.add('scale-100');
+        }, 10);
+        
+        // Prevent scrolling on body
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event, force = false) {
+        // If force is true (close button clicked) or clicked outside the image
+        if (force || event.target.id === 'lightbox') {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            lightbox.classList.add('opacity-0');
+            lightboxImg.classList.remove('scale-100');
+            lightboxImg.classList.add('scale-95');
+            
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                lightboxImg.src = '';
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            }, 300);
+        }
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            const lightbox = document.getElementById('lightbox');
+            if (!lightbox.classList.contains('hidden')) {
+                closeLightbox(event, true);
+            }
+        }
+    });
+</script>
 @endsection

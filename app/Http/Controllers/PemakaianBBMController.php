@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\PemakaianBBM;
 use App\Models\PemakaianBBMItem;
+use App\Models\PemakaianBBMImage;
 use App\Models\Kebun;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PemakaianBBMController extends Controller
 {
@@ -55,6 +57,8 @@ class PemakaianBBMController extends Controller
             'jumlah_liter.*' => 'required|numeric|min:0.01',
             'harga_per_liter' => 'required|array',
             'harga_per_liter.*' => 'required|numeric|min:0',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'pasted_images.*' => 'nullable|string',
         ]);
 
         try {
@@ -90,6 +94,42 @@ class PemakaianBBMController extends Controller
             }
 
             $pemakaian->update(['grand_total' => $grandTotal]);
+
+            // Simpan foto dokumentasi jika ada
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('pemakaian_bbm', 'public');
+                    PemakaianBBMImage::create([
+                        'pemakaian_bbm_id' => $pemakaian->id,
+                        'image_path' => $path,
+                        'original_name' => $image->getClientOriginalName()
+                    ]);
+                }
+            }
+
+            if ($request->has('pasted_images')) {
+                foreach ($request->pasted_images as $base64Image) {
+                    if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type)) {
+                        $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                        $type = strtolower($type[1]); 
+                        if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png', 'webp' ])) {
+                            continue;
+                        }
+                        $data = base64_decode($data);
+                        if ($data === false) {
+                            continue;
+                        }
+                        $fileName = 'pasted_' . time() . '_' . uniqid() . '.' . $type;
+                        $path = 'pemakaian_bbm/' . $fileName;
+                        Storage::disk('public')->put($path, $data);
+                        PemakaianBBMImage::create([
+                            'pemakaian_bbm_id' => $pemakaian->id,
+                            'image_path' => $path,
+                            'original_name' => 'Pasted Image'
+                        ]);
+                    }
+                }
+            }
 
             DB::commit();
             return redirect()->route('pemakaian-bbm.index')->with('success', 'Laporan pemakaian BBM berhasil disimpan.');
@@ -138,6 +178,9 @@ class PemakaianBBMController extends Controller
             'jumlah_liter.*' => 'required|numeric|min:0.01',
             'harga_per_liter' => 'required|array',
             'harga_per_liter.*' => 'required|numeric|min:0',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'pasted_images.*' => 'nullable|string',
+            'remove_images' => 'nullable|array',
         ]);
 
         try {
@@ -176,6 +219,53 @@ class PemakaianBBMController extends Controller
 
             $pemakaian->update(['grand_total' => $grandTotal]);
 
+            // Hapus gambar yang dicentang
+            if ($request->has('remove_images')) {
+                foreach ($request->remove_images as $imageId) {
+                    $image = PemakaianBBMImage::find($imageId);
+                    if ($image && $image->pemakaian_bbm_id == $pemakaian->id) {
+                        Storage::disk('public')->delete($image->image_path);
+                        $image->delete();
+                    }
+                }
+            }
+
+            // Simpan foto dokumentasi jika ada
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('pemakaian_bbm', 'public');
+                    PemakaianBBMImage::create([
+                        'pemakaian_bbm_id' => $pemakaian->id,
+                        'image_path' => $path,
+                        'original_name' => $image->getClientOriginalName()
+                    ]);
+                }
+            }
+
+            if ($request->has('pasted_images')) {
+                foreach ($request->pasted_images as $base64Image) {
+                    if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type)) {
+                        $data = substr($base64Image, strpos($base64Image, ',') + 1);
+                        $type = strtolower($type[1]); 
+                        if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png', 'webp' ])) {
+                            continue;
+                        }
+                        $data = base64_decode($data);
+                        if ($data === false) {
+                            continue;
+                        }
+                        $fileName = 'pasted_' . time() . '_' . uniqid() . '.' . $type;
+                        $path = 'pemakaian_bbm/' . $fileName;
+                        Storage::disk('public')->put($path, $data);
+                        PemakaianBBMImage::create([
+                            'pemakaian_bbm_id' => $pemakaian->id,
+                            'image_path' => $path,
+                            'original_name' => 'Pasted Image'
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
             return redirect()->route('pemakaian-bbm.index')->with('success', 'Laporan pemakaian BBM berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -187,6 +277,12 @@ class PemakaianBBMController extends Controller
     public function destroy(string $id)
     {
         $pemakaian_bbm = PemakaianBBM::findOrFail($id);
+        
+        // Hapus file gambar di storage
+        foreach ($pemakaian_bbm->images as $img) {
+            Storage::disk('public')->delete($img->image_path);
+        }
+        
         $pemakaian_bbm->delete();
         return redirect()->route('pemakaian-bbm.index')->with('success', 'Data pemakaian BBM berhasil dihapus.');
     }
