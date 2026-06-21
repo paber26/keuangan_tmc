@@ -230,10 +230,10 @@ class PengajuanBBMController extends Controller
 
     public function print(PengajuanBBM $pengajuan_bbm)
     {
-        $pengajuan_bbm->load('items', 'karyawan', 'kebun');
+        $pengajuan_bbm->load('items', 'karyawan', 'kebun', 'images');
         
         $pdf = Pdf::loadView('pengajuan-bbm.print-pdf', compact('pengajuan_bbm'))
-                  ->setPaper('a5', 'landscape');
+                  ->setPaper('a4', 'portrait');
         
         return $pdf->stream('Pengajuan-BBM-'.$pengajuan_bbm->id.'.pdf');
     }

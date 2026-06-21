@@ -151,5 +151,18 @@
         </table>
     </div>
 
+    @if($pengajuan_bbm->images && $pengajuan_bbm->images->count() > 0)
+        <!-- Page break before images -->
+        <div style="page-break-before: always;"></div>
+        <div class="images-wrapper" style="width: 100%; text-align: center;">
+            <h3 style="text-transform: uppercase; font-size: 14px; text-decoration: underline; margin-bottom: 20px;">Dokumentasi / Bukti Lampiran</h3>
+            @foreach($pengajuan_bbm->images as $img)
+                <div style="margin-bottom: 30px;">
+                    <img src="{{ public_path('storage/' . $img->image_path) }}" style="max-width: 100%; max-height: 800px; border: 2px solid #000; padding: 5px;" alt="Bukti">
+                </div>
+            @endforeach
+        </div>
+    @endif
+
 </body>
 </html>
