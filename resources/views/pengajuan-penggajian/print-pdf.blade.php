@@ -19,12 +19,14 @@
         
         .header-table { width: 100%; border-collapse: collapse; border-bottom: 2px solid #000; }
         .header-table td { border: none; vertical-align: top; padding: 10px; }
-        .logo-cell { width: 25%; text-align: center; }
-        .title-cell { width: 45%; text-align: center; vertical-align: middle; padding-top: 35px; }
-        .doc-info-cell { width: 30%; padding: 0; }
+        .logo-cell { width: 20%; text-align: center; }
+        .title-cell { width: 40%; text-align: center; vertical-align: middle; padding-top: 35px; }
+        .doc-info-cell { width: 40%; padding: 0; }
         
         .doc-info-table { width: 100%; border-collapse: collapse; border: 2px solid #000; font-size: 9px; font-weight: bold; }
         .doc-info-table td { border: 2px solid #000; padding: 4px; }
+        .doc-info-label { width: 30%; white-space: nowrap; }
+        .doc-info-value { width: 70%; white-space: nowrap; }
         
         .company-name { font-size: 14px; font-weight: bold; margin: 0 0 4px 0; }
         .company-address { font-size: 10px; margin: 0; line-height: 1.4; }
@@ -73,20 +75,20 @@
                 <td class="doc-info-cell">
                     <table class="doc-info-table">
                         <tr>
-                            <td>No. Dokumen</td>
-                            <td>: {{ $pengajuan_penggajian->no_dokumen ?? '-' }}</td>
+                            <td class="doc-info-label">No. Dokumen</td>
+                            <td class="doc-info-value">: {{ $pengajuan_penggajian->no_dokumen ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <td>Disahkan Tgl</td>
-                            <td>: {{ $pengajuan_penggajian->disahkan_tgl ? \Carbon\Carbon::parse($pengajuan_penggajian->disahkan_tgl)->translatedFormat('d F Y') : '-' }}</td>
+                            <td class="doc-info-label">Disahkan Tgl</td>
+                            <td class="doc-info-value">: {{ $pengajuan_penggajian->disahkan_tgl ? \Carbon\Carbon::parse($pengajuan_penggajian->disahkan_tgl)->translatedFormat('d F Y') : '-' }}</td>
                         </tr>
                         <tr>
-                            <td>Berlaku Tgl</td>
-                            <td>: {{ $pengajuan_penggajian->berlaku_tgl ? \Carbon\Carbon::parse($pengajuan_penggajian->berlaku_tgl)->translatedFormat('d F Y') : '-' }}</td>
+                            <td class="doc-info-label">Berlaku Tgl</td>
+                            <td class="doc-info-value">: {{ $pengajuan_penggajian->berlaku_tgl ? \Carbon\Carbon::parse($pengajuan_penggajian->berlaku_tgl)->translatedFormat('d F Y') : '-' }}</td>
                         </tr>
                         <tr>
-                            <td>Revisi</td>
-                            <td>: {{ $pengajuan_penggajian->revisi ?? '0' }}</td>
+                            <td class="doc-info-label">Revisi</td>
+                            <td class="doc-info-value">: {{ $pengajuan_penggajian->revisi ?? '0' }}</td>
                         </tr>
                     </table>
                 </td>
