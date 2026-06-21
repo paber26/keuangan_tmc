@@ -262,15 +262,28 @@ class PenggajianController extends Controller
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
         $dataKupas = $penggajian->details->where('tipe_pekerjaan', 'Kupas Kelapa');
 
+        $dokumentasi = \App\Models\DokumentasiHarian::with(['images'])
+            ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
+            ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
+            ->whereHas('kebun', function($q) use ($penggajian) {
+                $q->where('lokasi', $penggajian->lokasi_kebun);
+            })
+            ->orderBy('tanggal', 'asc')
+            ->get()
+            ->groupBy(function($item) {
+                return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
+            });
+
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('penggajian.print-pdf-saved', compact(
             'penggajian',
             'period',
             'dataHarian',
-            'dataKupas'
+            'dataKupas',
+            'dokumentasi'
         ));
 
         $pdf->setPaper('A4', 'portrait');
-        
-        return $pdf->stream('Laporan-Penggajian-'.$penggajian->lokasi_kebun.'.pdf');
+
+        return $pdf->stream('Laporan_Penggajian_' . $penggajian->lokasi_kebun . '.pdf');
     }
 }

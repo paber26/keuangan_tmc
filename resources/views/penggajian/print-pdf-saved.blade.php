@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Laporan Penggajian - {{ $selectedLokasi }}</title>
+    <title>Laporan Penggajian - {{ $penggajian->lokasi_kebun }}</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -114,8 +114,8 @@
     </div>
 
     <div class="judul-laporan">
-        <h2>LAPORAN PEKERJAAN MINGGUAN DI KEBUN {{ $selectedLokasi }}</h2>
-        <p style="margin: 0;"><b>Periode:</b> {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->format('d M Y') }}</p>
+            <h2 style="font-size: 14px; margin: 0; padding: 0;">LAPORAN PEKERJAAN MINGGUAN DI KEBUN {{ $penggajian->lokasi_kebun }}</h2>
+            <p style="margin: 0;"><b>Periode:</b> {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->format('d M Y') }}</p>
         <p style="margin: 0;"><b>Lokasi:</b> {{ $penggajian->lokasi_kebun }}</p>
     </div>
 
@@ -297,6 +297,61 @@
             </tbody>
         </table>
     </div>
+
+    @if(isset($dokumentasi) && count($dokumentasi) > 0)
+    <div class="page-break"></div>
+    <div class="kop-surat">
+        <img src="{{ public_path('logo.jpg') }}" class="logo" alt="Logo">
+        <div style="padding-left: 80px; padding-right: 80px;">
+            <h1 class="kop-title">PT . TRI MUSTIKA COCOMINAESA ( TMC )</h1>
+            <p class="kop-address">Jl. Raya A.K.D Km. 90 Kec. Amurang Barat Kab. Minahasa Selatan</p>
+        </div>
+    </div>
+
+    @foreach($period as $date)
+        @php
+            $dateStr = $date->format('Y-m-d');
+            $docsForDate = isset($dokumentasi[$dateStr]) ? $dokumentasi[$dateStr] : collect();
+            
+            // Get people who worked Harian on this date
+            $harianNames = [];
+            foreach($dataHarian as $harian) {
+                if(isset($harian->rincian_harian[$dateStr])) {
+                    $nameParts = explode(' ', trim($harian->nama_karyawan));
+                    $harianNames[] = $nameParts[0]; // Get first name
+                }
+            }
+        @endphp
+
+        @if($docsForDate->count() > 0)
+            <div style="margin-top: 20px;">
+                <h3 style="font-size: 14pt; margin-bottom: 10px;">{{ $date->format('j-n-y') }}</h3>
+                @if(count($harianNames) > 0)
+                    <p style="font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 10px;">HARIAN ( {{ implode(', ', $harianNames) }} )</p>
+                @endif
+                
+                <div style="width: 100%;">
+                    <table style="width: 100%; border: none; margin: 0; padding: 0;">
+                        <tr>
+                    @php $imgCount = 0; @endphp
+                    @foreach($docsForDate as $doc)
+                        @foreach($doc->images as $img)
+                            @if($imgCount > 0 && $imgCount % 2 == 0)
+                                </tr><tr>
+                            @endif
+                            <td style="border: none; padding: 5px; width: 50%; vertical-align: top;">
+                                <img src="{{ storage_path('app/public/' . $img->image_path) }}" style="width: 100%; max-height: 350px; object-fit: cover;">
+                            </td>
+                            @php $imgCount++; @endphp
+                        @endforeach
+                    @endforeach
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        @endif
+    @endforeach
+    @endif
 
 </body>
 </html>
