@@ -19,7 +19,6 @@ class BuktiKasKebunController extends Controller
     {
         // Only get Pengajuan that are 'Disetujui', have penggajian_id, and do not already have a BuktiKasKebun
         $pengajuans = PengajuanPenggajian::where('status', 'Disetujui')
-            ->whereNotNull('penggajian_id')
             ->doesntHave('bukti_kas_kebun')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -37,8 +36,8 @@ class BuktiKasKebunController extends Controller
 
         $pengajuan = PengajuanPenggajian::findOrFail($request->pengajuan_penggajian_id);
 
-        if ($pengajuan->status !== 'Disetujui' || !$pengajuan->penggajian_id) {
-            return redirect()->back()->with('error', 'Pengajuan ini belum disetujui atau tidak memiliki data Laporan Penggajian.');
+        if ($pengajuan->status !== 'Disetujui') {
+            return redirect()->back()->with('error', 'Pengajuan ini belum disetujui.');
         }
 
         BuktiKasKebun::create([
@@ -59,7 +58,6 @@ class BuktiKasKebunController extends Controller
     public function edit(BuktiKasKebun $bukti_kas_kebun)
     {
         $pengajuans = PengajuanPenggajian::where('status', 'Disetujui')
-            ->whereNotNull('penggajian_id')
             ->orderBy('created_at', 'desc')
             ->get();
 

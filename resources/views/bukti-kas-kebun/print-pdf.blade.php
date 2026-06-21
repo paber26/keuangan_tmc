@@ -155,7 +155,10 @@
         </div>
 
         <div class="keterangan-title">
-            Keterangan: {{ $pengajuan->perihal }} (Laporan Tgl {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->format('d/m/Y') }})
+            Keterangan: {{ $pengajuan->perihal }} 
+            @if($penggajian)
+            (Laporan Tgl {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->format('d/m/Y') }})
+            @endif
         </div>
 
         <table class="detail-table">

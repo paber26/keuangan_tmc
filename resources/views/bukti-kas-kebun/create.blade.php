@@ -35,10 +35,10 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <p class="text-xs text-gray-500 mt-1">Hanya form pengajuan yang statusnya "Disetujui" dan memiliki data laporan penggajian yang muncul di sini.</p>
+                            <p class="text-xs text-gray-500 mt-1">Hanya form pengajuan yang statusnya "Disetujui" yang muncul di sini.</p>
                         @else
                             <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
-                                Belum ada Form Pengajuan Dana (Upah) dengan status "Disetujui" yang memiliki lampiran laporan penggajian. <br>
+                                Belum ada Form Pengajuan Dana (Upah) dengan status "Disetujui". <br>
                                 <a href="{{ route('pengajuan-penggajian.index') }}" class="font-medium underline mt-1 inline-block">Lihat Pengajuan Dana</a>
                             </div>
                         @endif
