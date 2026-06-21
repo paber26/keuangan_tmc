@@ -84,6 +84,9 @@
         
         if ($penggajian && $penggajian->details) {
             foreach($penggajian->details as $detail) {
+                // Determine Tipe Gaji
+                $tipePekerjaan = $detail->tipe_pekerjaan ?: 'Lain-lain';
+                
                 // Determine Jabatan Name exactly like in the modal description
                 $jabatanName = $detail->jabatan;
                 if (!$jabatanName || strtolower($jabatanName) === 'harian' || strtolower($jabatanName) === 'borongan') {
@@ -100,10 +103,13 @@
                     $jabatanName = 'Harian Kumpul';
                 }
                 
-                if(!isset($grouped[$jabatanName])) {
-                    $grouped[$jabatanName] = 0;
+                if(!isset($grouped[$tipePekerjaan])) {
+                    $grouped[$tipePekerjaan] = [];
                 }
-                $grouped[$jabatanName] += $detail->total_upah;
+                if(!isset($grouped[$tipePekerjaan][$jabatanName])) {
+                    $grouped[$tipePekerjaan][$jabatanName] = 0;
+                }
+                $grouped[$tipePekerjaan][$jabatanName] += $detail->total_upah;
                 $total += $detail->total_upah;
             }
         } else {
@@ -144,12 +150,27 @@
                             @endif
                             <td class="px-4 py-3"></td>
                         </tr>
-                        @foreach($grouped as $tipe => $jumlah)
-                        <tr class="border-b border-gray-100">
-                            <td class="px-4 py-3"></td>
-                            <td class="px-4 py-3 text-gray-700">{{ strtoupper($tipe) }}</td>
-                            <td class="px-4 py-3 text-right font-medium text-gray-900">Rp {{ number_format($jumlah, 0, ',', '.') }}</td>
-                        </tr>
+                        @foreach($grouped as $tipe => $items)
+                            @if(is_array($items))
+                                <tr class="border-b border-gray-100 bg-gray-50/50">
+                                    <td class="px-4 py-3"></td>
+                                    <td class="px-4 py-3 font-semibold text-gray-800">UPAH {{ strtoupper($tipe) }}</td>
+                                    <td class="px-4 py-3"></td>
+                                </tr>
+                                @foreach($items as $jabatan => $jumlah)
+                                <tr class="border-b border-gray-100">
+                                    <td class="px-4 py-3"></td>
+                                    <td class="px-4 py-3 text-gray-700 pl-8">- {{ strtoupper($jabatan) }}</td>
+                                    <td class="px-4 py-3 text-right font-medium text-gray-900">Rp {{ number_format($jumlah, 0, ',', '.') }}</td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr class="border-b border-gray-100">
+                                    <td class="px-4 py-3"></td>
+                                    <td class="px-4 py-3 text-gray-700">{{ strtoupper($tipe) }}</td>
+                                    <td class="px-4 py-3 text-right font-medium text-gray-900">Rp {{ number_format($items, 0, ',', '.') }}</td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                     <tfoot>

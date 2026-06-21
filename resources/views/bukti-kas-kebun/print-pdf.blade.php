@@ -129,6 +129,9 @@
         
         if ($penggajian && $penggajian->details) {
             foreach($penggajian->details as $detail) {
+                // Determine Tipe Gaji
+                $tipePekerjaan = $detail->tipe_pekerjaan ?: 'Lain-lain';
+
                 // Determine Jabatan Name exactly like in the modal description
                 $jabatanName = $detail->jabatan;
                 if (!$jabatanName || strtolower($jabatanName) === 'harian' || strtolower($jabatanName) === 'borongan') {
@@ -145,14 +148,16 @@
                     $jabatanName = 'Harian Kumpul';
                 }
                 
-                if(!isset($grouped[$jabatanName])) {
-                    $grouped[$jabatanName] = 0;
+                if(!isset($grouped[$tipePekerjaan])) {
+                    $grouped[$tipePekerjaan] = [];
                 }
-                $grouped[$jabatanName] += $detail->total_upah;
+                if(!isset($grouped[$tipePekerjaan][$jabatanName])) {
+                    $grouped[$tipePekerjaan][$jabatanName] = 0;
+                }
+                $grouped[$tipePekerjaan][$jabatanName] += $detail->total_upah;
                 $total += $detail->total_upah;
             }
         } else {
-            // Fallback to pengajuan items if no penggajian details
             foreach($pengajuan->items as $item) {
                 if(!isset($grouped[$item->uraian])) {
                     $grouped[$item->uraian] = 0;
@@ -291,16 +296,36 @@
                             <td></td>
                         </tr>
 
-                        @foreach($grouped as $tipe => $jumlah)
-                        <tr>
-                            <td></td>
-                            <td>{{ strtoupper($tipe) }}</td>
-                            <td>
-                                <span class="flex-rp">Rp</span>
-                                <span class="flex-nominal">{{ number_format($jumlah, 0, ',', '.') }}</span>
-                            </td>
-                            <td></td>
-                        </tr>
+                        @foreach($grouped as $tipe => $items)
+                            @if(is_array($items))
+                                <tr>
+                                    <td></td>
+                                    <td style="font-weight: bold;">UPAH {{ strtoupper($tipe) }}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                @foreach($items as $jabatan => $jumlah)
+                                <tr>
+                                    <td></td>
+                                    <td style="padding-left: 15px;">- {{ strtoupper($jabatan) }}</td>
+                                    <td>
+                                        <span class="flex-rp">Rp</span>
+                                        <span class="flex-nominal">{{ number_format($jumlah, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td></td>
+                                    <td>{{ strtoupper($tipe) }}</td>
+                                    <td>
+                                        <span class="flex-rp">Rp</span>
+                                        <span class="flex-nominal">{{ number_format($items, 0, ',', '.') }}</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            @endif
                         @endforeach
 
                         @php 
@@ -356,7 +381,7 @@
                         </tr>
                         <tr>
                             <td style="height: 60px; vertical-align: bottom;">
-                                <strong>Aldo</strong><br><span style="font-size: 9px;">Spv.Op Kebun</span>
+                                <strong>Aldo</strong><br><span style="font-size: 9px;">Spv. Ops Kebun</span>
                             </td>
                             <td style="vertical-align: bottom;">
                                 <strong>Hendry</strong><br><span style="font-size: 9px;">Spv.Finance</span>
