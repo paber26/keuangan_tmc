@@ -125,7 +125,7 @@
                                 <td class="border border-black p-1 text-left">
                                     <div class="flex justify-between">
                                         <span>Rp</span>
-                                        <span>{{ number_format($tarifHarian, 0, ',', '.') }}</span>
+                                        <span>{{ number_format(strtolower($jabatan) === 'memaras mesin' ? $tarifMemaras : $tarifHarian, 0, ',', '.') }}</span>
                                     </div>
                                 </td>
                                 <td class="border border-black p-1 text-left bg-gray-100">
@@ -147,7 +147,7 @@
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($tarifHarian, 0, ',', '.') }}</span>
+                                    <span>{{ number_format(strtolower($jabatan) === 'memaras mesin' ? $tarifMemaras : $tarifHarian, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                             <td class="border border-black p-1 text-left bg-gray-100">

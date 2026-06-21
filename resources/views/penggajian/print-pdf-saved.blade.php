@@ -191,7 +191,7 @@
                         <td class="text-left">
                             <div class="currency">
                                 <span class="curr-sym">Rp</span>
-                                <span class="curr-val">{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
+                                <span class="curr-val">{{ number_format(strtolower($jabatan) === 'memaras mesin' ? ($penggajian->tarif_memaras ?? 250000) : $penggajian->tarif_harian, 0, ',', '.') }}</span>
                                 <div class="clear"></div>
                             </div>
                         </td>
@@ -214,7 +214,7 @@
                     <td class="text-left" style="font-weight: bold;">
                         <div class="currency">
                             <span class="curr-sym">Rp</span>
-                            <span class="curr-val">{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
+                            <span class="curr-val">{{ number_format(strtolower($jabatan) === 'memaras mesin' ? ($penggajian->tarif_memaras ?? 250000) : $penggajian->tarif_harian, 0, ',', '.') }}</span>
                             <div class="clear"></div>
                         </div>
                     </td>

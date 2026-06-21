@@ -54,9 +54,6 @@ class PenggajianController extends Controller
 
             foreach ($absensis as $absensi) {
                 $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatans->first()->nama ?? 'Tidak Diketahui');
-                if (strtolower($jabatan) === 'momaras mesin') {
-                    $jabatan = 'Memaras Mesin';
-                }
                 $karyawanId = $absensi->karyawan_id;
                 $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
 
@@ -172,9 +169,6 @@ class PenggajianController extends Controller
 
         foreach ($absensis as $absensi) {
             $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatans->first()->nama ?? 'Tidak Diketahui');
-            if (strtolower($jabatan) === 'momaras mesin') {
-                $jabatan = 'Memaras Mesin';
-            }
             $karyawanId = $absensi->karyawan_id;
             $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
 
@@ -327,15 +321,10 @@ class PenggajianController extends Controller
 
         foreach ($penggajian->details as $detail) {
             if ($detail->tipe_pekerjaan === 'Harian') {
-                $isMemaras = in_array(strtolower($detail->jabatan), ['memaras mesin', 'momaras mesin']);
+                $isMemaras = strtolower($detail->jabatan) === 'memaras mesin';
                 $tarif = $isMemaras ? $request->tarif_memaras : $request->tarif_harian;
                 $detail->total_upah = $detail->jumlah_hari_kerja * $tarif;
                 $totalHarian += $detail->total_upah;
-                
-                // Update jabatan typo to correct one if necessary
-                if (strtolower($detail->jabatan) === 'momaras mesin') {
-                    $detail->jabatan = 'Memaras Mesin';
-                }
                 
                 $detail->save();
             } else if ($detail->tipe_pekerjaan === 'Borongan') {
