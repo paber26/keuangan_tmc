@@ -123,7 +123,7 @@
             </tr>
         </table>
         
-        <table class="items-table" style="border-left: none; border-right: none; border-bottom: none;">
+        <table class="items-table" style="border-left: none; border-right: none; border-bottom: none; height: 550px;">
             <thead>
                 <tr>
                     <th style="width: 5%; border-left: none;">NO.</th>
@@ -150,38 +150,15 @@
                 </tr>
                 @endforeach
                 
-                @php
-                    $totalExtraLines = 0;
-                    foreach($pengajuan_penggajian->items as $item) {
-                        // Keterangan column is ~20% width. At 11px font, ~17 chars per line.
-                        $len = strlen($item->keterangan);
-                        $lines = ceil($len / 17);
-                        if ($lines > 1) {
-                            $totalExtraLines += ($lines - 1);
-                        }
-                        
-                        // Uraian column might also wrap (~25% width, ~22 chars per line)
-                        $lenUraian = strlen($item->uraian);
-                        $linesUraian = ceil($lenUraian / 22);
-                        if ($linesUraian > 1 && $linesUraian > $lines) {
-                            $totalExtraLines += ($linesUraian - max(1, $lines));
-                        }
-                    }
-                    $targetRows = 20 - $totalExtraLines;
-                    if ($targetRows < count($pengajuan_penggajian->items)) {
-                        $targetRows = count($pengajuan_penggajian->items);
-                    }
-                @endphp
-                
-                {{-- Fill empty rows dynamically to keep total height consistent --}}
-                @for($i = count($pengajuan_penggajian->items) + 1; $i <= $targetRows; $i++)
+                {{-- Always fill empty rows up to 20, let table height stretch them if needed --}}
+                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 20; $i++)
                 <tr>
-                    <td class="text-center font-bold" style="border-left: none; height: 16px;">{{ $i }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="border-right: none;"></td>
+                    <td class="text-center font-bold" style="border-left: none; padding: 0;">{{ $i }}</td>
+                    <td style="padding: 0;"></td>
+                    <td style="padding: 0;"></td>
+                    <td style="padding: 0;"></td>
+                    <td style="padding: 0;"></td>
+                    <td style="border-right: none; padding: 0;"></td>
                 </tr>
                 @endfor
             </tbody>
