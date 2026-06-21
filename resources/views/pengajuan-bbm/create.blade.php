@@ -69,8 +69,10 @@
                     <thead>
                         <tr class="bg-gray-100 border-y border-gray-200">
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No.</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[300px]">Uraian</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[200px]">Total Harga (Rp)</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Tipe BBM</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[120px]">Liter</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Harga/Liter</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[180px]">Total Harga (Rp)</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Keterangan</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[60px] text-center"></th>
                         </tr>
@@ -79,10 +81,19 @@
                         <tr class="item-row">
                             <td class="py-3 px-4 text-sm font-bold text-gray-800 text-center row-number">1</td>
                             <td class="py-3 px-4">
-                                <input type="text" name="uraian[]" required placeholder="Cth: SOLAR 45 L" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold uppercase">
+                                <select name="tipe_bbm[]" required class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold input-tipe-bbm">
+                                    <option value="Solar">Solar</option>
+                                    <option value="Pertalite">Pertalite</option>
+                                </select>
                             </td>
                             <td class="py-3 px-4">
-                                <input type="number" name="total_harga[]" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold input-harga">
+                                <input type="number" name="jumlah_liter[]" required min="0" step="0.01" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold input-liter">
+                            </td>
+                            <td class="py-3 px-4">
+                                <input type="number" name="harga_per_liter[]" required min="0" value="16000" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold input-harga-liter">
+                            </td>
+                            <td class="py-3 px-4">
+                                <input type="number" name="total_harga[]" required readonly class="w-full px-3 py-2 rounded border border-gray-100 bg-gray-50 text-emerald-700 outline-none text-sm font-bold input-total-harga">
                             </td>
                             <td class="py-3 px-4">
                                 <input type="text" name="keterangan_pengajuan[]" placeholder="Cth: UNTUK OPERASIONAL" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold uppercase">
@@ -248,8 +259,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 removeBtn.classList.add('hover:text-red-500', 'hover:bg-red-50');
             }
 
-            const harga = parseFloat(row.querySelector('.input-harga').value) || 0;
-            grandTotal += harga;
+            const liter = parseFloat(row.querySelector('.input-liter').value) || 0;
+            const hargaLiter = parseFloat(row.querySelector('.input-harga-liter').value) || 0;
+            const total = Math.round(liter * hargaLiter);
+            
+            row.querySelector('.input-total-harga').value = total;
+            grandTotal += total;
         });
 
         grandTotalEl.textContent = 'Rp ' + formatRp(grandTotal);
@@ -259,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const firstRow = container.querySelector('.item-row');
         const newRow = firstRow.cloneNode(true);
         
-        newRow.querySelector('input[name="uraian[]"]').value = '';
+        newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
         newRow.querySelector('input[name="total_harga[]"]').value = '';
         newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = '';
         
@@ -268,7 +283,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     container.addEventListener('input', (e) => {
-        if (e.target.classList.contains('input-harga')) {
+        if (e.target.classList.contains('input-liter') || e.target.classList.contains('input-harga-liter')) {
+            calculateTotals();
+        }
+    });
+
+    container.addEventListener('change', (e) => {
+        if (e.target.classList.contains('input-tipe-bbm')) {
+            const row = e.target.closest('.item-row');
+            const hargaInput = row.querySelector('.input-harga-liter');
+            if (e.target.value === 'Solar') {
+                hargaInput.value = 16000;
+            } else if (e.target.value === 'Pertalite') {
+                hargaInput.value = 13000;
+            }
             calculateTotals();
         }
     });
@@ -349,25 +377,36 @@ function tambahkanDataTerpilih() {
         const data = aggregatedData[tipe];
         const newRow = firstRow.cloneNode(true);
         
-        newRow.querySelector('input[name="uraian[]"]').value = tipe + ' ' + data.liter + ' L';
-        const hargaInput = newRow.querySelector('input[name="total_harga[]"]');
-        hargaInput.value = data.harga;
+        // Tipe BBM
+        const tipeSelect = newRow.querySelector('select[name="tipe_bbm[]"]');
+        if (tipe.toLowerCase() === 'solar' || tipe.toLowerCase() === 'pertalite') {
+            tipeSelect.value = tipe.charAt(0).toUpperCase() + tipe.slice(1).toLowerCase();
+        } else {
+            tipeSelect.value = 'Solar'; // Fallback
+        }
+
+        // Liter
+        const literInput = newRow.querySelector('input[name="jumlah_liter[]"]');
+        literInput.value = data.liter;
+
+        // Harga
+        const hargaLiterInput = newRow.querySelector('input[name="harga_per_liter[]"]');
+        hargaLiterInput.value = tipeSelect.value === 'Pertalite' ? 13000 : 16000;
         
+        // Keterangan
         let gabunganKeterangan = data.keterangan.join(', ');
         if (gabunganKeterangan.length > 250) {
             gabunganKeterangan = gabunganKeterangan.substring(0, 247) + '...';
         }
-        
         newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = gabunganKeterangan;
         
         container.appendChild(newRow);
-        lastAddedInput = hargaInput;
+        lastAddedInput = literInput; // Used to trigger recalculation
     });
 
     if (Object.keys(aggregatedData).length > 0) {
-        const firstUraian = firstRow.querySelector('input[name="uraian[]"]').value;
-        const firstHarga = firstRow.querySelector('input[name="total_harga[]"]').value;
-        if (!firstUraian && !firstHarga) {
+        const firstLiter = firstRow.querySelector('input[name="jumlah_liter[]"]').value;
+        if (!firstLiter) {
             firstRow.remove();
         }
     }
