@@ -65,7 +65,13 @@
                                 <input id="file-upload" name="images[]" type="file" multiple class="sr-only" accept="image/*">
                             </label>
                         </div>
-                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
+                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
+                        <div class="mt-4">
+                            <button type="button" onclick="pasteFromClipboard()" class="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm font-medium rounded-lg transition-colors border border-amber-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                Paste dari Clipboard
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div id="preview-container" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4"></div>
@@ -149,5 +155,32 @@
             }
         }
     });
+
+    async function pasteFromClipboard() {
+        try {
+            const clipboardItems = await navigator.clipboard.read();
+            let added = false;
+            for (const item of clipboardItems) {
+                const imageTypes = item.types.filter(type => type.startsWith('image/'));
+                for (const type of imageTypes) {
+                    const blob = await item.getType(type);
+                    const file = new File([blob], "pasted-" + Date.now() + "." + type.split('/')[1], { type: type });
+                    filesArray.push(file);
+                    added = true;
+                }
+            }
+            if (added) {
+                renderPreviews();
+                const dropZone = document.getElementById('drop-zone');
+                dropZone.classList.add('bg-amber-50', 'border-amber-300');
+                setTimeout(() => dropZone.classList.remove('bg-amber-50', 'border-amber-300'), 500);
+            } else {
+                alert('Tidak ada gambar di clipboard Anda. Copy gambar terlebih dahulu.');
+            }
+        } catch (err) {
+            console.error('Failed to read clipboard contents: ', err);
+            alert('Gagal membaca clipboard. Pastikan browser memberikan izin clipboard.');
+        }
+    }
 </script>
 @endsection
