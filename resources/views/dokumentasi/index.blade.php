@@ -92,7 +92,7 @@
                     <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{{ $doc->judul }}</h3>
                     <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ $doc->keterangan ?: 'Tidak ada keterangan' }}</p>
                     <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-50">
-                        <a href="{{ route('dokumentasi.show', $doc->id) }}" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Detail &rarr;</a>
+                        <button type="button" onclick="openModal({{ $doc->id }})" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Detail &rarr;</button>
                         <div class="flex items-center gap-2">
                             <a href="{{ route('dokumentasi.edit', $doc->id) }}" class="text-gray-400 hover:text-amber-500 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
@@ -162,9 +162,9 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-3">
-                                    <a href="{{ route('dokumentasi.show', $doc->id) }}" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition-colors" title="Lihat">
+                                    <button type="button" onclick="openModal({{ $doc->id }})" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition-colors" title="Lihat">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                    </a>
+                                    </button>
                                     <a href="{{ route('dokumentasi.edit', $doc->id) }}" class="text-amber-600 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 p-1.5 rounded-lg transition-colors" title="Edit">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     </a>
@@ -191,5 +191,108 @@
             </div>
         </div>
     @endif
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="closeModal()"></div>
+            
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <!-- Modal panel -->
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl w-full border border-gray-100">
+                <div class="bg-white px-6 pt-6 pb-6">
+                    <div class="flex justify-between items-start mb-5 border-b border-gray-100 pb-5">
+                        <div>
+                            <h3 class="text-xl leading-6 font-bold text-gray-900 tracking-tight" id="modal-judul">Judul</h3>
+                            <p class="text-sm text-gray-500 mt-1.5 flex items-center gap-2" id="modal-tanggal">Tanggal</p>
+                        </div>
+                        <button type="button" class="text-gray-400 hover:text-gray-600 bg-gray-50 hover:bg-gray-100 p-2 rounded-full transition-colors" onclick="closeModal()">
+                            <span class="sr-only">Tutup</span>
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mt-2">
+                        <h4 class="text-sm font-bold text-gray-800 mb-2">Keterangan</h4>
+                        <div class="text-sm text-gray-600 bg-gray-50/50 p-4 rounded-xl border border-gray-100/50 leading-relaxed" id="modal-keterangan">Keterangan</div>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="text-sm font-bold text-gray-800 mb-3" id="modal-galeri-title">Galeri Foto</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="modal-galeri">
+                            <!-- Images appended here by JS -->
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 flex justify-end">
+                    <button type="button" class="inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-5 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors" onclick="closeModal()">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    const docsData = @json($dokumentasi);
+    const storageUrl = "{{ Storage::url('') }}";
+
+    function openModal(id) {
+        const doc = docsData.find(d => d.id === id);
+        if (!doc) return;
+
+        document.getElementById('modal-judul').innerText = doc.judul;
+        
+        const dateObj = new Date(doc.tanggal);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        const formattedDate = dateObj.toLocaleDateString('id-ID', options);
+        const location = doc.kebun ? doc.kebun.lokasi : '-';
+        const employee = doc.karyawan ? doc.karyawan.nama : '-';
+        
+        document.getElementById('modal-tanggal').innerHTML = `
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            ${formattedDate} 
+            <span class="mx-1 text-gray-300">•</span>
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            ${location}
+            <span class="mx-1 text-gray-300">•</span>
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            ${employee}
+        `;
+
+        document.getElementById('modal-keterangan').innerText = doc.keterangan || 'Tidak ada keterangan.';
+
+        const galeriContainer = document.getElementById('modal-galeri');
+        galeriContainer.innerHTML = '';
+        
+        if (doc.images && doc.images.length > 0) {
+            document.getElementById('modal-galeri-title').innerText = `Galeri Foto (${doc.images.length})`;
+            doc.images.forEach(img => {
+                const wrapper = document.createElement('a');
+                wrapper.href = storageUrl + img.image_path;
+                wrapper.target = '_blank';
+                wrapper.className = 'block rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md hover:ring-2 hover:ring-emerald-500 transition-all';
+                
+                const imgEl = document.createElement('img');
+                imgEl.src = storageUrl + img.image_path;
+                imgEl.className = 'w-full h-32 object-cover hover:scale-105 transition-transform duration-300';
+                
+                wrapper.appendChild(imgEl);
+                galeriContainer.appendChild(wrapper);
+            });
+        } else {
+            document.getElementById('modal-galeri-title').innerText = 'Galeri Foto (0)';
+            galeriContainer.innerHTML = '<p class="text-sm text-gray-400 col-span-full italic">Tidak ada foto dokumentasi.</p>';
+        }
+
+        document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('detailModal').classList.add('hidden');
+    }
+</script>
 @endsection
