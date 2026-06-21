@@ -50,6 +50,10 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('dokumentasi', \App\Http\Controllers\DokumentasiHarianController::class);
 
     // Penggajian
+    Route::resource('pengajuan-penggajian', \App\Http\Controllers\PengajuanPenggajianController::class);
+    Route::patch('pengajuan-penggajian/{pengajuan_penggajian}/status', [\App\Http\Controllers\PengajuanPenggajianController::class, 'updateStatus'])->name('pengajuan-penggajian.update-status');
+    Route::get('pengajuan-penggajian/{pengajuan_penggajian}/print', [\App\Http\Controllers\PengajuanPenggajianController::class, 'print'])->name('pengajuan-penggajian.print');
+
     Route::get('/penggajian/laporan-mingguan', function() {
         return redirect()->route('penggajian.create', request()->all());
     });
