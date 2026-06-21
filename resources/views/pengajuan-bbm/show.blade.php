@@ -151,6 +151,24 @@
 
         </div>
     </div>
+
+    @if($pengajuan_bbm->images && $pengajuan_bbm->images->count() > 0)
+    <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Dokumentasi / Bukti ({{ $pengajuan_bbm->images->count() }})</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            @foreach($pengajuan_bbm->images as $img)
+            <div class="relative aspect-square bg-gray-100 rounded-xl overflow-hidden border border-gray-200 shadow-sm group">
+                <a href="{{ Storage::url($img->image_path) }}" target="_blank" class="block w-full h-full">
+                    <img src="{{ Storage::url($img->image_path) }}" alt="Dokumentasi" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                    </div>
+                </a>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
 </div>
 
 @push('styles')

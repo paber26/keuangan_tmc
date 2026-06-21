@@ -7,8 +7,10 @@ use App\Models\PengajuanBBMItem;
 use App\Models\PemakaianBBM;
 use App\Models\Kebun;
 use App\Models\Karyawan;
+use App\Models\PengajuanBBMImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengajuanBBMController extends Controller
@@ -66,6 +68,7 @@ class PengajuanBBMController extends Controller
             'total_harga.*' => 'required|numeric|min:0',
             'keterangan_pengajuan' => 'required|array|min:1',
             'keterangan_pengajuan.*' => 'nullable|string|max:255',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120'
         ]);
 
         try {
@@ -97,6 +100,16 @@ class PengajuanBBMController extends Controller
                     'total_harga' => $request->total_harga[$index],
                     'keterangan_pengajuan' => $request->keterangan_pengajuan[$index] ?? '-',
                 ]);
+            }
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('pengajuan_bbm', 'public');
+                    PengajuanBBMImage::create([
+                        'pengajuan_bbm_id' => $pengajuan->id,
+                        'image_path' => $path,
+                    ]);
+                }
             }
 
             DB::commit();
@@ -132,6 +145,7 @@ class PengajuanBBMController extends Controller
             'total_harga.*' => 'required|numeric|min:0',
             'keterangan_pengajuan' => 'required|array|min:1',
             'keterangan_pengajuan.*' => 'nullable|string|max:255',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120'
         ]);
 
         try {
@@ -166,6 +180,28 @@ class PengajuanBBMController extends Controller
                 ]);
             }
 
+            // Handle deleted images
+            if ($request->has('deleted_images')) {
+                foreach ($request->deleted_images as $imageId) {
+                    $image = PengajuanBBMImage::find($imageId);
+                    if ($image && $image->pengajuan_bbm_id == $pengajuan_bbm->id) {
+                        Storage::disk('public')->delete($image->image_path);
+                        $image->delete();
+                    }
+                }
+            }
+
+            // Handle new images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('pengajuan_bbm', 'public');
+                    PengajuanBBMImage::create([
+                        'pengajuan_bbm_id' => $pengajuan_bbm->id,
+                        'image_path' => $path,
+                    ]);
+                }
+            }
+
             DB::commit();
             return redirect()->route('pengajuan-bbm.index')->with('success', 'Pengajuan BBM berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -185,6 +221,9 @@ class PengajuanBBMController extends Controller
 
     public function destroy(PengajuanBBM $pengajuan_bbm)
     {
+        foreach ($pengajuan_bbm->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+        }
         $pengajuan_bbm->delete();
         return redirect()->route('pengajuan-bbm.index')->with('success', 'Pengajuan BBM berhasil dihapus.');
     }
