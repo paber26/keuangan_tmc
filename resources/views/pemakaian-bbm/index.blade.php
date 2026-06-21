@@ -33,7 +33,8 @@
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Lokasi Kebun</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Karyawan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Judul Laporan</th>
-                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Total</th>
+                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Total Liter</th>
+                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Total (Rp)</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -58,6 +59,21 @@
                             <p class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">{{ $item->keterangan }}</p>
                             @endif
                         </td>
+                        <td class="py-4 px-6 text-sm text-gray-800 text-right whitespace-nowrap">
+                            @php
+                                $totalSolar = $item->items->where('tipe_bbm', 'Solar')->sum('jumlah_liter');
+                                $totalPertalite = $item->items->where('tipe_bbm', 'Pertalite')->sum('jumlah_liter');
+                            @endphp
+                            @if($totalSolar > 0)
+                                <div><span class="font-medium text-gray-500">Solar:</span> {{ $totalSolar }} L</div>
+                            @endif
+                            @if($totalPertalite > 0)
+                                <div><span class="font-medium text-gray-500">Pertalite:</span> {{ $totalPertalite }} L</div>
+                            @endif
+                            @if($totalSolar == 0 && $totalPertalite == 0)
+                                -
+                            @endif
+                        </td>
                         <td class="py-4 px-6 text-sm font-bold text-gray-800 text-right whitespace-nowrap">Rp {{ number_format($item->grand_total, 0, ',', '.') }}</td>
                         <td class="py-4 px-6 text-center whitespace-nowrap">
                             <div class="flex items-center justify-center gap-2">
@@ -79,7 +95,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="py-12 text-center text-sm text-gray-500">
+                        <td colspan="8" class="py-12 text-center text-sm text-gray-500">
                             Belum ada laporan pemakaian BBM.
                         </td>
                     </tr>

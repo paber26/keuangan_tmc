@@ -13,7 +13,7 @@ class PemakaianBBMController extends Controller
 {
     public function index(Request $request)
     {
-        $query = PemakaianBBM::with(['kebun', 'karyawan'])->orderBy('tanggal', 'desc');
+        $query = PemakaianBBM::with(['kebun', 'karyawan', 'items'])->orderBy('tanggal', 'desc');
         
         if ($request->has('kategori') && in_array($request->kategori, ['Kebun', 'Sopir'])) {
             $query->where('kategori', $request->kategori);
