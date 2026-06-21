@@ -32,6 +32,21 @@ class PengajuanBBMController extends Controller
         return view('pengajuan-bbm.create', compact('kebun', 'karyawan', 'pemakaian_laporans'));
     }
 
+    public function edit(PengajuanBBM $pengajuan_bbm)
+    {
+        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
+        $karyawan = Karyawan::orderBy('nama')->get();
+        
+        $pemakaian_laporans = PemakaianBBM::with(['kebun', 'karyawan', 'items'])
+            ->orderBy('tanggal', 'desc')
+            ->limit(50)
+            ->get();
+            
+        $pengajuan_bbm->load('items');
+
+        return view('pengajuan-bbm.edit', compact('pengajuan_bbm', 'kebun', 'karyawan', 'pemakaian_laporans'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([

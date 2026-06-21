@@ -19,7 +19,12 @@
             <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Pengajuan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Lokasi Kebun <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Departemen <span class="text-red-500">*</span></label>
+                    <input type="text" name="departemen" value="{{ old('departemen', $pengajuan_bbm->departemen) }}" required
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pengajuan Untuk Kebutuhan (Lokasi Kebun) <span class="text-red-500">*</span></label>
                     <select name="kebun_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
                         <option value="" disabled>-- Pilih Lokasi --</option>
                         @foreach($kebun as $k)
@@ -28,79 +33,61 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pemohon (Karyawan) <span class="text-red-500">*</span></label>
-                    <select name="karyawan_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
-                        <option value="" disabled>-- Pilih Karyawan --</option>
-                        @foreach($karyawan as $k)
-                            <option value="{{ $k->id }}" {{ $pengajuan_bbm->karyawan_id == $k->id ? 'selected' : '' }}>{{ $k->nama }}</option>
-                        @endforeach
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Perihal <span class="text-red-500">*</span></label>
+                    <input type="text" name="perihal" value="{{ old('perihal', $pengajuan_bbm->perihal) }}" required
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pengajuan <span class="text-red-500">*</span></label>
-                    <input type="date" name="tanggal" value="{{ $pengajuan_bbm->tanggal }}" required
-                           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Pengajuan <span class="text-red-500">*</span></label>
-                    <input type="text" name="judul_pengajuan" value="{{ $pengajuan_bbm->judul_pengajuan }}" placeholder="Contoh: Pengajuan Operasional Basecamp" required
+                    <input type="date" name="tanggal" value="{{ old('tanggal', $pengajuan_bbm->tanggal) }}" required
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan (Opsional)</label>
-                    <textarea name="keterangan" rows="2" placeholder="Tuliskan catatan tambahan di sini..."
-                              class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">{{ $pengajuan_bbm->keterangan }}</textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Pengajuan (Opsional)</label>
+                    <input type="text" name="judul_pengajuan" value="{{ old('judul_pengajuan', $pengajuan_bbm->judul_pengajuan) }}" placeholder="Contoh: Pengajuan Operasional Basecamp"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
             </div>
         </div>
 
         <div class="p-6 md:p-8 bg-gray-50/50">
-            <div class="flex items-center justify-between mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
                 <h3 class="text-lg font-bold text-gray-800">Detail Kebutuhan BBM</h3>
-                <button type="button" id="btn-add-item" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Tambah Baris
-                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="openModalPemakaian()" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 hover:border-blue-500 hover:text-blue-600 text-blue-700 text-sm font-medium rounded-lg shadow-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Ambil Data Pemakaian
+                    </button>
+                    <button type="button" id="btn-add-item" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        Tambah Baris
+                    </button>
+                </div>
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[700px]">
+                <table class="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                         <tr class="bg-gray-100 border-y border-gray-200">
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Tanggal</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Tipe BBM</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Keterangan Kebutuhan</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[120px]">Liter</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[180px]">Harga Per Liter (Rp)</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[200px] text-right">Total Biaya (Rp)</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No.</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[300px]">Uraian</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[200px]">Total Harga (Rp)</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Keterangan</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[60px] text-center"></th>
                         </tr>
                     </thead>
                     <tbody id="items-container" class="divide-y divide-gray-100 bg-white">
                         @foreach($pengajuan_bbm->items as $index => $item)
                         <tr class="item-row">
-                            <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">{{ $index + 1 }}</td>
+                            <td class="py-3 px-4 text-sm font-bold text-gray-800 text-center row-number">{{ $index + 1 }}</td>
                             <td class="py-3 px-4">
-                                <input type="date" name="tanggal_pengajuan[]" required value="{{ $item->tanggal }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                                <input type="text" name="uraian[]" value="{{ $item->uraian }}" required placeholder="Cth: SOLAR 45 L" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold uppercase">
                             </td>
                             <td class="py-3 px-4">
-                                <select name="tipe_bbm[]" required class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
-                                    <option value="Solar" {{ $item->tipe_bbm == 'Solar' ? 'selected' : '' }}>Solar</option>
-                                    <option value="Pertalite" {{ $item->tipe_bbm == 'Pertalite' ? 'selected' : '' }}>Pertalite</option>
-                                </select>
+                                <input type="number" name="total_harga[]" value="{{ round($item->total_harga) }}" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold input-harga">
                             </td>
                             <td class="py-3 px-4">
-                                <input type="text" name="keterangan_pengajuan[]" value="{{ $item->keterangan_pengajuan }}" required placeholder="Cth: Solar Genset" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
-                            </td>
-                            <td class="py-3 px-4">
-                                <input type="number" step="0.01" name="jumlah_liter[]" value="{{ $item->jumlah_liter }}" required min="0.01" placeholder="0.00" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
-                            </td>
-                            <td class="py-3 px-4">
-                                <input type="number" name="harga_per_liter[]" value="{{ round($item->harga_per_liter) }}" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
-                            </td>
-                            <td class="py-3 px-4 text-right">
-                                <span class="text-sm font-semibold text-gray-800 row-total">{{ number_format($item->total_harga, 0, ',', '.') }}</span>
+                                <input type="text" name="keterangan_pengajuan[]" value="{{ $item->keterangan_pengajuan }}" placeholder="Cth: UNTUK OPERASIONAL" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold uppercase">
                             </td>
                             <td class="py-3 px-4 text-center">
                                 <button type="button" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors btn-remove-item" title="Hapus Baris" {{ count($pengajuan_bbm->items) == 1 ? 'disabled' : '' }}>
@@ -112,11 +99,11 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-100 border-t border-gray-200">
-                            <td colspan="6" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
-                            <td class="py-4 px-4 text-right">
-                                <span class="text-lg font-bold text-emerald-600" id="grand-total">0</span>
+                            <td colspan="2" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">TOTAL PENGAJUAN DANA</td>
+                            <td class="py-4 px-4 text-left">
+                                <span class="text-lg font-bold text-emerald-600" id="grand-total">Rp 0</span>
                             </td>
-                            <td></td>
+                            <td colspan="2"></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -129,6 +116,73 @@
             </button>
         </div>
     </form>
+</div>
+
+<!-- Modal Ambil Data Pemakaian -->
+<div id="modalPemakaian" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full sm:p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900" id="modal-title">Pilih Data Pemakaian BBM</h3>
+                <button type="button" onclick="closeModalPemakaian()" class="text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">Tutup</span>
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto max-h-[60vh] border border-gray-200 rounded-lg">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 sticky top-0 shadow-sm">
+                        <tr>
+                            <th class="py-3 px-4 w-10 text-center border-b border-gray-200">
+                                <input type="checkbox" id="check-all-pemakaian" class="w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500">
+                            </th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Tanggal</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Kategori</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Lokasi Kebun</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Karyawan</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">Judul Laporan</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase text-right border-b border-gray-200">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse($pemakaian_laporans as $laporan)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="py-3 px-4 text-center">
+                                <input type="checkbox" class="check-pemakaian w-4 h-4 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500" 
+                                       data-items='{{ json_encode($laporan->items) }}'>
+                            </td>
+                            <td class="py-3 px-4 text-sm text-gray-800">{{ \Carbon\Carbon::parse($laporan->tanggal)->format('d M Y') }}</td>
+                            <td class="py-3 px-4">
+                                <span class="px-2 py-1 text-xs font-medium rounded-full {{ $laporan->kategori == 'Kebun' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700' }}">
+                                    {{ $laporan->kategori }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-sm font-semibold text-emerald-600">{{ $laporan->kebun ? $laporan->kebun->lokasi : '-' }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-800">{{ $laporan->karyawan ? $laporan->karyawan->nama : '-' }}</td>
+                            <td class="py-3 px-4 text-sm font-bold text-gray-800">{{ $laporan->judul_laporan ?? 'Pemakaian BBM' }}</td>
+                            <td class="py-3 px-4 text-sm font-bold text-gray-800 text-right">Rp {{ number_format($laporan->grand_total, 0, ',', '.') }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="py-8 text-center text-sm text-gray-500">Tidak ada data rekap pemakaian BBM terbaru.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse gap-2">
+                <button type="button" onclick="tambahkanDataTerpilih()" class="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-emerald-600 text-base font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 sm:w-auto sm:text-sm transition-all">
+                    Tambahkan Terpilih (<span id="count-selected">0</span>)
+                </button>
+                <button type="button" onclick="closeModalPemakaian()" class="mt-3 w-full inline-flex justify-center rounded-xl border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:w-auto sm:text-sm transition-all">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -197,12 +251,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 removeBtn.classList.add('hover:text-red-500', 'hover:bg-red-50');
             }
 
-            const qty = parseFloat(row.querySelector('.input-qty').value) || 0;
             const harga = parseFloat(row.querySelector('.input-harga').value) || 0;
-            const total = qty * harga;
-            
-            row.querySelector('.row-total').textContent = formatRp(total);
-            grandTotal += total;
+            grandTotal += harga;
         });
 
         grandTotalEl.textContent = 'Rp ' + formatRp(grandTotal);
@@ -212,19 +262,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const firstRow = container.querySelector('.item-row');
         const newRow = firstRow.cloneNode(true);
         
-        newRow.querySelector('input[name="tanggal_pengajuan[]"]').value = '{{ date('Y-m-d') }}';
-        newRow.querySelector('select[name="tipe_bbm[]"]').value = 'Solar';
+        newRow.querySelector('input[name="uraian[]"]').value = '';
+        newRow.querySelector('input[name="total_harga[]"]').value = '';
         newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = '';
-        newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
-        newRow.querySelector('input[name="harga_per_liter[]"]').value = '';
-        newRow.querySelector('.row-total').textContent = '0';
         
         container.appendChild(newRow);
         calculateTotals();
     });
 
     container.addEventListener('input', (e) => {
-        if (e.target.classList.contains('input-qty') || e.target.classList.contains('input-harga')) {
+        if (e.target.classList.contains('input-harga')) {
             calculateTotals();
         }
     });
@@ -239,5 +286,102 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calculateTotals();
 });
+
+// Modal Logic
+function openModalPemakaian() {
+    document.getElementById('modalPemakaian').classList.remove('hidden');
+    updateCountSelected();
+}
+
+function closeModalPemakaian() {
+    document.getElementById('modalPemakaian').classList.add('hidden');
+}
+
+function updateCountSelected() {
+    const count = document.querySelectorAll('.check-pemakaian:checked').length;
+    document.getElementById('count-selected').textContent = count;
+}
+
+document.getElementById('check-all-pemakaian').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.check-pemakaian');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+    updateCountSelected();
+});
+
+document.querySelectorAll('.check-pemakaian').forEach(cb => {
+    cb.addEventListener('change', updateCountSelected);
+});
+
+function tambahkanDataTerpilih() {
+    const checkboxes = document.querySelectorAll('.check-pemakaian:checked');
+    if (checkboxes.length === 0) {
+        alert('Pilih minimal 1 data pemakaian!');
+        return;
+    }
+
+    const container = document.getElementById('items-container');
+    const firstRow = container.querySelector('.item-row');
+    
+    let lastAddedInput = null;
+    let aggregatedData = {};
+
+    checkboxes.forEach(cb => {
+        try {
+            const items = JSON.parse(cb.dataset.items);
+            items.forEach(item => {
+                const tipe = String(item.tipe_bbm).toUpperCase();
+                if (!aggregatedData[tipe]) {
+                    aggregatedData[tipe] = { liter: 0, harga: 0, keterangan: [] };
+                }
+                
+                aggregatedData[tipe].liter += parseFloat(item.jumlah_liter);
+                aggregatedData[tipe].harga += Math.round(item.jumlah_liter * item.harga_per_liter);
+                
+                let ket = (item.keterangan_pemakaian || '').toUpperCase();
+                if (ket && !aggregatedData[tipe].keterangan.includes(ket)) {
+                    aggregatedData[tipe].keterangan.push(ket);
+                }
+            });
+        } catch(e) {
+            console.error('Error parsing items', e);
+        }
+        cb.checked = false;
+    });
+
+    Object.keys(aggregatedData).forEach(tipe => {
+        const data = aggregatedData[tipe];
+        const newRow = firstRow.cloneNode(true);
+        
+        newRow.querySelector('input[name="uraian[]"]').value = tipe + ' ' + data.liter + ' L';
+        const hargaInput = newRow.querySelector('input[name="total_harga[]"]');
+        hargaInput.value = data.harga;
+        
+        let gabunganKeterangan = data.keterangan.join(', ');
+        if (gabunganKeterangan.length > 250) {
+            gabunganKeterangan = gabunganKeterangan.substring(0, 247) + '...';
+        }
+        
+        newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = gabunganKeterangan;
+        
+        container.appendChild(newRow);
+        lastAddedInput = hargaInput;
+    });
+
+    if (Object.keys(aggregatedData).length > 0) {
+        const firstUraian = firstRow.querySelector('input[name="uraian[]"]').value;
+        const firstHarga = firstRow.querySelector('input[name="total_harga[]"]').value;
+        if (!firstUraian && !firstHarga) {
+            firstRow.remove();
+        }
+    }
+
+    document.getElementById('check-all-pemakaian').checked = false;
+    updateCountSelected();
+    closeModalPemakaian();
+    
+    if (lastAddedInput) {
+        lastAddedInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+}
 </script>
 @endpush
