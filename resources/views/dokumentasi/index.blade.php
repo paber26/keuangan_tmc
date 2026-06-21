@@ -89,7 +89,10 @@
                         <div class="text-xs font-semibold text-emerald-600">{{ \Carbon\Carbon::parse($doc->tanggal)->format('d M Y') }}</div>
                         <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{{ $doc->judul }}</h3>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1">{{ $doc->judul }}</h3>
+                    <div class="text-xs text-emerald-600 font-medium mb-2 truncate" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
+                        {{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}
+                    </div>
                     <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ $doc->keterangan ?: 'Tidak ada keterangan' }}</p>
                     <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-50">
                         <button type="button" onclick="openModal({{ $doc->id }})" class="text-sm font-medium text-blue-600 hover:text-blue-700">Lihat Detail &rarr;</button>
@@ -127,6 +130,7 @@
                         <tr>
                             <th scope="col" class="px-6 py-4 font-semibold">Tanggal</th>
                             <th scope="col" class="px-6 py-4 font-semibold">Kebun</th>
+                            <th scope="col" class="px-6 py-4 font-semibold">Karyawan</th>
                             <th scope="col" class="px-6 py-4 font-semibold">Judul</th>
                             <th scope="col" class="px-6 py-4 font-semibold">Foto</th>
                             <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
@@ -142,6 +146,11 @@
                                 <span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
                                     {{ $doc->kebun->lokasi ?? '-' }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                <div class="text-xs font-medium mb-1 truncate max-w-[150px]" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
+                                    {{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : '-' }}
+                                </div>
                             </td>
                             <td class="px-6 py-4 text-gray-700">
                                 <div class="font-medium text-gray-900">{{ $doc->judul }}</div>
