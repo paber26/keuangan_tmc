@@ -50,6 +50,10 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('dokumentasi', \App\Http\Controllers\DokumentasiHarianController::class);
 
     // Penggajian
+    Route::get('/penggajian/laporan-mingguan', function() {
+        return redirect()->route('penggajian.create', request()->all());
+    });
+    
     Route::get('/penggajian', [\App\Http\Controllers\PenggajianController::class, 'index'])->name('penggajian.index');
     Route::get('/penggajian/create', [\App\Http\Controllers\PenggajianController::class, 'create'])->name('penggajian.create');
     Route::post('/penggajian', [\App\Http\Controllers\PenggajianController::class, 'store'])->name('penggajian.store');
