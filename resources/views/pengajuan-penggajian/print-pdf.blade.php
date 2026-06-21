@@ -150,8 +150,31 @@
                 </tr>
                 @endforeach
                 
-                {{-- Fill empty rows up to 10 --}}
-                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 10; $i++)
+                @php
+                    $totalExtraLines = 0;
+                    foreach($pengajuan_penggajian->items as $item) {
+                        // Keterangan column is ~20% width. At 11px font, ~17 chars per line.
+                        $len = strlen($item->keterangan);
+                        $lines = ceil($len / 17);
+                        if ($lines > 1) {
+                            $totalExtraLines += ($lines - 1);
+                        }
+                        
+                        // Uraian column might also wrap (~25% width, ~22 chars per line)
+                        $lenUraian = strlen($item->uraian);
+                        $linesUraian = ceil($lenUraian / 22);
+                        if ($linesUraian > 1 && $linesUraian > $lines) {
+                            $totalExtraLines += ($linesUraian - max(1, $lines));
+                        }
+                    }
+                    $targetRows = 20 - $totalExtraLines;
+                    if ($targetRows < count($pengajuan_penggajian->items)) {
+                        $targetRows = count($pengajuan_penggajian->items);
+                    }
+                @endphp
+                
+                {{-- Fill empty rows dynamically to keep total height consistent --}}
+                @for($i = count($pengajuan_penggajian->items) + 1; $i <= $targetRows; $i++)
                 <tr>
                     <td class="text-center font-bold" style="border-left: none; height: 16px;">{{ $i }}</td>
                     <td></td>
