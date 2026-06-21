@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>Print Form Pengajuan Dana - {{ $pengajuan_bbm->id }}</title>
     <style>
-        body { font-family: 'Arial', sans-serif; font-size: 12px; color: #000; margin: 0; padding: 20px; }
+        body { font-family: 'Arial', sans-serif; font-size: 11px; color: #000; margin: 0; padding: 10px; }
         .wrapper { width: 100%; border: 2px solid #000; }
         table { width: 100%; border-collapse: collapse; }
-        td, th { border: 2px solid #000; padding: 5px; }
+        td, th { border: 2px solid #000; padding: 3px; }
         .no-border { border: none !important; }
         .border-b { border-bottom: 2px solid #000; }
         .border-r { border-right: 2px solid #000; }
@@ -18,24 +18,24 @@
         .uppercase { text-transform: uppercase; }
         
         .header-table { width: 100%; border-collapse: collapse; border-bottom: 2px solid #000; }
-        .header-table td { border: none; vertical-align: middle; padding: 10px; }
+        .header-table td { border: none; vertical-align: middle; padding: 5px; }
         .logo-cell { width: 15%; text-align: center; border-right: 2px solid #000 !important; }
         .title-cell { width: 85%; text-align: center; padding-right: 15%; }
-        .company-name { font-size: 20px; font-weight: bold; margin: 0 0 5px 0; }
-        .company-address { font-size: 10px; font-weight: bold; margin: 0; }
-        .form-title { font-size: 18px; font-weight: bold; text-align: center; padding: 10px; border-bottom: 2px solid #000; }
+        .company-name { font-size: 16px; font-weight: bold; margin: 0 0 2px 0; }
+        .company-address { font-size: 9px; font-weight: bold; margin: 0; }
+        .form-title { font-size: 14px; font-weight: bold; text-align: center; padding: 5px; border-bottom: 2px solid #000; }
         
         .info-table { width: 100%; border-collapse: collapse; border-bottom: 2px solid #000; }
-        .info-table td { border: none; padding: 4px 10px; font-weight: bold; font-size: 12px; }
+        .info-table td { border: none; padding: 2px 5px; font-weight: bold; font-size: 11px; }
         .info-label { width: 250px; }
         
         .items-table { width: 100%; border-collapse: collapse; }
-        .items-table th, .items-table td { border: 2px solid #000; padding: 8px; }
+        .items-table th, .items-table td { border: 2px solid #000; padding: 4px; }
         .items-table th { text-align: center; font-weight: bold; }
         
-        .sign-table { width: 100%; border-collapse: collapse; text-align: center; font-weight: bold; font-size: 12px; }
-        .sign-table td { border: 2px solid #000; border-bottom: none; width: 20%; padding: 8px; }
-        .sign-table .names td { border-top: none; padding-top: 60px; padding-bottom: 10px; }
+        .sign-table { width: 100%; border-collapse: collapse; text-align: center; font-weight: bold; font-size: 11px; }
+        .sign-table td { border: 2px solid #000; border-bottom: none; width: 20%; padding: 4px; }
+        .sign-table .names td { border-top: none; padding-top: 40px; padding-bottom: 5px; }
         .sign-line { border-bottom: 2px solid #000; display: inline-block; width: 80%; }
         
         .rp { float: left; }
@@ -49,7 +49,7 @@
             <tr>
                 <td class="logo-cell">
                     @if(file_exists(public_path('logo.jpg')))
-                        <img src="{{ public_path('logo.jpg') }}" alt="Logo" style="width: 70px;">
+                        <img src="{{ public_path('logo.jpg') }}" alt="Logo" style="width: 50px;">
                     @endif
                 </td>
                 <td class="title-cell">
@@ -114,7 +114,7 @@
                 
                 @for($i = count($pengajuan_bbm->items) + 1; $i <= 5; $i++)
                 <tr>
-                    <td class="text-center font-bold" style="border-left: none; height: 30px;">{{ $i }}</td>
+                    <td class="text-center font-bold" style="border-left: none; height: 15px;">{{ $i }}</td>
                     <td></td>
                     <td></td>
                     <td style="border-right: none;"></td>
