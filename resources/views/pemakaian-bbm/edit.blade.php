@@ -2,6 +2,15 @@
 @section('page-title', 'Edit Laporan Pemakaian BBM')
 
 @section('content')
+@php
+    $isKebun = $pemakaian_bbm->kategori == 'Kebun';
+    $formBgClass = $isKebun ? 'bg-emerald-50 rounded-xl shadow-lg border-2 border-emerald-400 overflow-hidden transition-colors duration-300' : 'bg-blue-50 rounded-xl shadow-lg border-2 border-blue-400 overflow-hidden transition-colors duration-300';
+    $footerClass = $isKebun ? 'p-6 border-t border-emerald-200 bg-emerald-100 flex justify-end transition-colors duration-300' : 'p-6 border-t border-blue-200 bg-blue-100 flex justify-end transition-colors duration-300';
+    $btnSubmitClass = $isKebun ? 'px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500' : 'px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-blue-500';
+    $detailBgClass = $isKebun ? 'p-6 md:p-8 bg-emerald-50/50 transition-colors duration-300' : 'p-6 md:p-8 bg-blue-50/50 transition-colors duration-300';
+    $grandTotalClass = $isKebun ? 'text-lg font-bold text-emerald-600' : 'text-lg font-bold text-blue-600';
+@endphp
+
 <div class="w-full pb-10">
     <div class="mb-8">
         <a href="{{ route('pemakaian-bbm.index') }}" class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors mb-4">
@@ -11,15 +20,28 @@
         <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Edit Laporan Pemakaian BBM</h2>
     </div>
 
-
-
-    <form action="{{ route('pemakaian-bbm.update', $pemakaian_bbm->id) }}" method="POST" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" id="form-pemakaian">
+    <form action="{{ route('pemakaian-bbm.update', $pemakaian_bbm->id) }}" method="POST" class="{{ $formBgClass }}" id="form-pemakaian">
         @csrf
         @method('PUT')
         
         <div class="p-6 md:p-8 border-b border-gray-100">
             <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Laporan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Kategori Laporan <span class="text-red-500">*</span></label>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label class="flex-1 flex items-center gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
+                            <input type="radio" name="kategori" value="Kebun" required {{ $isKebun ? 'checked' : '' }} class="text-emerald-600 focus:ring-emerald-500 w-5 h-5">
+                            <span class="font-bold text-gray-700">BBM Kebun</span>
+                        </label>
+                        <label class="flex-1 flex items-center gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                            <input type="radio" name="kategori" value="Sopir" required {{ !$isKebun ? 'checked' : '' }} class="text-blue-600 focus:ring-blue-500 w-5 h-5">
+                            <span class="font-bold text-gray-700">BBM Sopir</span>
+                        </label>
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Lokasi Kebun <span class="text-red-500">*</span></label>
                     <select name="kebun_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
@@ -40,12 +62,12 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Laporan <span class="text-red-500">*</span></label>
-                    <input type="date" name="tanggal" value="{{ $pemakaian_bbm->tanggal }}" required
+                    <input type="date" name="tanggal" value="{{ \Carbon\Carbon::parse($pemakaian_bbm->tanggal)->format('Y-m-d') }}" required
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Laporan <span class="text-red-500">*</span></label>
-                    <input type="text" name="judul_laporan" value="{{ $pemakaian_bbm->judul_laporan }}" placeholder="Contoh: Laporan BBM Pick Up & Genset (Minggu 1)" required
+                    <input type="text" name="judul_laporan" value="{{ $pemakaian_bbm->judul_laporan }}" required placeholder="Contoh: Laporan BBM Pick Up & Genset (Minggu 1)"
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
                 <div class="md:col-span-2">
@@ -56,7 +78,7 @@
             </div>
         </div>
 
-        <div class="p-6 md:p-8 bg-gray-50/50">
+        <div class="{{ $detailBgClass }}" id="detail-section">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Detail Pemakaian</h3>
                 <button type="button" id="btn-add-item" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
@@ -81,42 +103,42 @@
                     </thead>
                     <tbody id="items-container" class="divide-y divide-gray-100 bg-white">
                         @foreach($pemakaian_bbm->items as $index => $item)
-                        <tr class="item-row">
-                            <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">{{ $index + 1 }}</td>
-                            <td class="py-3 px-4">
-                                <input type="date" name="tanggal_pemakaian[]" required value="{{ $item->tanggal }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
-                            </td>
-                            <td class="py-3 px-4">
-                                <select name="tipe_bbm[]" required class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
-                                    <option value="Solar" {{ $item->tipe_bbm == 'Solar' ? 'selected' : '' }}>Solar</option>
-                                    <option value="Pertalite" {{ $item->tipe_bbm == 'Pertalite' ? 'selected' : '' }}>Pertalite</option>
-                                </select>
-                            </td>
-                            <td class="py-3 px-4">
-                                <input type="text" name="keterangan_pemakaian[]" value="{{ $item->keterangan_pemakaian }}" required placeholder="Cth: Pick Up Grand Max" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
-                            </td>
-                            <td class="py-3 px-4">
-                                <input type="number" step="0.01" name="jumlah_liter[]" value="{{ $item->jumlah_liter }}" required min="0.01" placeholder="0.00" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
-                            </td>
-                            <td class="py-3 px-4">
-                                <input type="number" name="harga_per_liter[]" value="{{ round($item->harga_per_liter) }}" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
-                            </td>
-                            <td class="py-3 px-4 text-right">
-                                <span class="text-sm font-semibold text-gray-800 row-total">{{ number_format($item->total_harga, 0, ',', '.') }}</span>
-                            </td>
-                            <td class="py-3 px-4 text-center">
-                                <button type="button" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors btn-remove-item" title="Hapus Baris" {{ count($pemakaian_bbm->items) == 1 ? 'disabled' : '' }}>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
-                            </td>
-                        </tr>
+                            <tr class="item-row">
+                                <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">{{ $index + 1 }}</td>
+                                <td class="py-3 px-4">
+                                    <input type="date" name="tanggal_pemakaian[]" required value="{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <select name="tipe_bbm[]" required class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                                        <option value="Solar" {{ $item->tipe_bbm == 'Solar' ? 'selected' : '' }}>Solar</option>
+                                        <option value="Pertalite" {{ $item->tipe_bbm == 'Pertalite' ? 'selected' : '' }}>Pertalite</option>
+                                    </select>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="text" name="keterangan_pemakaian[]" value="{{ $item->keterangan_pemakaian }}" required placeholder="Cth: Pick Up Grand Max" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="number" step="0.01" name="jumlah_liter[]" value="{{ $item->jumlah_liter }}" required min="0.01" placeholder="0.00" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
+                                </td>
+                                <td class="py-3 px-4">
+                                    <input type="number" name="harga_per_liter[]" value="{{ round($item->harga_per_liter) }}" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
+                                </td>
+                                <td class="py-3 px-4 text-right">
+                                    <span class="text-sm font-semibold text-gray-800 row-total">0</span>
+                                </td>
+                                <td class="py-3 px-4 text-center">
+                                    <button type="button" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors btn-remove-item" title="Hapus Baris">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-100 border-t border-gray-200">
-                            <td colspan="5" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
+                            <td colspan="6" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
                             <td class="py-4 px-4 text-right">
-                                <span class="text-lg font-bold text-emerald-600" id="grand-total">0</span>
+                                <span class="{{ $grandTotalClass }}" id="grand-total">0</span>
                             </td>
                             <td></td>
                         </tr>
@@ -125,8 +147,8 @@
             </div>
         </div>
 
-        <div class="p-6 border-t border-gray-100 bg-white flex justify-end">
-            <button type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+        <div class="{{ $footerClass }}" id="form-footer">
+            <button type="submit" id="btn-submit" class="{{ $btnSubmitClass }}">
                 Perbarui Laporan
             </button>
         </div>
@@ -170,6 +192,32 @@
     $(document).ready(function() {
         $('.searchable-select').select2({
             width: '100%'
+        });
+
+        // Dynamic Colors Script
+        const radios = document.querySelectorAll('input[name="kategori"]');
+        const form = document.getElementById('form-pemakaian');
+        const footer = document.getElementById('form-footer');
+        const btnSubmit = document.getElementById('btn-submit');
+        const detailSection = document.getElementById('detail-section');
+        const grandTotal = document.getElementById('grand-total');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if(e.target.value === 'Kebun') {
+                    form.className = "bg-emerald-50 rounded-xl shadow-lg border-2 border-emerald-400 overflow-hidden transition-colors duration-300";
+                    footer.className = "p-6 border-t border-emerald-200 bg-emerald-100 flex justify-end transition-colors duration-300";
+                    btnSubmit.className = "px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500";
+                    detailSection.className = "p-6 md:p-8 bg-emerald-50/50 transition-colors duration-300";
+                    grandTotal.className = "text-lg font-bold text-emerald-600";
+                } else if(e.target.value === 'Sopir') {
+                    form.className = "bg-blue-50 rounded-xl shadow-lg border-2 border-blue-400 overflow-hidden transition-colors duration-300";
+                    footer.className = "p-6 border-t border-blue-200 bg-blue-100 flex justify-end transition-colors duration-300";
+                    btnSubmit.className = "px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-blue-500";
+                    detailSection.className = "p-6 md:p-8 bg-blue-50/50 transition-colors duration-300";
+                    grandTotal.className = "text-lg font-bold text-blue-600";
+                }
+            });
         });
     });
 </script>

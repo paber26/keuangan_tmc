@@ -14,6 +14,8 @@ class PengajuanBBM extends Model
     protected $fillable = [
         'kebun_id',
         'karyawan_id',
+        'departemen',
+        'perihal',
         'tanggal',
         'judul_pengajuan',
         'keterangan',

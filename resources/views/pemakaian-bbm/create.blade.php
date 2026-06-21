@@ -11,23 +11,37 @@
         <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Buat Laporan Pemakaian BBM</h2>
     </div>
 
-
-
-    <form action="{{ route('pemakaian-bbm.store') }}" method="POST" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" id="form-pemakaian">
+    <form action="{{ route('pemakaian-bbm.store') }}" method="POST" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-colors duration-300" id="form-pemakaian">
         @csrf
         
         <div class="p-6 md:p-8 border-b border-gray-100">
             <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Laporan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Lokasi Kebun <span class="text-red-500">*</span></label>
-                    <select name="kebun_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
-                        <option value="" disabled selected>-- Pilih Lokasi --</option>
-                        @foreach($kebun as $k)
-                            <option value="{{ $k->id }}">{{ $k->lokasi }}</option>
-                        @endforeach
-                    </select>
+                
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Kategori Laporan <span class="text-red-500">*</span></label>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label class="flex-1 flex items-center gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-emerald-50 hover:border-emerald-200 transition-colors">
+                            <input type="radio" name="kategori" value="Kebun" required class="text-emerald-600 focus:ring-emerald-500 w-5 h-5">
+                            <span class="font-bold text-gray-700">BBM Kebun</span>
+                        </label>
+                        <label class="flex-1 flex items-center gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                            <input type="radio" name="kategori" value="Sopir" required class="text-blue-600 focus:ring-blue-500 w-5 h-5">
+                            <span class="font-bold text-gray-700">BBM Sopir</span>
+                        </label>
+                    </div>
                 </div>
+
+                <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 hidden" id="dynamic-form-fields">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Lokasi Kebun <span class="text-red-500">*</span></label>
+                        <select name="kebun_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
+                            <option value="" disabled selected>-- Pilih Lokasi --</option>
+                            @foreach($kebun as $k)
+                                <option value="{{ $k->id }}">{{ $k->lokasi }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pengambil (Karyawan) <span class="text-red-500">*</span></label>
                     <select name="karyawan_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
@@ -47,15 +61,16 @@
                     <input type="text" name="judul_laporan" placeholder="Contoh: Laporan BBM Pick Up & Genset (Minggu 1)" required
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan (Opsional)</label>
-                    <textarea name="keterangan" rows="2" placeholder="Tuliskan catatan tambahan di sini..."
-                              class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"></textarea>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan (Opsional)</label>
+                        <textarea name="keterangan" rows="2" placeholder="Tuliskan catatan tambahan di sini..."
+                                  class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="p-6 md:p-8 bg-gray-50/50">
+        <div class="p-6 md:p-8 bg-gray-50/50 hidden" id="detail-section">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-bold text-gray-800">Detail Pemakaian</h3>
                 <button type="button" id="btn-add-item" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-emerald-500 hover:text-emerald-600 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all">
@@ -111,7 +126,7 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-100 border-t border-gray-200">
-                            <td colspan="5" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
+                            <td colspan="6" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
                             <td class="py-4 px-4 text-right">
                                 <span class="text-lg font-bold text-emerald-600" id="grand-total">0</span>
                             </td>
@@ -122,8 +137,8 @@
             </div>
         </div>
 
-        <div class="p-6 border-t border-gray-100 bg-white flex justify-end">
-            <button type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+        <div class="p-6 border-t border-gray-100 bg-white flex justify-end transition-colors duration-300 hidden" id="form-footer">
+            <button type="submit" id="btn-submit" class="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Simpan Laporan
             </button>
         </div>
@@ -167,6 +182,38 @@
     $(document).ready(function() {
         $('.searchable-select').select2({
             width: '100%'
+        });
+
+        // Dynamic Colors Script
+        const radios = document.querySelectorAll('input[name="kategori"]');
+        const form = document.getElementById('form-pemakaian');
+        const footer = document.getElementById('form-footer');
+        const btnSubmit = document.getElementById('btn-submit');
+        const detailSection = document.getElementById('detail-section');
+        const grandTotal = document.getElementById('grand-total');
+        const dynamicFormFields = document.getElementById('dynamic-form-fields');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                // Show hidden fields when a category is selected
+                dynamicFormFields.classList.remove('hidden');
+                detailSection.classList.remove('hidden');
+                footer.classList.remove('hidden');
+
+                if(e.target.value === 'Kebun') {
+                    form.className = "bg-emerald-50 rounded-xl shadow-lg border-2 border-emerald-400 overflow-hidden transition-colors duration-300";
+                    footer.className = "p-6 border-t border-emerald-200 bg-emerald-100 flex justify-end transition-colors duration-300";
+                    btnSubmit.className = "px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500";
+                    detailSection.className = "p-6 md:p-8 bg-emerald-50/50 transition-colors duration-300";
+                    grandTotal.className = "text-lg font-bold text-emerald-600";
+                } else if(e.target.value === 'Sopir') {
+                    form.className = "bg-blue-50 rounded-xl shadow-lg border-2 border-blue-400 overflow-hidden transition-colors duration-300";
+                    footer.className = "p-6 border-t border-blue-200 bg-blue-100 flex justify-end transition-colors duration-300";
+                    btnSubmit.className = "px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-blue-500";
+                    detailSection.className = "p-6 md:p-8 bg-blue-50/50 transition-colors duration-300";
+                    grandTotal.className = "text-lg font-bold text-blue-600";
+                }
+            });
         });
     });
 </script>

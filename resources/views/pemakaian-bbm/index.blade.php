@@ -6,20 +6,30 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
             <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Data Pemakaian BBM</h2>
-            <p class="text-sm text-gray-500 mt-1">Kelola pencatatan histori pemakaian BBM kendaraan/mesin harian.</p>
+            <p class="text-sm text-gray-500 mt-1">Kelola pencatatan histori pemakaian BBM harian.</p>
         </div>
-        <a href="{{ route('pemakaian-bbm.create') }}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all">
+        <div class="flex gap-2 items-center">
+            <form action="{{ route('pemakaian-bbm.index') }}" method="GET" class="flex gap-2">
+                <select name="kategori" onchange="this.form.submit()" class="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <option value="">Semua Kategori</option>
+                    <option value="Kebun" {{ request('kategori') == 'Kebun' ? 'selected' : '' }}>Kebun</option>
+                    <option value="Sopir" {{ request('kategori') == 'Sopir' ? 'selected' : '' }}>Sopir</option>
+                </select>
+            </form>
+            <a href="{{ route('pemakaian-bbm.create') }}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             Tambah Laporan
         </a>
     </div>
+</div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-50/50 border-b border-gray-100">
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
+                        <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Kategori</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Lokasi Kebun</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Karyawan</th>
                         <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Judul Laporan</th>
@@ -31,6 +41,13 @@
                     @forelse($pemakaian as $item)
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="py-4 px-6 text-sm text-gray-600 whitespace-nowrap">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
+                        <td class="py-4 px-6 whitespace-nowrap">
+                            @if($item->kategori == 'Kebun')
+                                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">Kebun</span>
+                            @else
+                                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">Sopir</span>
+                            @endif
+                        </td>
                         <td class="py-4 px-6 text-sm font-semibold text-emerald-600">
                             {{ $item->kebun ? $item->kebun->lokasi : '-' }}
                         </td>

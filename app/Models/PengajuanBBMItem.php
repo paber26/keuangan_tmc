@@ -15,6 +15,7 @@ class PengajuanBBMItem extends Model
         'pengajuan_bbm_id',
         'tanggal',
         'tipe_bbm',
+        'uraian',
         'keterangan_pengajuan',
         'jumlah_liter',
         'harga_per_liter',

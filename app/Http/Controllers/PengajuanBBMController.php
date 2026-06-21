@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PengajuanBBM;
 use App\Models\PengajuanBBMItem;
+use App\Models\PemakaianBBM;
 use App\Models\Kebun;
 use App\Models\Karyawan;
 use Illuminate\Http\Request;
@@ -21,60 +22,57 @@ class PengajuanBBMController extends Controller
     {
         $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
         $karyawan = Karyawan::orderBy('nama')->get();
-        return view('pengajuan-bbm.create', compact('kebun', 'karyawan'));
+        
+        $pemakaian_laporans = PemakaianBBM::with(['kebun', 'karyawan', 'items'])
+            ->orderBy('tanggal', 'desc')
+            ->limit(50)
+            ->get();
+
+        return view('pengajuan-bbm.create', compact('kebun', 'karyawan', 'pemakaian_laporans'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'kebun_id' => 'required|exists:kebuns,id',
-            'karyawan_id' => 'required|exists:karyawans,id',
+            'departemen' => 'required|string',
+            'perihal' => 'required|string',
             'tanggal' => 'required|date',
-            'judul_pengajuan' => 'required|string|max:255',
+            'judul_pengajuan' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
+            'uraian' => 'required|array|min:1',
+            'uraian.*' => 'required|string|max:255',
+            'total_harga' => 'required|array|min:1',
+            'total_harga.*' => 'required|numeric|min:0',
             'keterangan_pengajuan' => 'required|array|min:1',
-            'keterangan_pengajuan.*' => 'required|string|max:255',
-            'tanggal_pengajuan' => 'required|array|min:1',
-            'tanggal_pengajuan.*' => 'required|date',
-            'tipe_bbm' => 'required|array|min:1',
-            'tipe_bbm.*' => 'required|in:Solar,Pertalite',
-            'jumlah_liter' => 'required|array|min:1',
-            'jumlah_liter.*' => 'required|numeric|min:0.01',
-            'harga_per_liter' => 'required|array',
-            'harga_per_liter.*' => 'required|numeric|min:0',
+            'keterangan_pengajuan.*' => 'nullable|string|max:255',
         ]);
 
         try {
             DB::beginTransaction();
 
             $grandTotal = 0;
-            for ($i = 0; $i < count($request->keterangan_pengajuan); $i++) {
-                $grandTotal += ($request->jumlah_liter[$i] * $request->harga_per_liter[$i]);
+            for ($i = 0; $i < count($request->uraian); $i++) {
+                $grandTotal += $request->total_harga[$i];
             }
 
             $pengajuan = PengajuanBBM::create([
                 'kebun_id' => $request->kebun_id,
-                'karyawan_id' => $request->karyawan_id,
+                'departemen' => $request->departemen,
+                'perihal' => $request->perihal,
                 'tanggal' => $request->tanggal,
-                'judul_pengajuan' => $request->judul_pengajuan,
+                'judul_pengajuan' => $request->judul_pengajuan ?? 'Pengajuan BBM',
                 'keterangan' => $request->keterangan,
                 'grand_total' => $grandTotal,
                 'status' => 'Pending'
             ]);
 
-            foreach ($request->keterangan_pengajuan as $index => $ket) {
-                $liter = $request->jumlah_liter[$index];
-                $harga = $request->harga_per_liter[$index];
-                $total = $liter * $harga;
-
+            foreach ($request->uraian as $index => $uraian) {
                 PengajuanBBMItem::create([
                     'pengajuan_bbm_id' => $pengajuan->id,
-                    'tanggal' => $request->tanggal_pengajuan[$index],
-                    'tipe_bbm' => $request->tipe_bbm[$index],
-                    'keterangan_pengajuan' => $ket,
-                    'jumlah_liter' => $liter,
-                    'harga_per_liter' => $harga,
-                    'total_harga' => $total,
+                    'uraian' => $uraian,
+                    'total_harga' => $request->total_harga[$index],
+                    'keterangan_pengajuan' => $request->keterangan_pengajuan[$index] ?? '-',
                 ]);
             }
 

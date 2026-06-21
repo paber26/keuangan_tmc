@@ -2,95 +2,192 @@
 @section('page-title', 'Detail Pengajuan BBM')
 
 @section('content')
+@php
+    $hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    $bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    $tgl = \Carbon\Carbon::parse($pengajuan_bbm->tanggal);
+    $nama_hari = $hari[$tgl->dayOfWeek];
+    $nama_bulan = $bulan[$tgl->month];
+    $tanggal_indo = $nama_hari . ', ' . $tgl->day . ' ' . $nama_bulan . ' ' . $tgl->year;
+@endphp
+
 <div class="w-full pb-10">
-    <div class="mb-8">
+    <div class="mb-8 print:hidden">
         <a href="{{ route('pengajuan-bbm.index') }}" class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors mb-4">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             Kembali ke Daftar
         </a>
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Detail Pengajuan BBM</h2>
-            <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition-all print:hidden">
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Cetak Form Pengajuan Dana</h2>
+            <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 Cetak Pengajuan
             </button>
         </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden print:shadow-none print:border-none">
-        <div class="p-6 md:p-8 border-b border-gray-100 print:border-b-2">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Lokasi Kebun</p>
-                    <p class="text-base font-semibold text-emerald-600">{{ $pengajuan_bbm->kebun ? $pengajuan_bbm->kebun->lokasi : '-' }}</p>
+    <!-- Paper Container -->
+    <div class="w-full max-w-5xl mx-auto bg-white p-8 md:p-12 shadow-xl rounded-sm print:p-0 print:shadow-none print:m-0">
+        
+        <!-- Printable Area -->
+        <div id="printable-area" class="w-full font-sans text-black border-2 border-black">
+            
+            <!-- Header -->
+            <div class="flex items-center border-b-2 border-black p-4">
+                <div class="w-1/6 flex justify-center">
+                    <img src="{{ asset('logo.jpg') }}" alt="TMC Logo" class="w-16 h-16 object-contain">
                 </div>
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Nama Pemohon (Karyawan)</p>
-                    <p class="text-base font-semibold text-emerald-600">{{ $pengajuan_bbm->karyawan ? $pengajuan_bbm->karyawan->nama : '-' }}</p>
+                <div class="w-5/6 text-center pr-16">
+                    <h1 class="text-xl md:text-2xl font-bold uppercase tracking-wide mb-1" style="font-family: 'Arial', sans-serif;">PT. TRI MUSTIKA COCOMINAESA</h1>
+                    <p class="text-[11px] md:text-xs font-semibold">Jl. Raya A.K.D. Km. 90, Teep Kec. Amurang Barat Kab. Minahasa Selatan, Sulawesi Utara 95955, Indonesia</p>
                 </div>
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Tanggal Pengajuan</p>
-                    <p class="text-base font-semibold text-gray-800">{{ \Carbon\Carbon::parse($pengajuan_bbm->tanggal)->format('d M Y') }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Judul Pengajuan</p>
-                    <p class="text-base font-semibold text-gray-800">{{ $pengajuan_bbm->judul_pengajuan }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Status</p>
-                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full 
-                        {{ $pengajuan_bbm->status == 'Disetujui' ? 'bg-emerald-100 text-emerald-800' : ($pengajuan_bbm->status == 'Ditolak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800') }}">
-                        {{ $pengajuan_bbm->status }}
-                    </span>
-                </div>
-                @if($pengajuan_bbm->keterangan)
-                <div class="md:col-span-2">
-                    <p class="text-sm text-gray-500 mb-1">Keterangan Tambahan</p>
-                    <p class="text-base text-gray-800">{{ $pengajuan_bbm->keterangan }}</p>
-                </div>
-                @endif
             </div>
-        </div>
 
-        <div class="p-6 md:p-8">
-            <h3 class="text-lg font-bold text-gray-800 mb-6">Rincian Kebutuhan BBM</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-50 border-y border-gray-200">
-                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider w-16">No</th>
-                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tipe BBM</th>
-                                <th class="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Keterangan Kebutuhan</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">Liter</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">Harga / Liter</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider text-right">Total Biaya</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach($pengajuan_bbm->items as $index => $item)
+            <!-- Form Title -->
+            <div class="border-b-2 border-black py-2 text-center">
+                <h2 class="text-lg md:text-xl font-bold" style="font-family: 'Arial', sans-serif;">Form Pengajuan Dana</h2>
+            </div>
+
+            <!-- Info Section -->
+            <div class="border-b-2 border-black p-3">
+                <table class="w-full text-sm font-bold">
+                    <tbody>
                         <tr>
-                                <td class="py-4 px-4 text-sm text-gray-500 text-center">{{ $loop->iteration }}</td>
-                                <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $item->tanggal ? \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') : '-' }}</td>
-                                <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $item->tipe_bbm }}</td>
-                                <td class="py-4 px-4 text-sm font-medium text-gray-800">{{ $item->keterangan_pengajuan }}</td>
-                            <td class="py-4 px-4 text-sm text-gray-600 text-right">{{ number_format($item->jumlah_liter, 2, ',', '.') }} L</td>
-                            <td class="py-4 px-4 text-sm text-gray-600 text-right">Rp {{ number_format($item->harga_per_liter, 0, ',', '.') }}</td>
-                            <td class="py-4 px-4 text-sm font-semibold text-gray-800 text-right">Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
+                            <td class="w-64 pb-1">Departemen</td>
+                            <td class="pb-1">: {{ strtoupper($pengajuan_bbm->departemen ?? 'PERKEBUNAN') }}</td>
                         </tr>
-                        @endforeach
+                        <tr>
+                            <td class="pb-1">Pengajuan Untuk Kebutuhan</td>
+                            <td class="pb-1">: {{ $pengajuan_bbm->kebun ? $pengajuan_bbm->kebun->lokasi : '-' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="pb-1">Perihal</td>
+                            <td class="pb-1">: {{ $pengajuan_bbm->perihal ?? 'Kebutuhan Biaya BBM' }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal Pengajuan</td>
+                            <td>: {{ $tanggal_indo }}</td>
+                        </tr>
                     </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-50 border-t-2 border-gray-200">
-                            <td colspan="6" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Total</td>
-                            <td class="py-4 px-4 text-right text-lg font-bold text-emerald-600">
-                                Rp {{ number_format($pengajuan_bbm->grand_total, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
+
+            <!-- Table -->
+            <table class="w-full text-sm border-collapse border-b-2 border-black">
+                <thead>
+                    <tr class="border-b-2 border-black text-center font-bold">
+                        <th class="border-r-2 border-black p-2 w-12">NO.</th>
+                        <th class="border-r-2 border-black p-2">URAIAN</th>
+                        <th class="border-r-2 border-black p-2 w-48">TOTAL HARGA</th>
+                        <th class="p-2 w-72">KETERANGAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pengajuan_bbm->items as $index => $item)
+                    <tr class="border-b-2 border-black">
+                        <td class="border-r-2 border-black p-2 text-center font-bold">{{ $index + 1 }}</td>
+                        <td class="border-r-2 border-black p-2 font-bold">{{ strtoupper($item->uraian) }}</td>
+                        <td class="border-r-2 border-black p-2 font-bold">
+                            <div class="flex justify-between">
+                                <span>Rp</span>
+                                <span>{{ number_format($item->total_harga, 0, ',', '.') }}</span>
+                            </div>
+                        </td>
+                        <td class="p-2 font-bold">{{ strtoupper($item->keterangan_pengajuan) }}</td>
+                    </tr>
+                    @endforeach
+
+                    <!-- Fill empty rows up to 5 -->
+                    @for($i = count($pengajuan_bbm->items) + 1; $i <= 5; $i++)
+                    <tr class="border-b-2 border-black h-10">
+                        <td class="border-r-2 border-black p-2 text-center font-bold">{{ $i }}</td>
+                        <td class="border-r-2 border-black p-2"></td>
+                        <td class="border-r-2 border-black p-2"></td>
+                        <td class="p-2"></td>
+                    </tr>
+                    @endfor
+
+                    <!-- Total Row -->
+                    <tr class="font-bold border-black">
+                        <td colspan="2" class="border-r-2 border-black p-2 text-center">TOTAL PENGAJUAN DANA</td>
+                        <td class="border-r-2 border-black p-2">
+                            <div class="flex justify-between">
+                                <span>Rp</span>
+                                <span>{{ number_format($pengajuan_bbm->grand_total, 0, ',', '.') }}</span>
+                            </div>
+                        </td>
+                        <td class="p-2"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Signatures Header -->
+            <div class="grid grid-cols-5 text-center text-sm font-bold border-t-2 border-b-2 border-black">
+                <div class="border-r-2 border-black p-2">Dibuat Oleh</div>
+                <div class="border-r-2 border-black p-2">Diketahui Oleh</div>
+                <div class="border-r-2 border-black p-2">Disetujui Oleh</div>
+                <div class="border-r-2 border-black p-2">Dibayar Oleh</div>
+                <div class="p-2">Dibukukan Oleh</div>
+            </div>
+
+            <!-- Signatures Names -->
+            <div class="grid grid-cols-5 text-center text-sm font-bold h-28">
+                <div class="border-r-2 border-black p-2 flex flex-col justify-end">
+                    <span class="border-b-2 border-black mx-2 pb-1">{{ strtoupper($pengajuan_bbm->karyawan ? $pengajuan_bbm->karyawan->nama : 'ALDO') }}</span>
+                </div>
+                <div class="border-r-2 border-black p-2 flex flex-col justify-end">
+                    <span class="border-b-2 border-black mx-2 pb-1">DAVID</span>
+                </div>
+                <div class="border-r-2 border-black p-2 flex flex-col justify-end">
+                    <span class="border-b-2 border-black mx-2 pb-1">STANLY</span>
+                </div>
+                <div class="border-r-2 border-black p-2 flex flex-col justify-end">
+                    <span class="border-b-2 border-black mx-2 pb-1">PRISILLIA</span>
+                </div>
+                <div class="p-2 flex flex-col justify-end">
+                    <span class="border-b-2 border-black mx-2 pb-1">EDMON</span>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #printable-area, #printable-area * {
+            visibility: visible;
+        }
+        #printable-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            border: 2px solid black !important;
+        }
+        .border-black {
+            border-color: black !important;
+        }
+        .border-2 {
+            border-width: 2px !important;
+        }
+        .border-b-2 {
+            border-bottom-width: 2px !important;
+        }
+        .border-t-2 {
+            border-top-width: 2px !important;
+        }
+        .border-r-2 {
+            border-right-width: 2px !important;
+        }
+        .border-l-2 {
+            border-left-width: 2px !important;
+        }
+    }
+</style>
+@endpush
 @endsection

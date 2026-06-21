@@ -12,6 +12,7 @@ class PemakaianBBM extends Model
     protected $table = 'pemakaian_bbm';
 
     protected $fillable = [
+        'kategori',
         'kebun_id',
         'karyawan_id',
         'tanggal',
