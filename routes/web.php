@@ -47,6 +47,8 @@ Route::middleware('admin.login')->group(function () {
     Route::get('pengajuan-bbm/{pengajuan_bbm}/print', [\App\Http\Controllers\PengajuanBBMController::class, 'print'])->name('pengajuan-bbm.print');
     Route::patch('pengajuan-bbm/{pengajuan_bbm}/status', [\App\Http\Controllers\PengajuanBBMController::class, 'updateStatus'])->name('pengajuan-bbm.update-status');
 
+    Route::resource('dokumentasi', \App\Http\Controllers\DokumentasiHarianController::class);
+
     // Penggajian
     Route::get('/penggajian/gaji-bulanan', function() { return view('gaji.index'); })->name('gaji.index');
     Route::get('/penggajian/upah-harian', function() { return view('upah-harian.index'); })->name('upah-harian.index');
