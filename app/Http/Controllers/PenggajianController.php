@@ -71,6 +71,7 @@ class PenggajianController extends Controller
                         $dataHarian[$karyawanId] = [
                             'karyawan_id' => $karyawanId,
                             'nama' => $nama,
+                            'jabatan' => $jabatan,
                             'hari' => [],
                             'total_hari' => 0,
                             'total_upah' => 0
