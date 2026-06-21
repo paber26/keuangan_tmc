@@ -225,11 +225,10 @@
                     <!-- Sub Header -->
                     <table class="sub-header-table">
                         <tr>
-                            <td style="width: 60%; padding-top: 10px; padding-bottom: 10px;">
-                                <div>Perkiraan No :</div>
-                                <div style="margin-top: 5px; letter-spacing: 2px;">.......................................................................</div>
+                            <td style="width: 60%;">
+                                Perkiraan No <span style="margin-left: 5px; font-weight: normal; letter-spacing: 2px;">: ...........................................................</span>
                             </td>
-                            <td style="width: 40%; vertical-align: top; padding-top: 10px;">
+                            <td style="width: 40%; vertical-align: top;">
                                 Lampiran <span style="margin-left: 5px;">:</span>
                             </td>
                         </tr>
@@ -304,7 +303,7 @@
                                 </table>
                             </td>
                             <td style="text-align: center; vertical-align: top; padding: 10px 5px; border-bottom: 2px solid black;">
-                                <div style="font-weight: bold; font-size: 14px; text-align: right; margin-bottom: 5px;">
+                                <div style="font-weight: bold; font-size: 14px; text-align: right; margin-bottom: 5px; border-bottom: 1px solid black; padding-bottom: 5px;">
                                     <span class="flex-rp">Rp</span>
                                     <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
                                     <div style="clear: both;"></div>
