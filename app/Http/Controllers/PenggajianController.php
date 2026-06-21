@@ -162,13 +162,13 @@ class PenggajianController extends Controller
             }
         }
 
-        foreach ($dataHarian as $id => &$data) {
-            $data['total_upah'] = $data['total_hari'] * $request->tarif_harian;
-            $totalUpahHarian += $data['total_upah'];
+        foreach ($dataHarian as $id => $data) {
+            $dataHarian[$id]['total_upah'] = $dataHarian[$id]['total_hari'] * $request->tarif_harian;
+            $totalUpahHarian += $dataHarian[$id]['total_upah'];
         }
-        foreach ($dataKupas as $id => &$data) {
-            $data['total_upah'] = $data['total_butir'] * $request->tarif_kupas;
-            $totalUpahKupas += $data['total_upah'];
+        foreach ($dataKupas as $id => $data) {
+            $dataKupas[$id]['total_upah'] = $dataKupas[$id]['total_butir'] * $request->tarif_kupas;
+            $totalUpahKupas += $dataKupas[$id]['total_upah'];
         }
 
         // Create Penggajian
