@@ -23,21 +23,21 @@
     @endif
 
     {{-- Filter Section --}}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-        <form method="GET" action="{{ route('dokumentasi.index') }}" class="px-6 py-4">
-            <div class="flex flex-wrap items-end gap-4">
-                <div class="min-w-[150px]">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <form method="GET" action="{{ route('dokumentasi.index') }}" class="p-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Tanggal Mulai</label>
+                    <input type="date" name="start_date" value="{{ request('start_date') }}" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm transition-colors">
                 </div>
-                <div class="min-w-[150px]">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Akhir</label>
-                    <input type="date" name="end_date" value="{{ request('end_date') }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Tanggal Akhir</label>
+                    <input type="date" name="end_date" value="{{ request('end_date') }}" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm transition-colors">
                 </div>
-                <div class="min-w-[200px]">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kebun</label>
-                    <select name="lokasi" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
-                        <option value="">Semua Kebun</option>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Lokasi Kebun</label>
+                    <select name="lokasi" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm transition-colors">
+                        <option value="">Semua Lokasi</option>
                         @foreach($lokasiList as $loc)
                             <option value="{{ $loc->lokasi }}" {{ request('lokasi') == $loc->lokasi ? 'selected' : '' }}>
                                 {{ $loc->lokasi }}
@@ -45,20 +45,20 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="min-w-[120px]">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tampilan</label>
-                    <select name="view" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Tampilan</label>
+                    <select name="view" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm transition-colors">
                         <option value="grid" {{ $viewMode == 'grid' ? 'selected' : '' }}>Grid</option>
                         <option value="table" {{ $viewMode == 'table' ? 'selected' : '' }}>Tabel</option>
                     </select>
                 </div>
-                <div>
-                    <button type="submit" class="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                         Filter
                     </button>
-                    <a href="{{ route('dokumentasi.index') }}" class="ml-2 inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg shadow-sm transition-colors">
-                        Reset
+                    <a href="{{ route('dokumentasi.index') }}" class="flex-none inline-flex justify-center items-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg transition-colors" title="Reset Filter">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     </a>
                 </div>
             </div>
