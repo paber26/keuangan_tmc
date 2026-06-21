@@ -106,6 +106,24 @@
         $pengajuan = $bukti_kas_kebun->pengajuan_penggajian;
         $penggajian = $pengajuan->penggajian;
         
+        if (!$penggajian) {
+            foreach($pengajuan->items as $item) {
+                if (preg_match('/PER (.*?) S\/D (.*?)$/i', $item->uraian, $matches)) {
+                    try {
+                        $start = \Carbon\Carbon::parse($matches[1])->format('Y-m-d');
+                        $end = \Carbon\Carbon::parse($matches[2])->format('Y-m-d');
+                        $found = \App\Models\Penggajian::where('tanggal_mulai', $start)
+                            ->where('tanggal_akhir', $end)
+                            ->first();
+                        if ($found) {
+                            $penggajian = $found;
+                            break;
+                        }
+                    } catch(\Exception $e) {}
+                }
+            }
+        }
+        
         $grouped = [];
         $total = 0;
         
