@@ -10,10 +10,28 @@ use Illuminate\Support\Facades\DB;
 
 class DokumentasiHarianController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dokumentasi = DokumentasiHarian::with('images')->orderBy('tanggal', 'desc')->get();
-        return view('dokumentasi.index', compact('dokumentasi'));
+        $query = DokumentasiHarian::with(['images', 'kebun', 'karyawan']);
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('tanggal', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('tanggal', '<=', $request->end_date);
+        }
+        if ($request->filled('lokasi')) {
+            $query->whereHas('kebun', function($q) use ($request) {
+                $q->where('lokasi', $request->lokasi);
+            });
+        }
+
+        $dokumentasi = $query->orderBy('tanggal', 'desc')->get();
+        $lokasiList = \App\Models\Kebun::orderBy('lokasi', 'asc')->get()->unique('lokasi');
+
+        $viewMode = $request->get('view', 'grid'); // default to grid
+
+        return view('dokumentasi.index', compact('dokumentasi', 'lokasiList', 'viewMode'));
     }
 
     public function create()
