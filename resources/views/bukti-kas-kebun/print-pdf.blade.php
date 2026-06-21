@@ -111,9 +111,7 @@
         
         if ($penggajian && $penggajian->details) {
             foreach($penggajian->details as $detail) {
-                // Get Jabatan names
-                $jabatans = $detail->karyawan->jabatans->pluck('nama_jabatan')->implode(', ');
-                $jabatanName = $jabatans ?: 'Lain-lain';
+                $jabatanName = $detail->jabatan ?: ($detail->tipe_pekerjaan ?: 'Lain-lain');
                 
                 if(!isset($grouped[$jabatanName])) {
                     $grouped[$jabatanName] = 0;
