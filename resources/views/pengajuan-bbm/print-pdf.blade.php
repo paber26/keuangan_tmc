@@ -177,7 +177,7 @@
                         }
                     }
                 @endphp
-                <div style="text-align: center; margin-bottom: 30px; page-break-inside: avoid; height: 950px; display: table-cell; vertical-align: middle; width: 100%;">
+                <div style="text-align: center; margin-bottom: 30px; page-break-inside: avoid; height: 950px; width: 100%;">
                     <img src="{{ $imgSrc }}" style="max-width: 100%; max-height: 900px; border: 2px solid #000; padding: 5px;" alt="Bukti">
                 </div>
             @endforeach
