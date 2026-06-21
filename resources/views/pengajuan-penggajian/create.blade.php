@@ -328,7 +328,7 @@ function tambahkanDataPenggajian() {
         
         const tanggalMulai = cb.getAttribute('data-tanggal-mulai');
         const tanggalAkhir = cb.getAttribute('data-tanggal-akhir');
-        const total = cb.getAttribute('data-total');
+        const total = Math.round(parseFloat(cb.getAttribute('data-total')) || 0);
         let keterangan = cb.getAttribute('data-keterangan') || '';
         
         if (keterangan === '-' || keterangan === 'null') keterangan = '';

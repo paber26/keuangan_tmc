@@ -115,7 +115,7 @@
                                 <input type="number" name="harga_satuan[]" min="0" step="any" value="{{ $item->harga_satuan ? (float) $item->harga_satuan : '' }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
                             </td>
                             <td class="py-3 px-4">
-                                <input type="number" name="total_harga[]" required min="0" step="any" value="{{ (float) $item->total_harga }}" class="w-full px-3 py-2 text-right font-medium rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-total">
+                                <input type="number" name="total_harga[]" required min="0" step="any" placeholder="0" value="{{ round($item->total_harga) }}" class="w-full px-3 py-2 text-right font-medium rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-total">
                             </td>
                             <td class="py-3 px-4">
                                 <textarea name="keterangan[]" rows="2" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">{{ $item->keterangan }}</textarea>
@@ -330,7 +330,7 @@ function tambahkanDataPenggajian() {
         
         const tanggalMulai = cb.getAttribute('data-tanggal-mulai');
         const tanggalAkhir = cb.getAttribute('data-tanggal-akhir');
-        const total = cb.getAttribute('data-total');
+        const total = Math.round(parseFloat(cb.getAttribute('data-total')) || 0);
         let keterangan = cb.getAttribute('data-keterangan') || '';
         
         if (keterangan === '-' || keterangan === 'null') keterangan = '';
