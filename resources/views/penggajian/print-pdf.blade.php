@@ -27,7 +27,7 @@
         }
         .kop-title {
             font-family: 'Times New Roman', serif;
-            font-size: 18pt;
+            font-size: 16pt;
             font-weight: bold;
             margin: 0 0 5px 0;
             letter-spacing: 1px;
@@ -107,7 +107,7 @@
     <div class="kop-surat">
         <!-- Assuming logo.jpg is in public path. DomPDF requires absolute local path usually, but asset() might work depending on setup -->
         <img src="{{ public_path('logo.jpg') }}" class="logo" alt="Logo">
-        <div style="padding-left: 90px; padding-right: 90px;">
+        <div style="padding-left: 80px; padding-right: 80px;">
             <h1 class="kop-title">PT . TRI MUSTIKA COCOMINAESA ( TMC )</h1>
             <p class="kop-address">Jl. Raya A.K.D Km. 90 Kec. Amurang Barat Kab. Minahasa Selatan</p>
         </div>
