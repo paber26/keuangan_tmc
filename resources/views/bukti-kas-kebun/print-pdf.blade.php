@@ -220,11 +220,12 @@
                     <!-- Sub Header -->
                     <table class="sub-header-table">
                         <tr>
-                            <td style="width: 60%;">
-                                Perkiraan No <span style="margin-left: 5px; font-weight: normal; letter-spacing: 2px;">: ................................................................</span>
+                            <td style="width: 60%; padding-top: 10px; padding-bottom: 10px;">
+                                <div>Perkiraan No :</div>
+                                <div style="margin-top: 5px; letter-spacing: 2px;">.......................................................................</div>
                             </td>
-                            <td style="width: 40%;">
-                                Lampiran <span style="margin-left: 5px; font-weight: normal;">:</span>
+                            <td style="width: 40%; vertical-align: top; padding-top: 10px;">
+                                Lampiran <span style="margin-left: 5px;">:</span>
                             </td>
                         </tr>
                     </table>
@@ -281,37 +282,30 @@
                         </tr>
                         @endfor
 
+                        <!-- Footer integrated into Items Table -->
                         <tr>
-                            <td style="border-bottom: none; background-color: #f9f9f9;"></td>
-                            <td style="border-bottom: none; background-color: #f9f9f9;"></td>
-                            <td style="border-bottom: none; background-color: #f9f9f9;"></td>
-                            <td style="border-bottom: none; font-weight: bold; font-size: 14px;">
-                                <span class="flex-rp">Rp</span>
-                                <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <!-- Footer Table -->
-                    <table class="footer-table">
-                        <tr>
-                            <td style="width: 75%; padding: 10px; vertical-align: top;">
+                            <td colspan="3" style="padding: 10px; border-right: 2px solid black;">
                                 <table style="width: 100%; border: none;">
                                     <tr>
-                                        <td style="width: 20%; border: none; font-weight: bold; font-size: 16px; font-style: italic;">
+                                        <td style="width: 20%; border: none; font-weight: bold; font-size: 16px; font-style: italic; vertical-align: middle;">
                                             Terbilang
                                         </td>
                                         <td style="width: 80%; border: none;">
-                                            <div style="background-color: #f0f0f0; padding: 8px 10px; font-weight: bold; font-style: italic; font-size: 12px; min-height: 20px;">
+                                            <div style="background-color: #f0f0f0; padding: 10px 10px; font-weight: bold; font-style: italic; font-size: 13px; min-height: 20px;">
                                                 {{ trim(ucwords(terbilang($total))) }}
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="width: 25%; text-align: center; vertical-align: top; padding: 10px 5px;">
-                                <div style="font-weight: bold; margin-bottom: 30px;">Diterima Oleh</div>
-                                <div style="font-size: 10px;">Cantumkan Nama</div>
+                            <td style="text-align: center; vertical-align: top; padding: 10px 5px; border-bottom: 2px solid black;">
+                                <div style="font-weight: bold; font-size: 14px; text-align: right; margin-bottom: 5px;">
+                                    <span class="flex-rp">Rp</span>
+                                    <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
+                                    <div style="clear: both;"></div>
+                                </div>
+                                <div style="font-weight: bold; margin-bottom: 40px; text-align: center;">Diterima Oleh</div>
+                                <div style="font-size: 10px; text-align: center;">Cantumkan Nama</div>
                             </td>
                         </tr>
                     </table>
