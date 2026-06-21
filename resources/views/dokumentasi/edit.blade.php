@@ -54,25 +54,27 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tambahkan Foto Baru (Opsional)</label>
-                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:bg-gray-50 transition-colors relative cursor-pointer" id="drop-zone">
-                    <div class="space-y-1 text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- File Upload Option -->
+                    <div class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:bg-gray-50 transition-colors relative cursor-pointer" id="drop-zone">
+                        <svg class="mx-auto h-10 w-10 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         <div class="flex text-sm text-gray-600 justify-center">
                             <label for="file-upload" class="relative cursor-pointer rounded-md font-medium text-emerald-600 hover:text-emerald-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-500">
-                                <span>Pilih banyak file sekaligus</span>
+                                <span>Pilih File Komputer</span>
                                 <input id="file-upload" name="images[]" type="file" multiple class="sr-only" accept="image/*">
                             </label>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 5MB</p>
-                        <div class="mt-4">
-                            <button type="button" onclick="pasteFromClipboard()" class="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm font-medium rounded-lg transition-colors border border-amber-200">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                                Paste dari Clipboard
-                            </button>
-                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Bisa pilih banyak sekaligus</p>
                     </div>
+
+                    <!-- Clipboard Paste Option -->
+                    <button type="button" onclick="pasteFromClipboard()" id="clipboard-zone" class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-amber-200 border-dashed rounded-xl bg-amber-50 hover:bg-amber-100 transition-colors relative cursor-pointer outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                        <svg class="mx-auto h-10 w-10 text-amber-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        <span class="font-medium text-amber-700 text-sm">Paste dari Clipboard</span>
+                        <p class="text-xs text-amber-600/70 mt-1">Atau cukup tekan Ctrl+V / Cmd+V</p>
+                    </button>
                 </div>
                 <div id="preview-container" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4"></div>
             </div>
