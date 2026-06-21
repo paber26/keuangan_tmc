@@ -306,6 +306,7 @@
                                 </div>
                                 <div style="font-weight: bold; margin-bottom: 40px; text-align: center;">Dibukukan Oleh</div>
                                 <div style="font-size: 11px; font-weight: bold; text-decoration: underline; text-align: center;">Edmon</div>
+                                <div style="font-size: 10px; text-align: center; margin-top: 2px;">SPV Accounting</div>
                             </td>
                         </tr>
                     </table>
