@@ -339,8 +339,8 @@
                             @if($imgCount > 0 && $imgCount % 2 == 0)
                                 </tr><tr>
                             @endif
-                            <td style="border: none; padding: 5px; width: 50%; vertical-align: top;">
-                                <img src="{{ storage_path('app/public/' . $img->image_path) }}" style="width: 100%; max-height: 350px; object-fit: cover;">
+                            <td style="border: none; padding: 5px; width: 50%; vertical-align: top; text-align: center;">
+                                <img src="{{ storage_path('app/public/' . $img->image_path) }}" style="width: 95%; height: auto; border-radius: 4px; border: 1px solid #ddd;">
                             </td>
                             @php $imgCount++; @endphp
                         @endforeach

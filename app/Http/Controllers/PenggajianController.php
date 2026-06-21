@@ -100,8 +100,11 @@ class PenggajianController extends Controller
                 ->whereHas('kebun', function($q) use ($selectedLokasi) {
                     $q->where('lokasi', $selectedLokasi);
                 })
-                ->orderBy('tanggal', 'desc')
-                ->get();
+                ->orderBy('tanggal', 'asc')
+                ->get()
+                ->groupBy(function($item) {
+                    return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
+                });
         }
 
         return view('penggajian.create', compact(
@@ -240,8 +243,11 @@ class PenggajianController extends Controller
             ->whereHas('kebun', function($q) use ($penggajian) {
                 $q->where('lokasi', $penggajian->lokasi_kebun);
             })
-            ->orderBy('tanggal', 'desc')
-            ->get();
+            ->orderBy('tanggal', 'asc')
+            ->get()
+            ->groupBy(function($item) {
+                return \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d');
+            });
 
         return view('penggajian.show', compact('penggajian', 'period', 'dataHarian', 'dataKupas', 'dokumentasi'));
     }
@@ -256,6 +262,9 @@ class PenggajianController extends Controller
 
     public function print($id)
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(300);
+
         $penggajian = Penggajian::with('details')->findOrFail($id);
         $period = CarbonPeriod::create(Carbon::parse($penggajian->tanggal_mulai), Carbon::parse($penggajian->tanggal_akhir));
 
