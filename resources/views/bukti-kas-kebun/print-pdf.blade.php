@@ -337,34 +337,36 @@
 
                         <!-- Footer integrated into Items Table -->
                         <tr>
-                            <td colspan="3" style="padding: 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
+                            <td colspan="3" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
                                 <table style="width: 100%; border: none;">
                                     <tr>
-                                        <td style="width: 20%; border: none; font-weight: bold; font-size: 16px; font-style: italic; vertical-align: middle;">
+                                        <td style="width: 20%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: middle;">
                                             Terbilang
                                         </td>
                                         <td style="width: 80%; border: none;">
-                                            <div style="background-color: #f0f0f0; padding: 10px 10px; font-weight: bold; font-style: italic; font-size: 13px; min-height: 20px;">
+                                            <div style="background-color: #f0f0f0; padding: 6px 10px; font-weight: bold; font-style: italic; font-size: 12px; min-height: 15px;">
                                                 {{ trim(ucwords(terbilang($total))) }}
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="text-align: center; vertical-align: top; padding: 10px 5px; border-bottom: 2px solid black;">
-                                <div style="font-weight: bold; font-size: 14px; text-align: right; margin-bottom: 5px; border-bottom: 1px solid black; padding-bottom: 5px;">
+                            <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black;">
+                                <div style="font-weight: bold; font-size: 14px; text-align: right; margin-bottom: 2px; border-bottom: 1px solid black; padding-bottom: 2px;">
                                     <span class="flex-rp">Rp</span>
                                     <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
                                     <div style="clear: both;"></div>
                                 </div>
-                                <div style="font-weight: bold; margin-bottom: 40px; text-align: center;">Dibukukan Oleh</div>
-                                <div style="font-size: 11px; font-weight: bold; text-align: center;">Edmon</div>
-                                <div style="font-size: 10px; text-align: center; margin-top: 2px;">SPV Accounting</div>
+                                <div style="font-size: 9px; font-weight: bold; text-align: center; margin-top: 5px;">
+                                    Dibukukan Oleh
+                                </div>
+                                <br><br>
+                                <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
                             </td>
                         </tr>
                     </table>
 
-                    <!-- Signatures Table -->
+                    <!-- Signature Table directly below -->
                     <table class="sign-table">
                         <tr>
                             <td style="width: 17%;" class="header-cell">DIAJUKAN OLEH :</td>
@@ -374,7 +376,7 @@
                             <td style="width: 17%;" class="header-cell">DIBAYAR OLEH :</td>
                         </tr>
                         <tr>
-                            <td style="height: 60px; vertical-align: bottom;">
+                            <td style="height: 40px; vertical-align: bottom;">
                                 <strong>Aldo</strong><br><span style="font-size: 9px;">Spv. Ops Kebun</span>
                             </td>
                             <td style="vertical-align: bottom;">
