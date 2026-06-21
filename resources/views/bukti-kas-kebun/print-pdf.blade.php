@@ -304,8 +304,8 @@
                                     <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
                                     <div style="clear: both;"></div>
                                 </div>
-                                <div style="font-weight: bold; margin-bottom: 40px; text-align: center;">Diterima Oleh</div>
-                                <div style="font-size: 10px; text-align: center;">Cantumkan Nama</div>
+                                <div style="font-weight: bold; margin-bottom: 40px; text-align: center;">Dibukukan Oleh</div>
+                                <div style="font-size: 11px; font-weight: bold; text-decoration: underline; text-align: center;">Edmon</div>
                             </td>
                         </tr>
                     </table>
