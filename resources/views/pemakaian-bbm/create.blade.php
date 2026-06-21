@@ -112,7 +112,7 @@
                                 <input type="number" step="0.01" name="jumlah_liter[]" required min="0.01" placeholder="0.00" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
                             </td>
                             <td class="py-3 px-4">
-                                <input type="number" name="harga_per_liter[]" required min="0" placeholder="0" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
+                                <input type="number" name="harga_per_liter[]" required min="0" placeholder="0" value="16000" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-harga">
                             </td>
                             <td class="py-3 px-4 text-right">
                                 <span class="text-sm font-semibold text-gray-800 row-total">0</span>
