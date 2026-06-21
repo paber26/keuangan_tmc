@@ -18,6 +18,9 @@ composer install --no-dev --optimize-autoloader
 echo \"➡️ Menjalankan migrasi database (php artisan migrate)...\"
 php artisan migrate --force
 
+echo \"➡️ Menyiapkan symlink storage...\"
+php artisan storage:link
+
 echo \"➡️ Memperbarui izin akses file (Permissions)...\"
 chown -R www:www storage bootstrap/cache
 
