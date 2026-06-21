@@ -162,7 +162,7 @@
                     </tr>
                 </table>
                 
-                <table class="items-table" style="border-left: none; border-right: none; border-bottom: none; height: 550px;">
+                <table class="items-table" style="border-left: none; border-right: none; border-bottom: none;">
                     <thead>
                         <tr>
                             <th style="width: 5%; border-left: none;">NO.</th>
