@@ -93,7 +93,11 @@
                                 <input type="number" name="harga_per_liter[]" required min="0" value="16000" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold input-harga-liter">
                             </td>
                             <td class="py-3 px-4">
-                                <input type="number" name="total_harga[]" required readonly class="w-full px-3 py-2 rounded border border-gray-100 bg-gray-50 text-emerald-700 outline-none text-sm font-bold input-total-harga">
+                                <div class="flex items-center gap-1 bg-gray-50 px-3 py-2 rounded border border-gray-100">
+                                    <span class="text-sm font-bold text-gray-500">Rp</span>
+                                    <input type="text" readonly class="w-full bg-transparent border-none p-0 focus:ring-0 text-emerald-700 outline-none text-sm font-bold input-total-harga-display" value="0">
+                                    <input type="hidden" name="total_harga[]" class="input-total-harga" value="0">
+                                </div>
                             </td>
                             <td class="py-3 px-4">
                                 <input type="text" name="keterangan_pengajuan[]" placeholder="Cth: UNTUK OPERASIONAL" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm font-bold uppercase">
@@ -263,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const hargaLiter = parseFloat(row.querySelector('.input-harga-liter').value) || 0;
             const total = Math.round(liter * hargaLiter);
             
+            row.querySelector('.input-total-harga-display').value = formatRp(total);
             row.querySelector('.input-total-harga').value = total;
             grandTotal += total;
         });
@@ -275,7 +280,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const newRow = firstRow.cloneNode(true);
         
         newRow.querySelector('input[name="jumlah_liter[]"]').value = '';
-        newRow.querySelector('input[name="total_harga[]"]').value = '';
+        newRow.querySelector('.input-total-harga-display').value = '0';
+        newRow.querySelector('.input-total-harga').value = '0';
         newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = '';
         
         container.appendChild(newRow);
