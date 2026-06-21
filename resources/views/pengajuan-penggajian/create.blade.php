@@ -180,11 +180,11 @@
                                        data-tanggal-mulai="{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }}"
                                        data-tanggal-akhir="{{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}"
                                        data-total="{{ $laporan->total_keseluruhan }}"
-                                       data-keterangan="{{ $laporan->keterangan }}">
+                                       data-keterangan="{{ $laporan->generated_keterangan }}">
                             </td>
                             <td class="py-3 px-4 text-sm font-bold text-gray-800">{{ \Carbon\Carbon::parse($laporan->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($laporan->tanggal_akhir)->format('d M Y') }}</td>
                             <td class="py-3 px-4 text-sm font-semibold text-emerald-600">{{ $laporan->lokasi_kebun }}</td>
-                            <td class="py-3 px-4 text-sm text-gray-600">{{ $laporan->keterangan ?? '-' }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-600">{{ $laporan->generated_keterangan ?? '-' }}</td>
                             <td class="py-3 px-4 text-sm font-bold text-gray-800 text-right">Rp {{ number_format($laporan->total_keseluruhan, 0, ',', '.') }}</td>
                         </tr>
                         @empty

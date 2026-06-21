@@ -21,7 +21,23 @@ class PengajuanPenggajianController extends Controller
     {
         $lokasiList = \App\Models\Penggajian::select('lokasi_kebun')->distinct()->pluck('lokasi_kebun');
         $kebuns = Kebun::whereIn('lokasi', $lokasiList)->orderBy('lokasi', 'asc')->get()->unique('lokasi');
-        $penggajians = \App\Models\Penggajian::orderBy('tanggal_mulai', 'desc')->get();
+        $penggajians = \App\Models\Penggajian::with(['details.karyawan.jabatans'])->orderBy('tanggal_mulai', 'desc')->get();
+        
+        $penggajians->transform(function ($penggajian) {
+            $types = [];
+            foreach ($penggajian->details as $detail) {
+                $tipe = $detail->tipe_pekerjaan;
+                $jabatan = $detail->karyawan->jabatans->first()->nama ?? 'TIDAK DIKETAHUI';
+                $name = $tipe . ' - ' . $jabatan;
+                if (!in_array($name, $types)) {
+                    $types[] = $name;
+                }
+            }
+            $keterangan = count($types) > 0 ? 'Upah ' . implode(', Upah ', array_map(function($t) { return ucwords(strtolower($t)); }, $types)) : ($penggajian->keterangan ?? '');
+            $penggajian->generated_keterangan = $keterangan;
+            return $penggajian;
+        });
+
         return view('pengajuan-penggajian.create', compact('kebuns', 'penggajians'));
     }
 
@@ -110,7 +126,22 @@ class PengajuanPenggajianController extends Controller
             $kebuns->push($pengajuan_penggajian->kebun);
         }
         
-        $penggajians = \App\Models\Penggajian::orderBy('tanggal_mulai', 'desc')->get();
+        $penggajians = \App\Models\Penggajian::with(['details.karyawan.jabatans'])->orderBy('tanggal_mulai', 'desc')->get();
+        
+        $penggajians->transform(function ($penggajian) {
+            $types = [];
+            foreach ($penggajian->details as $detail) {
+                $tipe = $detail->tipe_pekerjaan;
+                $jabatan = $detail->karyawan->jabatans->first()->nama ?? 'TIDAK DIKETAHUI';
+                $name = $tipe . ' - ' . $jabatan;
+                if (!in_array($name, $types)) {
+                    $types[] = $name;
+                }
+            }
+            $keterangan = count($types) > 0 ? 'Upah ' . implode(', Upah ', array_map(function($t) { return ucwords(strtolower($t)); }, $types)) : ($penggajian->keterangan ?? '');
+            $penggajian->generated_keterangan = $keterangan;
+            return $penggajian;
+        });
         
         return view('pengajuan-penggajian.edit', compact('pengajuan_penggajian', 'kebuns', 'penggajians'));
     }

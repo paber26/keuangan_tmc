@@ -173,8 +173,8 @@
             </tr>
             <tr class="names">
                 <td style="border-left: none;">
-                    <span class="sign-line">Prisillia Sondakh</span>
-                    <span style="font-weight: normal;">Admin Perkebunan</span>
+                    <span class="sign-line">Aldo</span>
+                    <span style="font-weight: normal;">SPV Ops Perkebunan</span>
                 </td>
                 <td>
                     <span class="sign-line">Henry Harinda</span>
