@@ -153,7 +153,7 @@
     </div>
 
     @if($pengajuan_bbm->images && $pengajuan_bbm->images->count() > 0)
-    <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
+    <div id="dokumentasi" class="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:p-8">
         <h3 class="text-xl font-bold text-gray-800 mb-6">Dokumentasi / Bukti ({{ $pengajuan_bbm->images->count() }})</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             @foreach($pengajuan_bbm->images as $img)

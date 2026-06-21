@@ -106,7 +106,7 @@
             </div>
         </div>
         @if($pemakaian_bbm->images->count() > 0)
-        <div class="px-8 py-6 border-t border-gray-100 bg-gray-50/30">
+        <div id="dokumentasi" class="px-8 py-6 border-t border-gray-100 bg-gray-50/30">
             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-widest mb-4">Dokumentasi / Bukti Lampiran</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 @foreach($pemakaian_bbm->images as $img)
