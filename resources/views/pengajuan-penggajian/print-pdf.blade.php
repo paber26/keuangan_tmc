@@ -150,8 +150,8 @@
                 </tr>
                 @endforeach
                 
-                {{-- Fill empty rows up to 20 --}}
-                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 20; $i++)
+                {{-- Fill empty rows up to 10 --}}
+                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 10; $i++)
                 <tr>
                     <td class="text-center font-bold" style="border-left: none; height: 16px;">{{ $i }}</td>
                     <td></td>
