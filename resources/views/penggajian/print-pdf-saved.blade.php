@@ -165,7 +165,7 @@
                 </tr>
             </thead>
             <tbody>
-                @php $no = 1; @endphp
+                @php $no = 1; $subTotalHari = 0; $subTotalUpah = 0; @endphp
                 @foreach($items as $data)
                     <tr>
                         <td class="text-center">{{ $no++ }}</td>
@@ -193,7 +193,29 @@
                             </div>
                         </td>
                     </tr>
+                    @php 
+                        $subTotalHari += $data->jumlah_hari_kerja;
+                        $subTotalUpah += $data->total_upah;
+                    @endphp
                 @endforeach
+                <tr>
+                    <td class="text-center uppercase" colspan="{{ count($period) + 2 }}" style="font-weight: bold;">JUMLAH</td>
+                    <td class="text-center" style="font-weight: bold;">{{ $subTotalHari }}</td>
+                    <td class="text-left" style="font-weight: bold;">
+                        <div class="currency">
+                            <span class="curr-sym">Rp</span>
+                            <span class="curr-val">{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
+                            <div class="clear"></div>
+                        </div>
+                    </td>
+                    <td class="text-left bg-gray" style="font-weight: bold;">
+                        <div class="currency">
+                            <span class="curr-sym">Rp</span>
+                            <span class="curr-val">{{ number_format($subTotalUpah, 0, ',', '.') }}</span>
+                            <div class="clear"></div>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
         @endforeach

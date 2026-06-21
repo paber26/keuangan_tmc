@@ -130,10 +130,7 @@
                         @endforeach
                         
                         <tr>
-                            <td class="border border-black p-1 text-center uppercase" colspan="2">JUMLAH</td>
-                            @foreach($period as $date)
-                                <td class="border border-black p-1 bg-gray-100"></td>
-                            @endforeach
+                            <td class="border border-black p-1 text-center uppercase" colspan="{{ count($period) + 2 }}">JUMLAH</td>
                             <td class="border border-black p-1">{{ $subTotalHari }}</td>
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
