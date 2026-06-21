@@ -129,7 +129,21 @@
         
         if ($penggajian && $penggajian->details) {
             foreach($penggajian->details as $detail) {
-                $jabatanName = $detail->jabatan ?: ($detail->tipe_pekerjaan ?: 'Lain-lain');
+                // Determine Jabatan Name exactly like in the modal description
+                $jabatanName = $detail->jabatan;
+                if (!$jabatanName || strtolower($jabatanName) === 'harian' || strtolower($jabatanName) === 'borongan') {
+                    $relJabatan = $detail->karyawan->jabatans->first()->nama ?? null;
+                    if ($relJabatan) {
+                        $jabatanName = $relJabatan;
+                    } else {
+                        $jabatanName = $detail->tipe_pekerjaan ?: 'Lain-lain';
+                    }
+                }
+                
+                // If it still resolves to just 'Harian', format it as 'Harian Kumpul' to be more descriptive per user request
+                if (strtolower($jabatanName) === 'harian') {
+                    $jabatanName = 'Harian Kumpul';
+                }
                 
                 if(!isset($grouped[$jabatanName])) {
                     $grouped[$jabatanName] = 0;
