@@ -225,13 +225,23 @@
         color: #065f46 !important;
         border-radius: 0.375rem !important;
         margin-top: 4px !important;
-        padding: 2px 8px !important;
+        padding: 2px 8px 2px 24px !important;
+        position: relative;
     }
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
         color: #059669 !important;
-        margin-right: 5px !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         border-right: 1px solid #a7f3d0 !important;
-        padding-right: 5px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-weight: bold !important;
     }
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
         background-color: #d1fae5 !important;
