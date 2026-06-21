@@ -45,8 +45,8 @@
 
             {{-- Judul Laporan --}}
             <div class="mb-4">
-                <h2 class="text-lg font-bold uppercase">LAPORAN PEKERJAAN MINGGUAN DI KEBUN {{ $selectedLokasi }}</h2>
-                <h3 class="text-md font-bold uppercase">PERIODE {{ \Carbon\Carbon::parse($startDate)->isoFormat('D') }}-{{ \Carbon\Carbon::parse($endDate)->isoFormat('D MMMM Y') }}</h3>
+                <h2 class="text-lg font-bold uppercase">LAPORAN PEKERJAAN MINGGUAN DI KEBUN {{ $penggajian->lokasi_kebun }}</h2>
+                <h3 class="text-md font-bold uppercase">PERIODE {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->isoFormat('D') }}-{{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->isoFormat('D MMMM Y') }}</h3>
             </div>
 
             {{-- Tabel HARIAN --}}
@@ -84,7 +84,7 @@
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($tarifHarian, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                             <td class="border border-black p-1 text-left bg-gray-100">
@@ -150,7 +150,7 @@
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($tarifKupas, 0, ',', '.') }}</span>
+                                    <span>{{ number_format($penggajian->tarif_kupas, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                             <td class="border border-black p-1 text-left bg-gray-100">
