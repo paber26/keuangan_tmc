@@ -50,9 +50,7 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('dokumentasi', \App\Http\Controllers\DokumentasiHarianController::class);
 
     // Penggajian
-    Route::get('/penggajian/gaji-bulanan', function() { return view('gaji.index'); })->name('gaji.index');
-    Route::get('/penggajian/upah-harian', function() { return view('upah-harian.index'); })->name('upah-harian.index');
-    Route::get('/penggajian/upah-borongan', function() { return view('upah-borongan.index'); })->name('upah-borongan.index');
+    Route::get('/penggajian/laporan-mingguan', [\App\Http\Controllers\PenggajianController::class, 'index'])->name('penggajian.index');
 
     // Keuangan & Laporan
     Route::get('/transaksi', function() { return view('transaksi.index'); })->name('transaksi.index');

@@ -120,20 +120,10 @@
                 <div class="pt-4 pb-1">
                     <p class="px-3 text-[10px] font-semibold text-gray-500 uppercase tracking-widest">Penggajian</p>
                 </div>
-                <a href="{{ route('gaji.index') }}" 
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('gaji.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route('penggajian.index') }}" 
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('penggajian.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                    Gaji Bulanan
-                </a>
-                <a href="{{ route('upah-harian.index') }}" 
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('upah-harian.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Upah Harian
-                </a>
-                <a href="{{ route('upah-borongan.index') }}" 
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('upah-borongan.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    Upah Borongan
+                    Laporan Penggajian
                 </a>
 
                 {{-- Manajemen BBM --}}
