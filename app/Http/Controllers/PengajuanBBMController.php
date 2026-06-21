@@ -174,11 +174,7 @@ class PengajuanBBMController extends Controller
         }
     }
 
-    public function show(PengajuanBBM $pengajuan_bbm)
-    {
-        $pengajuan_bbm->load(['items', 'kebun', 'karyawan']);
-        return view('pengajuan-bbm.show', compact('pengajuan_bbm'));
-    }
+
 
     public function updateStatus(Request $request, PengajuanBBM $pengajuan_bbm)
     {
