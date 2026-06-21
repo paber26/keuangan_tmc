@@ -141,59 +141,64 @@
     </div>
 
     <!-- HARIAN -->
-    <div class="section-title">HARIAN</div>
-    <table>
-        <thead>
-            <tr>
-                <th rowspan="2" style="width: 20px;">NO.</th>
-                <th rowspan="2" style="width: 110px;">NAMA</th>
-                <th colspan="{{ count($period) }}">PERIODE</th>
-                <th rowspan="2" style="width: 35px;">HARI<br>KERJA</th>
-                <th rowspan="2" style="width: 65px;">UPAH<br>PER HARI</th>
-                <th rowspan="2" style="width: 80px;">TOTAL UPAH</th>
-            </tr>
-            <tr>
-                @foreach($period as $date)
-                    <th>{{ $date->format('j') }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @php $no = 1; @endphp
-            @forelse($dataHarian as $data)
+    @php
+        $groupedHarian = $dataHarian->groupBy('jabatan');
+    @endphp
+    
+    @if(count($dataHarian) > 0)
+        @foreach($groupedHarian as $jabatan => $items)
+        <div class="section-title" style="{{ $loop->first ? '' : 'margin-top: 20px;' }}">HARIAN - {{ strtoupper($jabatan ?: 'TIDAK DIKETAHUI') }}</div>
+        <table>
+            <thead>
                 <tr>
-                    <td class="text-center">{{ $no++ }}</td>
-                    <td class="text-left uppercase">{{ $data->nama_karyawan }}</td>
+                    <th rowspan="2" style="width: 20px;">NO.</th>
+                    <th rowspan="2" style="width: 110px;">NAMA</th>
+                    <th colspan="{{ count($period) }}">PERIODE</th>
+                    <th rowspan="2" style="width: 35px;">HARI<br>KERJA</th>
+                    <th rowspan="2" style="width: 65px;">UPAH<br>PER HARI</th>
+                    <th rowspan="2" style="width: 80px;">TOTAL UPAH</th>
+                </tr>
+                <tr>
                     @foreach($period as $date)
-                        <td class="text-center">
-                            @if(isset($data->rincian_harian[$date->format('Y-m-d')]))
-                                V
-                            @endif
-                        </td>
+                        <th>{{ $date->format('j') }}</th>
                     @endforeach
-                    <td class="text-center">{{ $data->jumlah_hari_kerja }}</td>
-                    <td class="text-left">
-                        <div class="currency">
-                            <span class="curr-sym">Rp</span>
-                            <span class="curr-val">{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
-                            <div class="clear"></div>
-                        </div>
-                    </td>
-                    <td class="text-left bg-gray">
-                        <div class="currency">
-                            <span class="curr-sym">Rp</span>
-                            <span class="curr-val">{{ number_format($data->total_upah, 0, ',', '.') }}</span>
-                            <div class="clear"></div>
-                        </div>
-                    </td>
                 </tr>
-            @empty
-                <tr>
-                    <td class="text-center" colspan="{{ count($period) + 4 }}">Belum ada data harian.</td>
-                </tr>
-            @endforelse
-            
-            @if(count($dataHarian) > 0)
+            </thead>
+            <tbody>
+                @php $no = 1; @endphp
+                @foreach($items as $data)
+                    <tr>
+                        <td class="text-center">{{ $no++ }}</td>
+                        <td class="text-left uppercase">{{ $data->nama_karyawan }}</td>
+                        @foreach($period as $date)
+                            <td class="text-center">
+                                @if(isset($data->rincian_harian[$date->format('Y-m-d')]))
+                                    V
+                                @endif
+                            </td>
+                        @endforeach
+                        <td class="text-center">{{ $data->jumlah_hari_kerja }}</td>
+                        <td class="text-left">
+                            <div class="currency">
+                                <span class="curr-sym">Rp</span>
+                                <span class="curr-val">{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
+                                <div class="clear"></div>
+                            </div>
+                        </td>
+                        <td class="text-left bg-gray">
+                            <div class="currency">
+                                <span class="curr-sym">Rp</span>
+                                <span class="curr-val">{{ number_format($data->total_upah, 0, ',', '.') }}</span>
+                                <div class="clear"></div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @endforeach
+        
+        <table style="margin-top: -1px;">
             <tr class="totals-row">
                 <td colspan="{{ count($period) + 4 }}" style="text-align: right; padding-right: 10px;">TOTAL UPAH HARIAN</td>
                 <td colspan="1" style="text-align: left; background-color: #f3f4f6;">
@@ -204,9 +209,15 @@
                     </div>
                 </td>
             </tr>
-            @endif
-        </tbody>
-    </table>
+        </table>
+    @else
+        <div class="section-title">HARIAN</div>
+        <table>
+            <tr>
+                <td class="text-center" colspan="{{ count($period) + 4 }}">Belum ada data harian.</td>
+            </tr>
+        </table>
+    @endif
 
     <!-- KUPAS KELAPA -->
     <div class="section-title">KUPAS KELAPA</div>

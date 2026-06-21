@@ -73,37 +73,68 @@
             </div>
 
             {{-- Tabel HARIAN --}}
-            <div class="mb-2 font-bold text-sm">HARIAN</div>
-            <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
-                <thead class="bg-[#FFE600]">
-                    <tr>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 30px;">NO.</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 180px;">NAMA</th>
-                        <th class="border border-black p-1" colspan="{{ count($period) }}">PERIODE</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 50px;">HARI<br>KERJA</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>PER HARI</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 100px;">TOTAL UPAH</th>
-                    </tr>
-                    <tr>
-                        @foreach($period as $date)
-                            <th class="border border-black p-1">{{ $date->format('j') }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $no = 1; $grandTotalHari = 0; @endphp
-                    @forelse($dataHarian as $karyawanId => $data)
+            @php
+                $groupedHarian = collect($dataHarian)->groupBy('jabatan');
+            @endphp
+            
+            @if(count($dataHarian) > 0)
+                @foreach($groupedHarian as $jabatan => $items)
+                <div class="mb-2 font-bold text-sm {{ $loop->first ? '' : 'mt-6' }}">HARIAN - {{ strtoupper($jabatan) }}</div>
+                <table class="w-full border-collapse border border-black mb-4 text-xs text-center font-bold">
+                    <thead class="bg-[#FFE600]">
                         <tr>
-                            <td class="border border-black p-1">{{ $no++ }}</td>
-                            <td class="border border-black p-1 text-left uppercase">{{ $data['nama'] }}</td>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 30px;">NO.</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 180px;">NAMA</th>
+                            <th class="border border-black p-1" colspan="{{ count($period) }}">PERIODE</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 50px;">HARI<br>KERJA</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>PER HARI</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 100px;">TOTAL UPAH</th>
+                        </tr>
+                        <tr>
                             @foreach($period as $date)
-                                <td class="border border-black p-1 relative">
-                                    @if(isset($data['hari'][$date->format('Y-m-d')]))
-                                        V
-                                    @endif
-                                </td>
+                                <th class="border border-black p-1">{{ $date->format('j') }}</th>
                             @endforeach
-                            <td class="border border-black p-1">{{ $data['total_hari'] }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $no = 1; $subTotalHari = 0; $subTotalUpah = 0; @endphp
+                        @foreach($items as $data)
+                            <tr>
+                                <td class="border border-black p-1">{{ $no++ }}</td>
+                                <td class="border border-black p-1 text-left uppercase">{{ $data['nama'] }}</td>
+                                @foreach($period as $date)
+                                    <td class="border border-black p-1 relative">
+                                        @if(isset($data['hari'][$date->format('Y-m-d')]))
+                                            V
+                                        @endif
+                                    </td>
+                                @endforeach
+                                <td class="border border-black p-1">{{ $data['total_hari'] }}</td>
+                                <td class="border border-black p-1 text-left">
+                                    <div class="flex justify-between">
+                                        <span>Rp</span>
+                                        <span>{{ number_format($tarifHarian, 0, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                                <td class="border border-black p-1 text-left bg-gray-100">
+                                    <div class="flex justify-between">
+                                        <span>Rp</span>
+                                        <span>{{ number_format($data['total_upah'], 0, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @php 
+                                $subTotalHari += $data['total_hari'];
+                                $subTotalUpah += $data['total_upah'];
+                            @endphp
+                        @endforeach
+                        
+                        <tr>
+                            <td class="border border-black p-1 text-center uppercase" colspan="2">JUMLAH</td>
+                            @foreach($period as $date)
+                                <td class="border border-black p-1 bg-gray-100"></td>
+                            @endforeach
+                            <td class="border border-black p-1">{{ $subTotalHari }}</td>
                             <td class="border border-black p-1 text-left">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
@@ -113,41 +144,31 @@
                             <td class="border border-black p-1 text-left bg-gray-100">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($data['total_upah'], 0, ',', '.') }}</span>
+                                    <span>{{ number_format($subTotalUpah, 0, ',', '.') }}</span>
                                 </div>
                             </td>
                         </tr>
-                        @php $grandTotalHari += $data['total_hari']; @endphp
-                    @empty
-                        <tr>
-                            <td class="border border-black p-2" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td>
-                        </tr>
-                    @endforelse
-                    
-                    {{-- Footer Harian --}}
-                    @if(count($dataHarian) > 0)
+                    </tbody>
+                </table>
+                @endforeach
+                
+                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
                     <tr>
-                        <td class="border border-black p-1 text-center uppercase" colspan="2">JUMLAH</td>
-                        @foreach($period as $date)
-                            <td class="border border-black p-1 bg-gray-100"></td>
-                        @endforeach
-                        <td class="border border-black p-1">{{ $grandTotalHari }}</td>
-                        <td class="border border-black p-1 text-left">
-                            <div class="flex justify-between">
-                                <span>Rp</span>
-                                <span>{{ number_format($tarifHarian, 0, ',', '.') }}</span>
-                            </div>
-                        </td>
-                        <td class="border border-black p-1 text-left bg-gray-100">
+                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH HARIAN</td>
+                        <td class="border border-black p-1 text-left font-bold text-emerald-600 bg-emerald-50">
                             <div class="flex justify-between">
                                 <span>Rp</span>
                                 <span>{{ number_format($totalUpahHarian, 0, ',', '.') }}</span>
                             </div>
                         </td>
                     </tr>
-                    @endif
-                </tbody>
-            </table>
+                </table>
+            @else
+                <div class="mb-2 font-bold text-sm">HARIAN</div>
+                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
+                    <tr><td class="border border-black p-2 text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td></tr>
+                </table>
+            @endif
 
             {{-- Tabel KUPAS KELAPA --}}
             <div class="mb-2 font-bold text-sm">KUPAS KELAPA</div>

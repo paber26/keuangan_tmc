@@ -50,70 +50,78 @@
             </div>
 
             {{-- Tabel HARIAN --}}
-            <div class="mb-2 font-bold text-sm">HARIAN</div>
-            <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
-                <thead class="bg-[#FFE600]">
-                    <tr>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 30px;">NO.</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 180px;">NAMA</th>
-                        <th class="border border-black p-1" colspan="{{ count($period) }}">PERIODE</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 50px;">HARI<br>KERJA</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>PER HARI</th>
-                        <th class="border border-black p-1 align-middle" rowspan="2" style="width: 100px;">TOTAL UPAH</th>
-                    </tr>
-                    <tr>
-                        @foreach($period as $date)
-                            <th class="border border-black p-1">{{ $date->format('j') }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $no = 1; @endphp
-                    @forelse($dataHarian as $data)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="border border-black p-1">{{ $no++ }}</td>
-                            <td class="border border-black p-1 text-left uppercase">{{ $data->nama_karyawan }}</td>
-                            @foreach($period as $date)
-                                <td class="border border-black p-1 relative">
-                                    @if(isset($data->rincian_harian[$date->format('Y-m-d')]))
-                                        V
-                                    @endif
-                                </td>
-                            @endforeach
-                            <td class="border border-black p-1">{{ $data->jumlah_hari_kerja }}</td>
-                            <td class="border border-black p-1 text-left">
-                                <div class="flex justify-between">
-                                    <span>Rp</span>
-                                    <span>{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
-                                </div>
-                            </td>
-                            <td class="border border-black p-1 text-left bg-gray-100">
-                                <div class="flex justify-between">
-                                    <span>Rp</span>
-                                    <span>{{ number_format($data->total_upah, 0, ',', '.') }}</span>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
+            @php
+                $groupedHarian = $dataHarian->groupBy('jabatan');
+            @endphp
+            
+            @if(count($dataHarian) > 0)
+                @foreach($groupedHarian as $jabatan => $items)
+                <div class="mb-2 font-bold text-sm {{ $loop->first ? '' : 'mt-6' }}">HARIAN - {{ strtoupper($jabatan ?: 'TIDAK DIKETAHUI') }}</div>
+                <table class="w-full border-collapse border border-black mb-4 text-xs text-center font-bold">
+                    <thead class="bg-[#FFE600]">
                         <tr>
-                            <td class="border border-black p-2" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 30px;">NO.</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 180px;">NAMA</th>
+                            <th class="border border-black p-1" colspan="{{ count($period) }}">PERIODE</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 50px;">HARI<br>KERJA</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 90px;">UPAH<br>PER HARI</th>
+                            <th class="border border-black p-1 align-middle" rowspan="2" style="width: 100px;">TOTAL UPAH</th>
                         </tr>
-                    @endforelse
-                    
-                    {{-- Footer Harian --}}
-                    @if(count($dataHarian) > 0)
-                    <tr class="bg-gray-50 font-bold border-t-2 border-gray-200">
-                        <td colspan="{{ count($period) + 2 }}" class="border border-black p-1 text-right">TOTAL UPAH HARIAN</td>
-                        <td colspan="2" class="border border-black p-1 text-left text-emerald-600">
+                        <tr>
+                            @foreach($period as $date)
+                                <th class="border border-black p-1">{{ $date->format('j') }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $no = 1; @endphp
+                        @foreach($items as $data)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="border border-black p-1">{{ $no++ }}</td>
+                                <td class="border border-black p-1 text-left uppercase">{{ $data->nama_karyawan }}</td>
+                                @foreach($period as $date)
+                                    <td class="border border-black p-1 relative">
+                                        @if(isset($data->rincian_harian[$date->format('Y-m-d')]))
+                                            V
+                                        @endif
+                                    </td>
+                                @endforeach
+                                <td class="border border-black p-1">{{ $data->jumlah_hari_kerja }}</td>
+                                <td class="border border-black p-1 text-left">
+                                    <div class="flex justify-between">
+                                        <span>Rp</span>
+                                        <span>{{ number_format($penggajian->tarif_harian, 0, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                                <td class="border border-black p-1 text-left bg-gray-100">
+                                    <div class="flex justify-between">
+                                        <span>Rp</span>
+                                        <span>{{ number_format($data->total_upah, 0, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @endforeach
+                
+                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
+                    <tr>
+                        <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH HARIAN</td>
+                        <td class="border border-black p-1 text-left font-bold text-emerald-600 bg-emerald-50">
                             <div class="flex justify-between">
                                 <span>Rp</span>
                                 <span>{{ number_format($penggajian->total_upah_harian, 0, ',', '.') }}</span>
                             </div>
                         </td>
                     </tr>
-                    @endif
-                </tbody>
-            </table>
+                </table>
+            @else
+                <div class="mb-2 font-bold text-sm">HARIAN</div>
+                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
+                    <tr><td class="border border-black p-2 text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td></tr>
+                </table>
+            @endif
 
             {{-- Tabel KUPAS KELAPA --}}
             <div class="mb-2 font-bold text-sm">KUPAS KELAPA</div>

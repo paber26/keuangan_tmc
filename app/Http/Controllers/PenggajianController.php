@@ -157,6 +157,7 @@ class PenggajianController extends Controller
                 if (!isset($dataKupas[$karyawanId])) {
                     $dataKupas[$karyawanId] = [
                         'nama' => $nama,
+                        'jabatan' => $jabatan,
                         'hari' => [],
                         'total_butir' => 0,
                         'total_upah' => 0
@@ -168,6 +169,7 @@ class PenggajianController extends Controller
                 if (!isset($dataHarian[$karyawanId])) {
                     $dataHarian[$karyawanId] = [
                         'nama' => $nama,
+                        'jabatan' => $jabatan,
                         'hari' => [],
                         'total_hari' => 0,
                         'total_upah' => 0
@@ -205,6 +207,7 @@ class PenggajianController extends Controller
                 'penggajian_id' => $penggajian->id,
                 'karyawan_id' => $karyawanId,
                 'nama_karyawan' => $data['nama'],
+                'jabatan' => $data['jabatan'] ?? 'Harian',
                 'tipe_pekerjaan' => 'Harian',
                 'jumlah_hari_kerja' => $data['total_hari'],
                 'jumlah_volume' => 0,
@@ -218,6 +221,7 @@ class PenggajianController extends Controller
                 'penggajian_id' => $penggajian->id,
                 'karyawan_id' => $karyawanId,
                 'nama_karyawan' => $data['nama'],
+                'jabatan' => $data['jabatan'] ?? 'Kupas Kelapa',
                 'tipe_pekerjaan' => 'Kupas Kelapa',
                 'jumlah_hari_kerja' => 0,
                 'jumlah_volume' => $data['total_butir'],
