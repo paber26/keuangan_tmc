@@ -56,18 +56,16 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tambahkan Foto Baru (Opsional)</label>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- File Upload Option -->
-                    <div class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:bg-gray-50 transition-colors relative cursor-pointer" id="drop-zone">
+                    <label for="file-upload" class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-xl hover:bg-gray-50 transition-colors relative cursor-pointer" id="drop-zone">
                         <svg class="mx-auto h-10 w-10 text-gray-400 mb-2" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         <div class="flex text-sm text-gray-600 justify-center">
-                            <label for="file-upload" class="relative cursor-pointer rounded-md font-medium text-emerald-600 hover:text-emerald-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-emerald-500">
-                                <span>Pilih File Komputer</span>
-                                <input id="file-upload" name="images[]" type="file" multiple class="sr-only" accept="image/*">
-                            </label>
+                            <span class="relative font-medium text-emerald-600">Pilih File Komputer</span>
+                            <input id="file-upload" name="images[]" type="file" multiple class="sr-only" accept="image/*">
                         </div>
                         <p class="text-xs text-gray-500 mt-1">Bisa pilih banyak sekaligus</p>
-                    </div>
+                    </label>
 
                     <!-- Clipboard Paste Option -->
                     <button type="button" onclick="pasteFromClipboard()" id="clipboard-zone" class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-amber-200 border-dashed rounded-xl bg-amber-50 hover:bg-amber-100 transition-colors relative cursor-pointer outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
