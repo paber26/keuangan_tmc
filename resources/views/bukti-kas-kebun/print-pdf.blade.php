@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Bukti Pengeluaran Kas Kebun - {{ $bukti_kas_kebun->no_bukti ?: $bukti_kas_kebun->id }}</title>
     <style>
-        @page { size: A5 landscape; margin: 15px 25px 15px 15px; }
+        @page { size: A5 landscape; margin: 10px 20px 10px 10px; }
         body { font-family: 'Arial', sans-serif; font-size: 11px; color: #000; margin: 0; }
         table { border-collapse: collapse; width: 100%; }
         
@@ -21,13 +21,15 @@
             text-align: center;
             position: absolute;
             top: 250px;
-            left: -140px;
+            left: -130px;
         }
 
         .main-box {
-            border: 2px solid black;
+            border: 2px solid #000;
+            width: 100%;
         }
 
+        /* Header table */
         .header-table td {
             border-bottom: 2px solid black;
             border-right: 2px solid black;
@@ -36,49 +38,41 @@
             border-right: none;
         }
 
+        /* Sub header */
         .sub-header-table td {
             border-bottom: 2px solid black;
             border-right: 2px solid black;
-            padding: 6px 10px;
+            padding: 4px 8px;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
         }
         .sub-header-table td:last-child {
             border-right: none;
         }
 
-        .items-table td {
+        /* Items table */
+        .items-table th, .items-table td {
             border-bottom: 1px solid black;
             border-right: 2px solid black;
-            padding: 4px 6px;
         }
-        .items-table td:last-child {
+        .items-table td:last-child, .items-table th:last-child {
             border-right: none;
         }
         .items-table th {
             border-bottom: 2px solid black;
-            border-right: 2px solid black;
-            background-color: #e5e5e5;
-            padding: 6px;
+            padding: 4px;
             text-align: center;
             font-weight: bold;
             font-style: italic;
         }
-        .items-table th:last-child {
-            border-right: none;
+        .items-table td {
+            padding: 3px 5px;
         }
 
-        .footer-table td {
-            border-bottom: 2px solid black;
-            border-right: 2px solid black;
-        }
-        .footer-table td:last-child {
-            border-right: none;
-        }
-
+        /* Signature block */
         .sign-table td {
             border-right: 2px solid black;
-            padding: 4px;
+            padding: 2px;
             text-align: center;
         }
         .sign-table td:last-child {
@@ -88,8 +82,8 @@
             border-bottom: 2px solid black;
             font-weight: bold;
             font-size: 10px;
+            padding: 3px;
         }
-
         .flex-rp {
             display: inline-block;
             float: left;
