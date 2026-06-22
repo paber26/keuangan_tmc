@@ -152,15 +152,15 @@
                 </tr>
                 @endforeach
                 
-                {{-- Always fill empty rows up to 20, let table height stretch them if needed --}}
-                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 20; $i++)
+                {{-- Fill empty rows to make it full page --}}
+                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 38; $i++)
                 <tr>
-                    <td class="text-center font-bold" style="border-left: none; padding: 0;">{{ $i }}</td>
-                    <td style="padding: 0;"></td>
-                    <td style="padding: 0;"></td>
-                    <td style="padding: 0;"></td>
-                    <td style="padding: 0;"></td>
-                    <td style="border-right: none; padding: 0;"></td>
+                    <td class="text-center font-bold" style="border-left: none; padding: 2px;">{{ $i }}</td>
+                    <td style="padding: 2px;"></td>
+                    <td style="padding: 2px;"></td>
+                    <td style="padding: 2px;"></td>
+                    <td style="padding: 2px;"></td>
+                    <td style="border-right: none; padding: 2px;"></td>
                 </tr>
                 @endfor
             </tbody>
