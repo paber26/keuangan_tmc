@@ -63,6 +63,7 @@
     </div>
 
     {{-- Report Display Area --}}
+    <div id="dynamic-data-container" class="transition-opacity duration-300">
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 overflow-x-auto">
         <div id="printable-area" class="min-w-[900px] text-black">
             
@@ -380,7 +381,6 @@
         </div>
         @endif
     </div>
-
 </div>
 
 @push('styles')
@@ -423,6 +423,26 @@ function zoomImage(url, title) {
         backdrop: `rgba(0,0,0,0.8)`
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Hide data container when filters change to force user to click Hitung
+    const dynamicContainer = document.getElementById('dynamic-data-container');
+    if (dynamicContainer) {
+        const hideContainer = () => {
+            dynamicContainer.style.opacity = '0.5';
+            dynamicContainer.style.pointerEvents = 'none';
+            setTimeout(() => {
+                dynamicContainer.style.display = 'none';
+            }, 300);
+        };
+
+        const filters = document.querySelectorAll('form[action="{{ route('penggajian.create') }}"] input, form[action="{{ route('penggajian.create') }}"] select');
+
+        filters.forEach(filter => {
+            filter.addEventListener('change', hideContainer);
+        });
+    }
+});
 </script>
 @endpush
 

@@ -46,6 +46,7 @@
         </form>
     </div>
 
+    <div id="dynamic-data-container" class="transition-opacity duration-300">
     @if(count($karyawans) > 0)
     <!-- Attendance Table Form -->
     <form action="{{ route('absensi.store') }}" method="POST">
@@ -352,6 +353,7 @@
         </form>
     </div>
     @endif
+    </div>
 </div>
 
 @push('scripts')
@@ -499,6 +501,32 @@
             } else {
                 customContainer.classList.add('hidden');
             }
+        }
+
+        // Hide data container when filters change to force user to click Tampilkan
+        const dynamicContainer = document.getElementById('dynamic-data-container');
+        if (dynamicContainer) {
+            const hideContainer = () => {
+                dynamicContainer.style.opacity = '0.5';
+                dynamicContainer.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    dynamicContainer.style.display = 'none';
+                }, 300);
+            };
+
+            const filters = [
+                document.querySelector('select[name="lokasi"]'),
+                document.querySelector('input[name="week"]'),
+                document.querySelector('input[name="filter_start_date"]'),
+                document.querySelector('input[name="filter_end_date"]'),
+                document.getElementById('toggle-custom-date')
+            ];
+
+            filters.forEach(filter => {
+                if (filter) {
+                    filter.addEventListener('change', hideContainer);
+                }
+            });
         }
     });
 </script>
