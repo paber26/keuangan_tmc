@@ -134,11 +134,6 @@
                     </tbody>
                 </table>
                 @endforeach
-            @else
-                <div class="mb-2 font-bold text-sm">HARIAN</div>
-                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
-                    <tr><td class="border border-black p-2 text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td></tr>
-                </table>
             @endif
 
             {{-- Tabel BORONGAN --}}
@@ -153,7 +148,7 @@
                 $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
             @endphp
             
-            @forelse($groupedBorongan as $jabatan => $items)
+            @foreach($groupedBorongan as $jabatan => $items)
             @php
                 $isKupas = $jabatan === 'Kupas Kelapa';
                 $isPemanjat = $jabatan === 'Pemanjat Kelapa';
@@ -222,12 +217,7 @@
                     </tr>
                 </tbody>
             </table>
-            @empty
-                <div class="mb-2 font-bold text-sm">BORONGAN</div>
-                <table class="w-full border-collapse border border-black mb-8 text-xs text-center font-bold">
-                    <tr><td class="border border-black p-2 text-center" colspan="{{ count($period) + 5 }}">Belum ada data borongan.</td></tr>
-                </table>
-            @endforelse
+            @endforeach
 
             {{-- Tabel AKUMULASI --}}
             <div class="w-full md:w-1/2 mt-8">
