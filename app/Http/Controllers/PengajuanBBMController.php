@@ -23,7 +23,7 @@ class PengajuanBBMController extends Controller
 
     public function create()
     {
-        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
+        $kebun = Kebun::getVirtualKebunList();
         $karyawan = Karyawan::orderBy('nama')->get();
         
         $pemakaian_laporans = PemakaianBBM::with(['kebun', 'karyawan', 'items'])
@@ -36,7 +36,7 @@ class PengajuanBBMController extends Controller
 
     public function edit(PengajuanBBM $pengajuan_bbm)
     {
-        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
+        $kebun = Kebun::getVirtualKebunList();
         $karyawan = Karyawan::orderBy('nama')->get();
         
         $pemakaian_laporans = PemakaianBBM::with(['kebun', 'karyawan', 'items'])

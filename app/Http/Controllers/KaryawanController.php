@@ -23,7 +23,7 @@ class KaryawanController extends Controller
      */
     public function create()
     {
-        $lokasiKebuns = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        $lokasiKebuns = Kebun::getVirtualLokasiList();
         $jabatans = Jabatan::orderBy('nama')->get();
         return view('karyawan.create', compact('lokasiKebuns', 'jabatans'));
     }
@@ -56,7 +56,7 @@ class KaryawanController extends Controller
      */
     public function edit(Karyawan $karyawan)
     {
-        $lokasiKebuns = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        $lokasiKebuns = Kebun::getVirtualLokasiList();
         $jabatans = Jabatan::orderBy('nama')->get();
         return view('karyawan.edit', compact('karyawan', 'lokasiKebuns', 'jabatans'));
     }

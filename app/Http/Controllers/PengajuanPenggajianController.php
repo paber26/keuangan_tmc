@@ -20,7 +20,7 @@ class PengajuanPenggajianController extends Controller
     public function create()
     {
         $lokasiList = \App\Models\Penggajian::select('lokasi_kebun')->distinct()->pluck('lokasi_kebun');
-        $kebuns = Kebun::whereIn('lokasi', $lokasiList)->orderBy('lokasi', 'asc')->get()->unique('lokasi');
+        $kebuns = Kebun::getVirtualKebunList();
         $penggajians = \App\Models\Penggajian::with(['details.karyawan.jabatans'])->orderBy('tanggal_mulai', 'desc')->get();
         
         $penggajians->transform(function ($penggajian) {
@@ -121,7 +121,7 @@ class PengajuanPenggajianController extends Controller
         $pengajuan_penggajian->load('items');
         
         $lokasiList = \App\Models\Penggajian::select('lokasi_kebun')->distinct()->pluck('lokasi_kebun');
-        $kebuns = Kebun::whereIn('lokasi', $lokasiList)->orderBy('lokasi', 'asc')->get()->unique('lokasi');
+        $kebuns = Kebun::getVirtualKebunList();
         
         // Ensure the currently selected kebun is in the list even if no report exists for it
         if ($pengajuan_penggajian->kebun && !$kebuns->contains('id', $pengajuan_penggajian->kebun_id)) {

@@ -14,7 +14,7 @@ class AbsensiController extends Controller
 {
     public function index(Request $request)
     {
-        $lokasiList = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        $lokasiList = Kebun::getVirtualLokasiList();
         $masterJabatans = Jabatan::orderBy('nama')->get();
         
         // Fitur "Remember Last Selection" menggunakan Session

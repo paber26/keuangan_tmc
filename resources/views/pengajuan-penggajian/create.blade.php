@@ -45,7 +45,7 @@
                     <select name="kebun_id" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                         <option value="">-- Pilih Kebun --</option>
                         @foreach($kebuns as $kebun)
-                            <option value="{{ $kebun->id }}" {{ old('kebun_id') == $kebun->id ? 'selected' : '' }}>{{ $kebun->lokasi }}</option>
+                            <option value="{{ $kebun->id }}" {{ old('kebun_id') == $kebun->id ? 'selected' : '' }}>{{ $kebun->virtual_lokasi }}</option>
                         @endforeach
                     </select>
                 </div>

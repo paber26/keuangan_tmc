@@ -39,8 +39,8 @@
                     <select name="lokasi" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm transition-colors">
                         <option value="">Semua Lokasi</option>
                         @foreach($lokasiList as $loc)
-                            <option value="{{ $loc->lokasi }}" {{ request('lokasi') == $loc->lokasi ? 'selected' : '' }}>
-                                {{ $loc->lokasi }}
+                            <option value="{{ $loc->virtual_lokasi }}" {{ request('lokasi') == $loc->lokasi ? 'selected' : '' }}>
+                                {{ $loc->virtual_lokasi }}
                             </option>
                         @endforeach
                     </select>

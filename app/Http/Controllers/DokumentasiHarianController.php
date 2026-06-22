@@ -27,7 +27,7 @@ class DokumentasiHarianController extends Controller
         }
 
         $dokumentasi = $query->orderBy('tanggal', 'desc')->get();
-        $lokasiList = \App\Models\Kebun::orderBy('lokasi', 'asc')->get()->unique('lokasi');
+        $lokasiList = \App\Models\Kebun::getVirtualKebunList();
 
         $viewMode = $request->get('view', 'table'); // default to table
 
@@ -36,7 +36,7 @@ class DokumentasiHarianController extends Controller
 
     public function create()
     {
-        $kebun = \App\Models\Kebun::orderBy('lokasi', 'asc')->get()->unique('lokasi');
+        $kebun = \App\Models\Kebun::getVirtualKebunList();
         $karyawan = \App\Models\Karyawan::orderBy('nama', 'asc')->get();
         return view('dokumentasi.create', compact('kebun', 'karyawan'));
     }
@@ -93,7 +93,7 @@ class DokumentasiHarianController extends Controller
     public function edit(string $id)
     {
         $dokumentasi = DokumentasiHarian::with(['images', 'karyawans'])->findOrFail($id);
-        $kebun = \App\Models\Kebun::orderBy('lokasi', 'asc')->get()->unique('lokasi');
+        $kebun = \App\Models\Kebun::getVirtualKebunList();
         $karyawan = \App\Models\Karyawan::orderBy('nama', 'asc')->get();
         return view('dokumentasi.edit', compact('dokumentasi', 'kebun', 'karyawan'));
     }

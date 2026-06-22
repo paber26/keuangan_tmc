@@ -27,7 +27,7 @@ class PemakaianBBMController extends Controller
 
     public function create()
     {
-        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
+        $kebun = Kebun::getVirtualKebunList();
         $karyawan = Karyawan::orderBy('nama')->get();
         $keterangan_list = PemakaianBBMItem::select('keterangan_pemakaian')
             ->whereNotNull('keterangan_pemakaian')
@@ -148,7 +148,7 @@ class PemakaianBBMController extends Controller
     public function edit(string $id)
     {
         $pemakaian_bbm = PemakaianBBM::with('items')->findOrFail($id);
-        $kebun = Kebun::orderBy('lokasi')->get()->unique('lokasi');
+        $kebun = Kebun::getVirtualKebunList();
         $karyawan = Karyawan::orderBy('nama')->get();
         $keterangan_list = PemakaianBBMItem::select('keterangan_pemakaian')
             ->whereNotNull('keterangan_pemakaian')

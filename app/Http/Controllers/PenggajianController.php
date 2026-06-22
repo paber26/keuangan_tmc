@@ -20,7 +20,7 @@ class PenggajianController extends Controller
 
     public function create(Request $request)
     {
-        $lokasiList = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        $lokasiList = Kebun::getVirtualLokasiList();
 
         $selectedLokasi = $request->get('lokasi', $lokasiList->first());
         

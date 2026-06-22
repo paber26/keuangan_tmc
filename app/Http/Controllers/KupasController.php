@@ -10,7 +10,7 @@ class KupasController extends Controller
 {
     public function index(Request $request)
     {
-        $lokasiList = Kebun::select('lokasi')->distinct()->whereNotNull('lokasi')->pluck('lokasi');
+        $lokasiList = Kebun::getVirtualLokasiList();
         
         // Session logic
         if (!$request->has('lokasi') && !$request->has('month')) {
