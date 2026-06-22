@@ -153,7 +153,7 @@
                 @endforeach
                 
                 {{-- Fill empty rows to make it full page --}}
-                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 28; $i++)
+                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 24; $i++)
                 <tr>
                     <td class="text-center font-bold" style="border-left: none; padding: 3px;">{{ $i }}</td>
                     <td style="padding: 3px;"></td>
