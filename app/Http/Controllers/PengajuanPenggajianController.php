@@ -8,6 +8,8 @@ use App\Models\Kebun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PengajuanPenggajianExport;
 
 class PengajuanPenggajianController extends Controller
 {
@@ -240,5 +242,12 @@ class PengajuanPenggajianController extends Controller
         $pdf->setPaper('a4', 'portrait');
         
         return $pdf->stream('Form_Pengajuan_Dana_'.$pengajuan_penggajian->id.'.pdf');
+    }
+
+    public function exportExcel(PengajuanPenggajian $pengajuan_penggajian)
+    {
+        $pengajuan_penggajian->load(['items', 'kebun']);
+        $filename = 'Form_Pengajuan_Dana_' . str_replace('/', '_', $pengajuan_penggajian->no_dokumen ?? $pengajuan_penggajian->id) . '.xlsx';
+        return Excel::download(new PengajuanPenggajianExport($pengajuan_penggajian), $filename);
     }
 }

@@ -113,7 +113,21 @@
             </tr>
             <tr>
                 <td>Pengajuan Untuk Kebutuhan</td>
-                <td>: {{ $pengajuan_penggajian->kebun ? $pengajuan_penggajian->kebun->lokasi : '-' }}</td>
+                <td>: 
+                    @php
+                        $lokasiFull = $pengajuan_penggajian->kebun->lokasi ?? '-';
+                        if ($lokasiFull === 'TOMBATU') {
+                            if (stripos($pengajuan_penggajian->perihal, 'Winor') !== false) {
+                                $lokasiFull = 'TOMBATU - Winor';
+                            } elseif (stripos($pengajuan_penggajian->perihal, 'Tinembelan') !== false) {
+                                $lokasiFull = 'TOMBATU - Tinembelan';
+                            }
+                        } elseif ($lokasiFull === 'RANOKETANG TUA') {
+                            $lokasiFull = 'RANOKETANG TUA - Katuwisan';
+                        }
+                    @endphp
+                    {{ $lokasiFull }}
+                </td>
             </tr>
             <tr>
                 <td>Perihal</td>
@@ -175,7 +189,7 @@
             </tr>
             <tr class="names">
                 <td style="border-left: none;">
-                    <span class="sign-line">Aldo</span>
+                    <span class="sign-line">Aldo Halada</span>
                     <span style="font-weight: normal;">SPV Ops Perkebunan</span>
                 </td>
                 <td>

@@ -31,7 +31,21 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ $item->no_dokumen ?? '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $item->kebun->lokasi ?? '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @php
+                                    $lokasiFull = $item->kebun->lokasi ?? '-';
+                                    if ($lokasiFull === 'TOMBATU') {
+                                        if (stripos($item->perihal, 'Winor') !== false) {
+                                            $lokasiFull = 'TOMBATU - Winor';
+                                        } elseif (stripos($item->perihal, 'Tinembelan') !== false) {
+                                            $lokasiFull = 'TOMBATU - Tinembelan';
+                                        }
+                                    } elseif ($lokasiFull === 'RANOKETANG TUA') {
+                                        $lokasiFull = 'RANOKETANG TUA - Katuwisan';
+                                    }
+                                @endphp
+                                {{ $lokasiFull }}
+                            </td>
                             <td class="px-6 py-4">{{ $item->perihal }}</td>
                             <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Rp {{ number_format($item->grand_total, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">

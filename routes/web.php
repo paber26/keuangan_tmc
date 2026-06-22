@@ -53,6 +53,7 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('pengajuan-penggajian', \App\Http\Controllers\PengajuanPenggajianController::class);
     Route::patch('pengajuan-penggajian/{pengajuan_penggajian}/status', [\App\Http\Controllers\PengajuanPenggajianController::class, 'updateStatus'])->name('pengajuan-penggajian.update-status');
     Route::get('pengajuan-penggajian/{pengajuan_penggajian}/print', [\App\Http\Controllers\PengajuanPenggajianController::class, 'print'])->name('pengajuan-penggajian.print');
+    Route::get('pengajuan-penggajian/{pengajuan_penggajian}/excel', [\App\Http\Controllers\PengajuanPenggajianController::class, 'exportExcel'])->name('pengajuan-penggajian.excel');
 
     // Bukti Kas Kebun
     Route::resource('bukti-kas-kebun', \App\Http\Controllers\BuktiKasKebunController::class);
