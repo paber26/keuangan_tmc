@@ -129,6 +129,7 @@
     </div>
 
     <!-- HARIAN -->
+    @if(count($dataHarian) > 0)
     <table>
         <thead>
             <tr>
@@ -150,7 +151,7 @@
         </thead>
         <tbody>
             @php $no = 1; $grandTotalHari = 0; @endphp
-            @forelse($dataHarian as $karyawanId => $data)
+            @foreach($dataHarian as $karyawanId => $data)
                 <tr>
                     <td class="text-center">{{ $no++ }}</td>
                     <td class="text-left uppercase">{{ $data['nama'] }}</td>
@@ -178,11 +179,7 @@
                     </td>
                 </tr>
                 @php $grandTotalHari += $data['total_hari']; @endphp
-            @empty
-                <tr>
-                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td>
-                </tr>
-            @endforelse
+            @endforeach
             
             @if(count($dataHarian) > 0)
             <tr>
@@ -209,8 +206,10 @@
             @endif
         </tbody>
     </table>
+    @endif
 
     <!-- KUPAS KELAPA -->
+    @if(isset($dataKupas) && count($dataKupas) > 0)
     <table style="margin-top: 20px;">
         <thead>
             <tr>
@@ -234,7 +233,7 @@
             @php $no = 1; $grandTotalButir = 0; $sumPerHari = []; @endphp
             @foreach($period as $date) @php $sumPerHari[$date->format('Y-m-d')] = 0; @endphp @endforeach
 
-            @forelse($dataKupas as $karyawanId => $data)
+            @foreach($dataKupas as $karyawanId => $data)
                 <tr>
                     <td class="text-center">{{ $no++ }}</td>
                     <td class="text-left uppercase">{{ $data['nama'] }}</td>
@@ -263,11 +262,7 @@
                     </td>
                 </tr>
                 @php $grandTotalButir += $data['total_butir']; @endphp
-            @empty
-                <tr>
-                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data kupas kelapa.</td>
-                </tr>
-            @endforelse
+            @endforeach
             
             @if(count($dataKupas) > 0)
             <tr>
@@ -295,6 +290,7 @@
             @endif
         </tbody>
     </table>
+    @endif
 
     <!-- AKUMULASI -->
     <div class="akumulasi-container">

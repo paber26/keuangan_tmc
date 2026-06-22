@@ -243,19 +243,6 @@
             </tbody>
         </table>
         @endforeach
-    @else
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="{{ count($period) + 5 }}" class="table-title">HARIAN</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data harian.</td>
-                </tr>
-            </tbody>
-        </table>
     @endif
 
     <!-- BORONGAN -->
@@ -270,7 +257,7 @@
         $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
     @endphp
     
-    @forelse($groupedBorongan as $jabatan => $items)
+    @foreach($groupedBorongan as $jabatan => $items)
     @php
         $isKupas = $jabatan === 'Kupas Kelapa';
         $isPemanjat = $jabatan === 'Pemanjat Kelapa';
@@ -345,20 +332,7 @@
             </tr>
         </tbody>
     </table>
-    @empty
-        <table style="margin-top: 20px;">
-            <thead>
-                <tr>
-                    <th colspan="{{ count($period) + 5 }}" class="table-title">BORONGAN</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center" colspan="{{ count($period) + 5 }}">Belum ada data borongan.</td>
-                </tr>
-            </tbody>
-        </table>
-    @endforelse
+    @endforeach
 
     <!-- AKUMULASI -->
     <div class="akumulasi-container">
