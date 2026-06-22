@@ -57,9 +57,11 @@ class PenggajianController extends Controller
                 $karyawanId = $absensi->karyawan_id;
                 $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
 
+                $key = $karyawanId . '_' . $jabatan;
+
                 if (in_array($jabatan, ['Kupas Kelapa', 'Pemanjat Kelapa', 'Pemetik Cengkeh'])) {
-                    if (!isset($dataBorongan[$karyawanId])) {
-                        $dataBorongan[$karyawanId] = [
+                    if (!isset($dataBorongan[$key])) {
+                        $dataBorongan[$key] = [
                             'karyawan_id' => $karyawanId,
                             'nama' => $nama,
                             'jabatan' => $jabatan,
@@ -68,11 +70,11 @@ class PenggajianController extends Controller
                             'total_upah' => 0
                         ];
                     }
-                    $dataBorongan[$karyawanId]['hari'][$absensi->tanggal] = $absensi->volume;
-                    $dataBorongan[$karyawanId]['total_volume'] += $absensi->volume;
+                    $dataBorongan[$key]['hari'][$absensi->tanggal] = $absensi->volume;
+                    $dataBorongan[$key]['total_volume'] += $absensi->volume;
                 } else {
-                    if (!isset($dataHarian[$karyawanId])) {
-                        $dataHarian[$karyawanId] = [
+                    if (!isset($dataHarian[$key])) {
+                        $dataHarian[$key] = [
                             'karyawan_id' => $karyawanId,
                             'nama' => $nama,
                             'jabatan' => $jabatan,
@@ -81,8 +83,8 @@ class PenggajianController extends Controller
                             'total_upah' => 0
                         ];
                     }
-                    $dataHarian[$karyawanId]['hari'][$absensi->tanggal] = 'V';
-                    $dataHarian[$karyawanId]['total_hari'] += 1;
+                    $dataHarian[$key]['hari'][$absensi->tanggal] = 'V';
+                    $dataHarian[$key]['total_hari'] += 1;
                 }
             }
 
@@ -172,9 +174,12 @@ class PenggajianController extends Controller
             $karyawanId = $absensi->karyawan_id;
             $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
 
+            $key = $karyawanId . '_' . $jabatan;
+
             if (in_array($jabatan, ['Kupas Kelapa', 'Pemanjat Kelapa', 'Pemetik Cengkeh'])) {
-                if (!isset($dataBorongan[$karyawanId])) {
-                    $dataBorongan[$karyawanId] = [
+                if (!isset($dataBorongan[$key])) {
+                    $dataBorongan[$key] = [
+                        'karyawan_id' => $karyawanId,
                         'nama' => $nama,
                         'jabatan' => $jabatan,
                         'hari' => [],
@@ -182,11 +187,12 @@ class PenggajianController extends Controller
                         'total_upah' => 0
                     ];
                 }
-                $dataBorongan[$karyawanId]['hari'][$absensi->tanggal] = $absensi->volume;
-                $dataBorongan[$karyawanId]['total_volume'] += $absensi->volume;
+                $dataBorongan[$key]['hari'][$absensi->tanggal] = $absensi->volume;
+                $dataBorongan[$key]['total_volume'] += $absensi->volume;
             } else {
-                if (!isset($dataHarian[$karyawanId])) {
-                    $dataHarian[$karyawanId] = [
+                if (!isset($dataHarian[$key])) {
+                    $dataHarian[$key] = [
+                        'karyawan_id' => $karyawanId,
                         'nama' => $nama,
                         'jabatan' => $jabatan,
                         'hari' => [],
@@ -194,8 +200,8 @@ class PenggajianController extends Controller
                         'total_upah' => 0
                     ];
                 }
-                $dataHarian[$karyawanId]['hari'][$absensi->tanggal] = 'V';
-                $dataHarian[$karyawanId]['total_hari'] += 1;
+                $dataHarian[$key]['hari'][$absensi->tanggal] = 'V';
+                $dataHarian[$key]['total_hari'] += 1;
             }
         }
 
@@ -236,10 +242,10 @@ class PenggajianController extends Controller
         ]);
 
         // Insert Details
-        foreach ($dataHarian as $karyawanId => $data) {
+        foreach ($dataHarian as $key => $data) {
             PenggajianDetail::create([
                 'penggajian_id' => $penggajian->id,
-                'karyawan_id' => $karyawanId,
+                'karyawan_id' => $data['karyawan_id'],
                 'nama_karyawan' => $data['nama'],
                 'jabatan' => $data['jabatan'] ?? 'Harian',
                 'tipe_pekerjaan' => 'Harian',
@@ -250,10 +256,10 @@ class PenggajianController extends Controller
             ]);
         }
 
-        foreach ($dataBorongan as $karyawanId => $data) {
+        foreach ($dataBorongan as $key => $data) {
             PenggajianDetail::create([
                 'penggajian_id' => $penggajian->id,
-                'karyawan_id' => $karyawanId,
+                'karyawan_id' => $data['karyawan_id'],
                 'nama_karyawan' => $data['nama'],
                 'jabatan' => $data['jabatan'] ?? 'Borongan',
                 'tipe_pekerjaan' => 'Borongan',

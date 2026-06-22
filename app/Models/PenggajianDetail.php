@@ -13,6 +13,7 @@ class PenggajianDetail extends Model
         'penggajian_id',
         'karyawan_id',
         'nama_karyawan',
+        'jabatan',
         'tipe_pekerjaan',
         'jumlah_hari_kerja',
         'jumlah_volume',
