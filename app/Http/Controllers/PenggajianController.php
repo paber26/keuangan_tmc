@@ -115,11 +115,19 @@ class PenggajianController extends Controller
 
         $dokumentasi = [];
         if ($startDate && $endDate && $selectedLokasi) {
+            $karyawanIds = array_unique(array_merge(
+                array_column($dataHarian, 'karyawan_id'),
+                array_column($dataBorongan, 'karyawan_id')
+            ));
+
             $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawans', 'kebun'])
                 ->whereDate('tanggal', '>=', $startDate)
                 ->whereDate('tanggal', '<=', $endDate)
                 ->whereHas('kebun', function($q) use ($selectedLokasi) {
                     $q->where('lokasi', $selectedLokasi);
+                })
+                ->whereHas('karyawans', function($q) use ($karyawanIds) {
+                    $q->whereIn('karyawans.id', $karyawanIds);
                 })
                 ->orderBy('tanggal', 'asc')
                 ->get()
@@ -296,11 +304,16 @@ class PenggajianController extends Controller
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
         $dataBorongan = $penggajian->details->where('tipe_pekerjaan', 'Borongan');
 
+        $karyawanIds = $penggajian->details->pluck('karyawan_id')->unique()->toArray();
+
         $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawans', 'kebun'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
             ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
             ->whereHas('kebun', function($q) use ($penggajian) {
                 $q->where('lokasi', $penggajian->lokasi_kebun);
+            })
+            ->whereHas('karyawans', function($q) use ($karyawanIds) {
+                $q->whereIn('karyawans.id', $karyawanIds);
             })
             ->orderBy('tanggal', 'asc')
             ->get()
@@ -392,11 +405,16 @@ class PenggajianController extends Controller
         $dataHarian = $penggajian->details->where('tipe_pekerjaan', 'Harian');
         $dataBorongan = $penggajian->details->where('tipe_pekerjaan', 'Borongan');
 
+        $karyawanIds = $penggajian->details->pluck('karyawan_id')->unique()->toArray();
+
         $dokumentasi = \App\Models\DokumentasiHarian::with(['images'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
             ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
             ->whereHas('kebun', function($q) use ($penggajian) {
                 $q->where('lokasi', $penggajian->lokasi_kebun);
+            })
+            ->whereHas('karyawans', function($q) use ($karyawanIds) {
+                $q->whereIn('karyawans.id', $karyawanIds);
             })
             ->orderBy('tanggal', 'asc')
             ->get()
