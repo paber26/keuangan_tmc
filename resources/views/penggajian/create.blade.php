@@ -30,6 +30,14 @@
                     </select>
                 </div>
                 <div class="min-w-[150px]">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Pekerjaan</label>
+                    <select name="kategori" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                        <option value="Semua Pekerjaan" {{ request('kategori') == 'Semua Pekerjaan' ? 'selected' : '' }}>Semua Pekerjaan</option>
+                        <option value="Kelapa" {{ request('kategori') == 'Kelapa' ? 'selected' : '' }}>Kelapa (Tanpa Cengkeh)</option>
+                        <option value="Cengkeh" {{ request('kategori') == 'Cengkeh' ? 'selected' : '' }}>Cengkeh Saja</option>
+                    </select>
+                </div>
+                <div class="min-w-[150px]">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tarif Harian (Rp)</label>
                     <input type="number" name="tarif_harian" value="{{ $tarifHarian }}" class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
@@ -317,6 +325,7 @@
                     <input type="hidden" name="tarif_kupas" value="{{ $tarifKupas }}">
                     <input type="hidden" name="tarif_pemanjat" value="{{ $tarifPemanjat }}">
                     <input type="hidden" name="tarif_pemetik" value="{{ $tarifPemetik }}">
+                    <input type="hidden" name="kategori" value="{{ request('kategori', 'Semua Pekerjaan') }}">
                     <button type="submit" class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-100 text-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
                         Simpan Penggajian

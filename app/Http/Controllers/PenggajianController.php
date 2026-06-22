@@ -30,6 +30,8 @@ class PenggajianController extends Controller
         $startDate = $request->get('start_date', $now->startOfWeek()->format('Y-m-d'));
         $endDate = $request->get('end_date', $now->endOfWeek()->subDay()->format('Y-m-d'));
         
+        $kategori = $request->get('kategori', 'Semua Pekerjaan');
+        
         $tarifHarian = $request->get('tarif_harian', 125000);
         $tarifMemaras = $request->get('tarif_memaras', 250000);
         $tarifKupas = $request->get('tarif_kupas', 200);
@@ -58,6 +60,10 @@ class PenggajianController extends Controller
                 $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatans->first()->nama ?? 'Tidak Diketahui');
                 $karyawanId = $absensi->karyawan_id;
                 $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
+
+                $isCengkeh = in_array(strtolower($jabatan), ['pemetik cengkeh', 'penjemur cengkeh']);
+                if ($kategori === 'Kelapa' && $isCengkeh) continue;
+                if ($kategori === 'Cengkeh' && !$isCengkeh) continue;
 
                 $key = $karyawanId . '_' . $jabatan;
 
@@ -132,6 +138,7 @@ class PenggajianController extends Controller
             'tarifKupas',
             'tarifPemanjat',
             'tarifPemetik',
+            'kategori',
             'period',
             'dataHarian',
             'dataBorongan',
@@ -171,10 +178,16 @@ class PenggajianController extends Controller
         $totalUpahPemetik = 0;
         $totalUpahKupas = 0;
 
+        $kategori = $request->get('kategori', 'Semua Pekerjaan');
+
         foreach ($absensis as $absensi) {
             $jabatan = $absensi->jabatan ?: ($absensi->karyawan->jabatans->first()->nama ?? 'Tidak Diketahui');
             $karyawanId = $absensi->karyawan_id;
             $nama = $absensi->karyawan->nama ?? 'Tidak Diketahui';
+
+            $isCengkeh = in_array(strtolower($jabatan), ['pemetik cengkeh', 'penjemur cengkeh']);
+            if ($kategori === 'Kelapa' && $isCengkeh) continue;
+            if ($kategori === 'Cengkeh' && !$isCengkeh) continue;
 
             $key = $karyawanId . '_' . $jabatan;
 
