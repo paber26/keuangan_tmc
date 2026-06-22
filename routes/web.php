@@ -70,7 +70,8 @@ Route::middleware('admin.login')->group(function () {
     Route::get('/penggajian/{id}/edit', [\App\Http\Controllers\PenggajianController::class, 'edit'])->name('penggajian.edit');
     Route::put('/penggajian/{id}', [\App\Http\Controllers\PenggajianController::class, 'update'])->name('penggajian.update');
     Route::delete('/penggajian/{id}', [\App\Http\Controllers\PenggajianController::class, 'destroy'])->name('penggajian.destroy');
-    Route::get('/penggajian/{id}/print', [\App\Http\Controllers\PenggajianController::class, 'print'])->name('penggajian.print');
+    Route::get('penggajian/{id}/print', [\App\Http\Controllers\PenggajianController::class, 'print'])->name('penggajian.print');
+    Route::get('penggajian/{id}/excel', [\App\Http\Controllers\PenggajianController::class, 'exportExcel'])->name('penggajian.excel');
 
     // Keuangan & Laporan
     Route::get('/transaksi', function() { return view('transaksi.index'); })->name('transaksi.index');

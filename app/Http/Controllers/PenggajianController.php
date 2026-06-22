@@ -9,6 +9,8 @@ use App\Models\Penggajian;
 use App\Models\PenggajianDetail;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PenggajianExport;
 
 class PenggajianController extends Controller
 {
@@ -392,5 +394,12 @@ class PenggajianController extends Controller
         return view('penggajian.print-pdf-saved', compact(
             'penggajian', 'period', 'dataHarian', 'dataBorongan', 'dokumentasi'
         ));
+    }
+
+    public function exportExcel($id)
+    {
+        $penggajian = Penggajian::with(['details.karyawan.jabatans'])->findOrFail($id);
+        $filename = 'Laporan_Penggajian_' . str_replace(' ', '_', $penggajian->lokasi_kebun) . '_' . date('Ymd_His') . '.xlsx';
+        return Excel::download(new PenggajianExport($penggajian), $filename);
     }
 }

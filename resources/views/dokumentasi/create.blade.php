@@ -32,7 +32,7 @@
                     <select name="kebun_id" required class="searchable-select w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all bg-white">
                         <option value="" disabled selected>-- Pilih Lokasi Kebun --</option>
                         @foreach($kebun as $k)
-                            <option value="{{ $k->id }}">{{ $k->lokasi }}</option>
+                            <option value="{{ $k->id }}">{{ $k->virtual_lokasi }}</option>
                         @endforeach
                     </select>
                 </div>

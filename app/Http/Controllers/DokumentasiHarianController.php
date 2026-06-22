@@ -21,9 +21,10 @@ class DokumentasiHarianController extends Controller
             $query->whereDate('tanggal', '<=', $request->end_date);
         }
         if ($request->filled('lokasi')) {
-            $query->whereHas('kebun', function($q) use ($request) {
-                $q->where('lokasi', $request->lokasi);
-            });
+            $matchingKebunIds = \App\Models\Kebun::all()->filter(function($k) use ($request) {
+                return $k->virtual_lokasi === $request->lokasi;
+            })->pluck('id');
+            $query->whereIn('kebun_id', $matchingKebunIds);
         }
 
         $dokumentasi = $query->orderBy('tanggal', 'desc')->get();

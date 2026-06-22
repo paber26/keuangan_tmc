@@ -39,7 +39,7 @@
                     <select name="lokasi" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm transition-colors">
                         <option value="">Semua Lokasi</option>
                         @foreach($lokasiList as $loc)
-                            <option value="{{ $loc->virtual_lokasi }}" {{ request('lokasi') == $loc->lokasi ? 'selected' : '' }}>
+                            <option value="{{ $loc->virtual_lokasi }}" {{ request('lokasi') == $loc->virtual_lokasi ? 'selected' : '' }}>
                                 {{ $loc->virtual_lokasi }}
                             </option>
                         @endforeach
@@ -87,7 +87,7 @@
                 <div class="p-5">
                     <div class="flex justify-between items-start mb-1">
                         <div class="text-xs font-semibold text-emerald-600">{{ \Carbon\Carbon::parse($doc->tanggal)->format('d M Y') }}</div>
-                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->lokasi ?? '-' }}</span>
+                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{ $doc->kebun->virtual_lokasi ?? '-' }}</span>
                     </div>
                     <h3 class="text-lg font-bold text-gray-800 mb-1 line-clamp-1">{{ $doc->judul }}</h3>
                     <div class="text-xs text-emerald-600 font-medium mb-2 whitespace-normal leading-relaxed" title="{{ $doc->karyawans->count() > 0 ? $doc->karyawans->pluck('nama')->join(', ') : 'Tidak ada karyawan' }}">
@@ -144,7 +144,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                                    {{ $doc->kebun->lokasi ?? '-' }}
+                                    {{ $doc->kebun->virtual_lokasi ?? '-' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-700">
@@ -258,7 +258,7 @@
         const dateObj = new Date(doc.tanggal);
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         const formattedDate = dateObj.toLocaleDateString('id-ID', options);
-        const location = doc.kebun ? doc.kebun.lokasi : '-';
+        const location = doc.kebun ? doc.kebun.virtual_lokasi : '-';
         const employee = doc.karyawans && doc.karyawans.length > 0 ? doc.karyawans.map(k => k.nama).join(', ') : '-';
         
         document.getElementById('modal-tanggal').innerHTML = `

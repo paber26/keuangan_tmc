@@ -16,6 +16,8 @@ class Kebun extends Model
         'status',
     ];
 
+    protected $appends = ['virtual_lokasi'];
+
     public function getVirtualLokasiAttribute()
     {
         if (strtoupper($this->lokasi) === 'SAPA') {
