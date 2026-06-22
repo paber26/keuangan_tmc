@@ -130,7 +130,7 @@
                 <br><br><br><b>Henry Harinda</b><br>SPV Finance
             </td>
             <td colspan="2" style="border: 1px solid #000; text-align: center; vertical-align: bottom; height: 60px;">
-                <br><br><br><b>David Limpele</b><br>Manager F&A
+                <br><br><br><b>David Limpele</b><br>Manager F&amp;A
             </td>
             <td colspan="1" style="border: 1px solid #000; text-align: center; vertical-align: bottom; height: 60px;">
                 <br><br><br><b>Stanly Ransang</b><br>PIC Perkebunan

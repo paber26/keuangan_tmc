@@ -169,12 +169,12 @@
                 {{-- Fill empty rows to make it full page --}}
                 @for($i = count($pengajuan_penggajian->items) + 1; $i <= 24; $i++)
                 <tr>
-                    <td class="text-center font-bold" style="border-left: none; padding: 3px;">{{ $i }}</td>
-                    <td style="padding: 3px;"></td>
-                    <td style="padding: 3px;"></td>
-                    <td style="padding: 3px;"></td>
-                    <td style="padding: 3px;"></td>
-                    <td style="border-right: none; padding: 3px;"></td>
+                    <td class="text-center font-bold" style="border-left: none; height: 25px;">{{ $i }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border-right: none;"></td>
                 </tr>
                 @endfor
             </tbody>
@@ -198,7 +198,7 @@
                 </td>
                 <td>
                     <span class="sign-line">David Limpele</span>
-                    <span style="font-weight: normal;">Manager F&A</span>
+                    <span style="font-weight: normal;">Manager F&amp;A</span>
                 </td>
                 <td style="border-right: none;">
                     <span class="sign-line">Stanly Ransang</span>
