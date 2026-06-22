@@ -57,10 +57,10 @@
                     <td class="px-6 py-4 text-center">
                         <div class="flex justify-center items-center gap-2">
                             <a href="{{ route('kebun.edit', $kebun->id) }}" class="text-gray-400 hover:text-blue-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></a>
-                            <form action="{{ route('kebun.destroy', $kebun->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                            <form action="{{ route('kebun.destroy', $kebun->id) }}" method="POST" class="inline-block delete-form">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-gray-400 hover:text-red-600 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                                <button type="button" class="text-gray-400 hover:text-red-600 transition-colors btn-delete" data-nama="{{ $kebun->nama }}"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                             </form>
                         </div>
                     </td>
@@ -76,4 +76,58 @@
         </table>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+        
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.closest('.delete-form');
+                const namaKebun = this.getAttribute('data-nama');
+                
+                // Matematika rumit: (a * b) - c
+                const a = Math.floor(Math.random() * 15) + 5; // 5 to 19
+                const b = Math.floor(Math.random() * 10) + 2; // 2 to 11
+                const c = Math.floor(Math.random() * 50) + 10; // 10 to 59
+                const result = (a * b) - c;
+                
+                Swal.fire({
+                    title: 'Verifikasi Keamanan',
+                    html: `
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600 mb-1">Anda akan menghapus data kebun <b>${namaKebun}</b>.</p>
+                            <p class="text-sm text-red-600 font-medium">Tindakan ini tidak dapat dibatalkan!</p>
+                        </div>
+                        <p class="mb-2 text-sm font-medium text-gray-800">Selesaikan soal matematika berikut untuk melanjutkan:</p>
+                        <div class="text-2xl font-bold text-gray-800 bg-gray-100 py-3 rounded-lg border border-gray-200 mb-4 tracking-widest">
+                            (${a} &times; ${b}) &minus; ${c} = ?
+                        </div>
+                    `,
+                    input: 'number',
+                    inputPlaceholder: 'Jawaban Anda...',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus Data',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#EF4444',
+                    cancelButtonColor: '#6B7280',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Anda harus menjawab soal tersebut!';
+                        }
+                        if (parseInt(value) !== result) {
+                            return 'Jawaban salah! Penghapusan digagalkan.';
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
