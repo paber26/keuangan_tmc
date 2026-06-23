@@ -167,16 +167,25 @@
                 @endforeach
                 
                 {{-- Fill empty rows to make it full page --}}
-                @for($i = count($pengajuan_penggajian->items) + 1; $i <= 24; $i++)
-                <tr>
-                    <td class="text-center font-bold" style="border-left: none; height: 25px;">{{ $i }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="border-right: none;"></td>
-                </tr>
-                @endfor
+                @php
+                    // Set max rows per page to fit A4 perfectly without overflowing
+                    $max_rows = 14;
+                    $total_items = count($pengajuan_penggajian->items);
+                    $empty_rows = $max_rows - $total_items;
+                @endphp
+                
+                @if($empty_rows > 0)
+                    @for($i = 1; $i <= $empty_rows; $i++)
+                    <tr>
+                        <td class="text-center font-bold" style="border-left: none; height: 25px;">{{ $total_items + $i }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="border-right: none;"></td>
+                    </tr>
+                    @endfor
+                @endif
             </tbody>
         </table>
         

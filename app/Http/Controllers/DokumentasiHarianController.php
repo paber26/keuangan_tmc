@@ -27,7 +27,7 @@ class DokumentasiHarianController extends Controller
             $query->whereIn('kebun_id', $matchingKebunIds);
         }
 
-        $dokumentasi = $query->orderBy('tanggal', 'desc')->get();
+        $dokumentasi = $query->orderBy('tanggal', 'desc')->paginate(20)->withQueryString();
         $lokasiList = \App\Models\Kebun::getVirtualKebunList();
 
         $viewMode = $request->get('view', 'table'); // default to table
