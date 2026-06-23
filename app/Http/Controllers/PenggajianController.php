@@ -120,12 +120,14 @@ class PenggajianController extends Controller
                 array_column($dataBorongan, 'karyawan_id')
             ));
 
+            $matchingKebunIds = \App\Models\Kebun::all()->filter(function($k) use ($selectedLokasi) {
+                return $k->virtual_lokasi === $selectedLokasi;
+            })->pluck('id');
+
             $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawans', 'kebun'])
                 ->whereDate('tanggal', '>=', $startDate)
                 ->whereDate('tanggal', '<=', $endDate)
-                ->whereHas('kebun', function($q) use ($selectedLokasi) {
-                    $q->where('lokasi', $selectedLokasi);
-                })
+                ->whereIn('kebun_id', $matchingKebunIds)
                 ->whereHas('karyawans', function($q) use ($karyawanIds) {
                     $q->whereIn('karyawans.id', $karyawanIds);
                 })
@@ -306,12 +308,14 @@ class PenggajianController extends Controller
 
         $karyawanIds = $penggajian->details->pluck('karyawan_id')->unique()->toArray();
 
+        $matchingKebunIds = \App\Models\Kebun::all()->filter(function($k) use ($penggajian) {
+            return $k->virtual_lokasi === $penggajian->lokasi_kebun;
+        })->pluck('id');
+
         $dokumentasi = \App\Models\DokumentasiHarian::with(['images', 'karyawans', 'kebun'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
             ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
-            ->whereHas('kebun', function($q) use ($penggajian) {
-                $q->where('lokasi', $penggajian->lokasi_kebun);
-            })
+            ->whereIn('kebun_id', $matchingKebunIds)
             ->whereHas('karyawans', function($q) use ($karyawanIds) {
                 $q->whereIn('karyawans.id', $karyawanIds);
             })
@@ -407,12 +411,14 @@ class PenggajianController extends Controller
 
         $karyawanIds = $penggajian->details->pluck('karyawan_id')->unique()->toArray();
 
+        $matchingKebunIds = \App\Models\Kebun::all()->filter(function($k) use ($penggajian) {
+            return $k->virtual_lokasi === $penggajian->lokasi_kebun;
+        })->pluck('id');
+
         $dokumentasi = \App\Models\DokumentasiHarian::with(['images'])
             ->whereDate('tanggal', '>=', $penggajian->tanggal_mulai)
             ->whereDate('tanggal', '<=', $penggajian->tanggal_akhir)
-            ->whereHas('kebun', function($q) use ($penggajian) {
-                $q->where('lokasi', $penggajian->lokasi_kebun);
-            })
+            ->whereIn('kebun_id', $matchingKebunIds)
             ->whereHas('karyawans', function($q) use ($karyawanIds) {
                 $q->whereIn('karyawans.id', $karyawanIds);
             })
