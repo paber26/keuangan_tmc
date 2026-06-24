@@ -108,7 +108,7 @@
                         <tr class="item-row">
                             <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">{{ $index + 1 }}</td>
                             <td class="py-3 px-4">
-                                <textarea name="uraian[]" required rows="2" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">{{ $item->uraian }}</textarea>
+                                <textarea name="uraian[]" required rows="5" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">{{ $item->uraian }}</textarea>
                             </td>
                             <td class="py-3 px-4">
                                 <input type="number" name="banyak_unit[]" min="0" step="any" value="{{ $item->banyak_unit ? (float) $item->banyak_unit : '' }}" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
@@ -120,7 +120,7 @@
                                 <input type="number" name="total_harga[]" required min="0" step="any" placeholder="0" value="{{ round($item->total_harga) }}" class="w-full px-3 py-2 text-right font-medium rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-total">
                             </td>
                             <td class="py-3 px-4">
-                                <textarea name="keterangan[]" rows="2" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">{{ $item->keterangan }}</textarea>
+                                <textarea name="keterangan[]" rows="5" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">{{ $item->keterangan }}</textarea>
                             </td>
                             <td class="py-3 px-4 text-center">
                                 <button type="button" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors btn-remove-item" title="Hapus Baris" {{ count($pengajuan_penggajian->items) <= 1 ? 'disabled' : '' }}>

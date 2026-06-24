@@ -376,7 +376,7 @@
                             <td style="width: 17%;" class="header-cell">DIBAYAR OLEH :</td>
                         </tr>
                         <tr>
-                            <td style="height: 40px; vertical-align: bottom;">
+                            <td style="height: 80px; vertical-align: bottom;">
                                 <strong>Aldo</strong><br><span style="font-size: 9px;">Spv. Ops Kebun</span>
                             </td>
                             <td style="vertical-align: bottom;">

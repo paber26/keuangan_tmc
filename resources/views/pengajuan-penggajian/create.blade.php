@@ -105,7 +105,7 @@
                         <tr class="item-row">
                             <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">1</td>
                             <td class="py-3 px-4">
-                                <textarea name="uraian[]" required placeholder="Contoh: UPAH PEKERJA PER 8-13 JUNI 2026" rows="2" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm"></textarea>
+                                <textarea name="uraian[]" required placeholder="Contoh: UPAH PEKERJA PER 8-13 JUNI 2026" rows="5" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm"></textarea>
                             </td>
                             <td class="py-3 px-4">
                                 <input type="number" name="banyak_unit[]" min="0" step="any" placeholder="-" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
@@ -117,7 +117,7 @@
                                 <input type="number" name="total_harga[]" required min="0" step="any" placeholder="0" class="w-full px-3 py-2 text-right font-medium rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-total">
                             </td>
                             <td class="py-3 px-4">
-                                <textarea name="keterangan[]" placeholder="Catatan tambahan" rows="2" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm"></textarea>
+                                <textarea name="keterangan[]" placeholder="Catatan tambahan" rows="5" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm"></textarea>
                             </td>
                             <td class="py-3 px-4 text-center">
                                 <button type="button" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors btn-remove-item" title="Hapus Baris" disabled>
