@@ -105,7 +105,7 @@
                     return $item;
                 });
                 $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
-                $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
+                $totalUpahBorongan = collect($dataBorongan)->sum('total_upah');
             @endphp
             
             @foreach($groupedBorongan as $jabatan => $items)
@@ -185,7 +185,7 @@
             <tr>
                 <td style="border: 1px solid #000; text-align: center;">1</td>
                 <td style="border: 1px solid #000;">HARIAN</td>
-                <td style="border: 1px solid #000; text-align: right; font-weight: bold;">{{ $penggajian->total_upah_harian }}</td>
+                <td style="border: 1px solid #000; text-align: right; font-weight: bold;">{{ collect($dataHarian)->sum('total_upah') }}</td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000; text-align: center;">2</td>

@@ -14,9 +14,14 @@ class Penggajian extends Model
         'tanggal_akhir',
         'lokasi_kebun',
         'tarif_harian',
+        'tarif_memaras',
         'tarif_kupas',
+        'tarif_pemanjat',
+        'tarif_pemetik',
         'total_upah_harian',
         'total_upah_kupas',
+        'total_upah_pemanjat',
+        'total_upah_pemetik',
         'total_keseluruhan',
         'keterangan'
     ];

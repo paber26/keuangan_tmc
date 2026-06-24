@@ -149,7 +149,7 @@
                     return $item;
                 });
                 $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
-                $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
+                $totalUpahBorongan = collect($dataBorongan)->sum('total_upah');
             @endphp
             
             @foreach($groupedBorongan as $jabatan => $items)
@@ -212,7 +212,7 @@
                     {{-- Footer Group --}}
                     <tr>
                         <td class="border border-black p-1 text-right uppercase font-bold pr-4" colspan="{{ count($period) + 4 }}">TOTAL UPAH BORONGAN - {{ $jabatan }}</td>
-                        <td class="border border-black p-1 text-left font-bold text-blue-600 bg-blue-50">
+                        <td class="border border-black p-1 text-left font-bold bg-gray-100">
                             <div class="flex justify-between">
                                 <span>Rp</span>
                                 <span>{{ number_format($totalUpahGroup, 0, ',', '.') }}</span>
@@ -240,10 +240,10 @@
                         <tr>
                             <td class="border border-black p-1 text-center">1</td>
                             <td class="border border-black p-1">HARIAN</td>
-                            <td class="border border-black p-1 text-left">
+                            <td class="border border-black p-1 text-left bg-gray-100">
                                 <div class="flex justify-between">
                                     <span>Rp</span>
-                                    <span>{{ number_format($penggajian->total_upah_harian, 0, ',', '.') }}</span>
+                                    <span>{{ number_format(collect($dataHarian)->sum('total_upah'), 0, ',', '.') }}</span>
                                 </div>
                             </td>
                         </tr>

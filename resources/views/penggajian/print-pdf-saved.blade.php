@@ -254,7 +254,7 @@
             return $item;
         });
         $groupedBorongan = collect($dataBorongan)->groupBy('jabatan');
-        $totalUpahBorongan = $penggajian->total_upah_kupas + $penggajian->total_upah_pemanjat + $penggajian->total_upah_pemetik;
+        $totalUpahBorongan = collect($dataBorongan)->sum('total_upah');
     @endphp
     
     @foreach($groupedBorongan as $jabatan => $items)
@@ -348,7 +348,7 @@
                     <td style="text-align: left;">
                         <div class="currency">
                             <span class="curr-sym">Rp</span>
-                            <span class="curr-val">{{ number_format($penggajian->total_upah_harian, 0, ',', '.') }}</span>
+                            <span class="curr-val">{{ number_format(collect($dataHarian)->sum('total_upah'), 0, ',', '.') }}</span>
                             <div class="clear"></div>
                         </div>
                     </td>
