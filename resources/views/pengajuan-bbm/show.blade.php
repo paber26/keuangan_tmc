@@ -127,7 +127,7 @@
                 <div class="border-r-2 border-black p-2">Diketahui Oleh</div>
                 <div class="border-r-2 border-black p-2">Disetujui Oleh</div>
                 <div class="border-r-2 border-black p-2">Dibayar Oleh</div>
-                <div class="p-2">Dibukukan Oleh</div>
+                <div class="p-2">Diterima Oleh</div>
             </div>
 
             <!-- Signatures Names -->

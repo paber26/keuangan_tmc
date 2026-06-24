@@ -139,7 +139,7 @@
                 <td>Diketahui Oleh</td>
                 <td>Disetujui Oleh</td>
                 <td>Dibayar Oleh</td>
-                <td style="border-right: none;">Dibukukan Oleh</td>
+                <td style="border-right: none;">Diterima Oleh</td>
             </tr>
             <tr class="names">
                 <td style="border-left: none;"><span class="sign-line">{{ strtoupper($pengajuan_bbm->karyawan ? $pengajuan_bbm->karyawan->nama : 'ALDO') }}</span></td>
