@@ -335,9 +335,9 @@
                         </tr>
                         @endfor
 
-                        <!-- Footer integrated into Items Table -->
+                        <!-- Footer: Terbilang + Total -->
                         <tr>
-                            <td colspan="2" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
+                            <td colspan="3" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
                                 <table style="width: 100%; border: none;">
                                     <tr>
                                         <td style="width: 20%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: middle;">
@@ -351,25 +351,37 @@
                                     </tr>
                                 </table>
                             </td>
-                            <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black; border-right: 2px solid black;">
-                                <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                    Dibukukan Oleh
-                                </div>
-                                <br><br>
-                                <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
-                            </td>
                             <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black;">
-                                <div style="font-weight: bold; font-size: 14px; text-align: right; margin-bottom: 2px; border-bottom: 1px solid black; padding-bottom: 2px;">
+                                <div style="font-weight: bold; font-size: 14px; text-align: right; padding-bottom: 2px;">
                                     <span class="flex-rp">Rp</span>
                                     <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
                                     <div style="clear: both;"></div>
                                 </div>
-                                <div style="font-size: 9px; font-weight: bold; text-align: center; margin-top: 5px;">
-                                    Diterima Oleh
-                                </div>
-                                <br><br>
-                                <strong>......</strong>
                             </td>
+                        </tr>
+                        <!-- Footer: Dibukukan Oleh + Diterima Oleh -->
+                        <tr>
+                            <td colspan="3" style="border-right: 2px solid black; border-bottom: 2px solid black; padding: 0;">
+                                <table style="width: 100%; border: none;">
+                                    <tr>
+                                        <td style="width: 50%; border: none; border-right: 2px solid black; text-align: center; vertical-align: top; padding: 5px;">
+                                            <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                                Dibukukan Oleh
+                                            </div>
+                                            <br><br>
+                                            <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
+                                        </td>
+                                        <td style="width: 50%; border: none; text-align: center; vertical-align: top; padding: 5px;">
+                                            <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                                Diterima Oleh
+                                            </div>
+                                            <br><br>
+                                            <strong>......</strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border-bottom: 2px solid black;"></td>
                         </tr>
                     </table>
 

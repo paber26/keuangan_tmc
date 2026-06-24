@@ -9,7 +9,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                 Kembali ke Daftar
             </a>
-            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Bukti Pengeluaran Kas Kebun</h2>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Detail Bukti Kas Kebun</h2>
         </div>
         <div class="flex gap-3">
             <a href="{{ route('bukti-kas-kebun.print', $bukti_kas_kebun->id) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
@@ -23,40 +23,6 @@
         </div>
     </div>
 
-    <!-- Informasi Utama -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-        <div class="p-6 md:p-8">
-            <h3 class="text-lg font-bold text-gray-800 mb-6">Informasi Bukti Kas</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div>
-                    <span class="block text-sm font-medium text-gray-500 mb-1">Tanggal Bukti</span>
-                    <span class="block text-base font-semibold text-gray-900">{{ \Carbon\Carbon::parse($bukti_kas_kebun->tanggal)->format('d M Y') }}</span>
-                </div>
-                <div>
-                    <span class="block text-sm font-medium text-gray-500 mb-1">No. Bukti</span>
-                    <span class="block text-base font-semibold text-gray-900">{{ $bukti_kas_kebun->no_bukti ?: '-' }}</span>
-                </div>
-                <div>
-                    <span class="block text-sm font-medium text-gray-500 mb-1">Status Pengajuan</span>
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-sm font-medium border border-emerald-200">
-                        {{ $bukti_kas_kebun->pengajuan_penggajian->status }}
-                    </span>
-                </div>
-                <div class="lg:col-span-3">
-                    <span class="block text-sm font-medium text-gray-500 mb-1">Terkait Form Pengajuan Dana</span>
-                    <div class="flex items-center justify-between p-4 mt-1 bg-gray-50 rounded-lg border border-gray-200">
-                        <div>
-                            <div class="font-bold text-gray-800">#{{ $bukti_kas_kebun->pengajuan_penggajian->no_dokumen ?: $bukti_kas_kebun->pengajuan_penggajian->id }}</div>
-                            <div class="text-sm text-gray-600 mt-1">{{ $bukti_kas_kebun->pengajuan_penggajian->perihal }}</div>
-                        </div>
-                        <a href="{{ route('pengajuan-penggajian.show', $bukti_kas_kebun->pengajuan_penggajian->id) }}" class="text-sm font-medium text-emerald-600 hover:text-emerald-700 underline">Lihat Pengajuan</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Rincian Pengeluaran -->
     @php
         $pengajuan = $bukti_kas_kebun->pengajuan_penggajian;
         $penggajian = $pengajuan->penggajian;
@@ -84,10 +50,7 @@
         
         if ($penggajian && $penggajian->details) {
             foreach($penggajian->details as $detail) {
-                // Determine Tipe Gaji
                 $tipePekerjaan = $detail->tipe_pekerjaan ?: 'Lain-lain';
-                
-                // Determine Jabatan Name exactly like in the modal description
                 $jabatanName = $detail->jabatan;
                 if (!$jabatanName || strtolower($jabatanName) === 'harian' || strtolower($jabatanName) === 'borongan') {
                     $relJabatan = $detail->karyawan->jabatans->first()->nama ?? null;
@@ -97,12 +60,9 @@
                         $jabatanName = $detail->tipe_pekerjaan ?: 'Lain-lain';
                     }
                 }
-                
-                // If it still resolves to just 'Harian', format it as 'Harian Kumpul' to be more descriptive per user request
                 if (strtolower($jabatanName) === 'harian') {
                     $jabatanName = 'Harian Kumpul';
                 }
-                
                 if(!isset($grouped[$tipePekerjaan])) {
                     $grouped[$tipePekerjaan] = [];
                 }
@@ -121,64 +81,270 @@
                 $total += $item->total_harga;
             }
         }
+
+        // Terbilang function
+        if (!function_exists('penyebutShow')) {
+            function penyebutShow($nilai) {
+                $nilai = abs($nilai);
+                $huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
+                $temp = "";
+                if ($nilai < 12) { $temp = " ". $huruf[$nilai]; }
+                else if ($nilai < 20) { $temp = penyebutShow($nilai - 10). " Belas"; }
+                else if ($nilai < 100) { $temp = penyebutShow($nilai/10)." Puluh". penyebutShow($nilai % 10); }
+                else if ($nilai < 200) { $temp = " Seratus" . penyebutShow($nilai - 100); }
+                else if ($nilai < 1000) { $temp = penyebutShow($nilai/100) . " Ratus" . penyebutShow($nilai % 100); }
+                else if ($nilai < 2000) { $temp = " Seribu" . penyebutShow($nilai - 1000); }
+                else if ($nilai < 1000000) { $temp = penyebutShow($nilai/1000) . " Ribu" . penyebutShow($nilai % 1000); }
+                else if ($nilai < 1000000000) { $temp = penyebutShow($nilai/1000000) . " Juta" . penyebutShow($nilai % 1000000); }
+                else if ($nilai < 1000000000000) { $temp = penyebutShow($nilai/1000000000) . " Milyar" . penyebutShow(fmod($nilai,1000000000)); }
+                else if ($nilai < 1000000000000000) { $temp = penyebutShow($nilai/1000000000000) . " Trilyun" . penyebutShow(fmod($nilai,1000000000000)); }
+                return $temp;
+            }
+            function terbilangShow($nilai) {
+                if($nilai < 0) { $hasil = "Minus ". trim(penyebutShow($nilai)); }
+                else { $hasil = trim(penyebutShow($nilai)); }
+                return $hasil . " Rupiah";
+            }
+        }
     @endphp
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-        <div class="p-6 md:p-8">
-            <h3 class="text-lg font-bold text-gray-800 mb-6">Rincian Pengeluaran</h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-50 text-gray-600 text-sm border-b border-gray-200">
-                            <th class="px-4 py-3 font-semibold">No Urut</th>
-                            <th class="px-4 py-3 font-semibold">Keterangan</th>
-                            <th class="px-4 py-3 font-semibold text-right">Sub Total</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm">
-                        <tr class="border-b border-gray-100">
-                            <td class="px-4 py-3"></td>
-                            <td class="px-4 py-3 font-bold text-gray-800">BEBAN UPAH KEBUN {{ strtoupper($pengajuan->kebun->lokasi) }}</td>
-                            <td class="px-4 py-3"></td>
-                        </tr>
-                        <tr class="border-b border-gray-100">
-                            <td class="px-4 py-3"></td>
-                            @if($penggajian)
-                            <td class="px-4 py-3 font-bold text-gray-800">PERIODE : {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d') }}-{{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->translatedFormat('d F Y') }}</td>
-                            @else
-                            <td class="px-4 py-3 font-bold text-gray-800">PERIODE : {{ \Carbon\Carbon::parse($pengajuan->tanggal)->translatedFormat('F Y') }}</td>
-                            @endif
-                            <td class="px-4 py-3"></td>
-                        </tr>
-                        @foreach($grouped as $tipe => $items)
-                            @if(is_array($items))
-                                <tr class="border-b border-gray-100 bg-gray-50/50">
-                                    <td class="px-4 py-3"></td>
-                                    <td class="px-4 py-3 font-semibold text-gray-800">UPAH {{ strtoupper($tipe) }}</td>
-                                    <td class="px-4 py-3"></td>
+    <!-- Paper Container -->
+    <div class="w-full bg-white p-6 md:p-10 shadow-xl rounded-sm">
+        <div class="w-full text-black" style="font-family: 'Arial', sans-serif; font-size: 11px;">
+            <style>
+                .wrapper-bkk { width: 100%; border: 2px solid #000; }
+                .wrapper-bkk table { width: 100%; border-collapse: collapse; }
+                .wrapper-bkk td, .wrapper-bkk th { padding: 3px; }
+
+                .wrapper-bkk .header-table td { border-bottom: 2px solid black; border-right: 2px solid black; }
+                .wrapper-bkk .header-table td:last-child { border-right: none; }
+
+                .wrapper-bkk .sub-header-table td { border-bottom: 2px solid black; border-right: 2px solid black; padding: 4px 8px; font-weight: bold; font-size: 11px; }
+                .wrapper-bkk .sub-header-table td:last-child { border-right: none; }
+
+                .wrapper-bkk .items-table th, .wrapper-bkk .items-table td { border-bottom: 1px solid black; border-right: 2px solid black; }
+                .wrapper-bkk .items-table td:last-child, .wrapper-bkk .items-table th:last-child { border-right: none; }
+                .wrapper-bkk .items-table th { border-bottom: 2px solid black; padding: 4px; text-align: center; font-weight: bold; font-style: italic; }
+                .wrapper-bkk .items-table td { padding: 3px 5px; }
+
+                .wrapper-bkk .sign-table td { border-right: 2px solid black; padding: 2px; text-align: center; }
+                .wrapper-bkk .sign-table td:last-child { border-right: none; }
+                .wrapper-bkk .sign-table .header-cell { border-bottom: 2px solid black; font-weight: bold; font-size: 10px; padding: 3px; }
+
+                .wrapper-bkk .flex-rp { display: inline-block; float: left; }
+                .wrapper-bkk .flex-nominal { display: inline-block; float: right; }
+            </style>
+
+            <div class="wrapper-bkk">
+                <!-- Header -->
+                <table class="header-table">
+                    <tr>
+                        <td style="width: 35%; padding: 5px;">
+                            <table style="width: 100%; border: none;">
+                                <tr>
+                                    <td style="width: 40px; border: none; padding: 0;">
+                                        @if(file_exists(public_path('logo.jpg')))
+                                            <img src="{{ asset('logo.jpg') }}" alt="Logo" style="height: 35px;">
+                                        @else
+                                            <div style="width: 40px; height: 35px; border: 1px solid red;"></div>
+                                        @endif
+                                    </td>
+                                    <td style="border: none; padding-left: 10px; font-weight: bold; font-size: 10px; vertical-align: middle;">
+                                        PT. TRI MUSTIKA COCOMINAESA
+                                    </td>
                                 </tr>
-                                @foreach($items as $jabatan => $jumlah)
-                                <tr class="border-b border-gray-100">
-                                    <td class="px-4 py-3"></td>
-                                    <td class="px-4 py-3 text-gray-700 pl-8">- {{ strtoupper($jabatan) }}</td>
-                                    <td class="px-4 py-3 text-right font-medium text-gray-900">Rp {{ number_format($jumlah, 0, ',', '.') }}</td>
+                            </table>
+                        </td>
+                        <td style="width: 40%; text-align: center; font-weight: bold; font-size: 18px;">
+                            Bukti Pengeluaran Kas Kebun
+                        </td>
+                        <td style="width: 25%; padding: 5px;">
+                            <table style="width: 100%; font-weight: bold; font-size: 12px; border: none;">
+                                <tr>
+                                    <td style="width: 30px; border: none; padding: 2px;">No</td>
+                                    <td style="border: none; padding: 2px;">: {{ $bukti_kas_kebun->no_bukti }}</td>
                                 </tr>
-                                @endforeach
-                            @else
-                                <tr class="border-b border-gray-100">
-                                    <td class="px-4 py-3"></td>
-                                    <td class="px-4 py-3 text-gray-700">{{ strtoupper($tipe) }}</td>
-                                    <td class="px-4 py-3 text-right font-medium text-gray-900">Rp {{ number_format($items, 0, ',', '.') }}</td>
+                                <tr>
+                                    <td style="border: none; padding: 2px;">Tgl</td>
+                                    <td style="border: none; padding: 2px;">: {{ \Carbon\Carbon::parse($bukti_kas_kebun->tanggal)->translatedFormat('d F Y') }}</td>
                                 </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-gray-50">
-                            <td colspan="2" class="px-4 py-4 text-right font-bold text-gray-800">JUMLAH</td>
-                            <td class="px-4 py-4 text-right font-bold text-emerald-600 text-lg">Rp {{ number_format($total, 0, ',', '.') }}</td>
-                        </tr>
-                    </tfoot>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Sub Header -->
+                <table class="sub-header-table">
+                    <tr>
+                        <td style="width: 60%;">
+                            Perkiraan No <span style="margin-left: 5px; font-weight: normal; letter-spacing: 2px;">: ...........................................................</span>
+                        </td>
+                        <td style="width: 40%; vertical-align: top;">
+                            Lampiran <span style="margin-left: 5px;">:</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Items Table -->
+                <table class="items-table">
+                    <tr>
+                        <th style="width: 5%;">No<br>Urut</th>
+                        <th style="width: 50%;">Keterangan</th>
+                        <th style="width: 20%;">Sub Total</th>
+                        <th style="width: 25%; font-size: 14px;">JUMLAH</th>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td style="font-weight: bold;">BEBAN UPAH KEBUN {{ strtoupper($pengajuan->kebun->lokasi) }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        @if($penggajian)
+                        <td style="font-weight: bold;">PERIODE : {{ \Carbon\Carbon::parse($penggajian->tanggal_mulai)->format('d') }}-{{ \Carbon\Carbon::parse($penggajian->tanggal_akhir)->translatedFormat('d F Y') }}</td>
+                        @else
+                        <td style="font-weight: bold;">PERIODE : {{ \Carbon\Carbon::parse($pengajuan->tanggal)->translatedFormat('F Y') }}</td>
+                        @endif
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    @foreach($grouped as $tipe => $items)
+                        @if(is_array($items))
+                            <tr>
+                                <td></td>
+                                <td style="font-weight: bold;">UPAH {{ strtoupper($tipe) }}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            @foreach($items as $jabatan => $jumlah)
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 15px;">- {{ strtoupper($jabatan) }}</td>
+                                <td>
+                                    <span class="flex-rp">Rp</span>
+                                    <span class="flex-nominal">{{ number_format($jumlah, 0, ',', '.') }}</span>
+                                    <div style="clear: both;"></div>
+                                </td>
+                                <td></td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td></td>
+                                <td>{{ strtoupper($tipe) }}</td>
+                                <td>
+                                    <span class="flex-rp">Rp</span>
+                                    <span class="flex-nominal">{{ number_format($items, 0, ',', '.') }}</span>
+                                    <div style="clear: both;"></div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        @endif
+                    @endforeach
+
+                    @php 
+                        $itemsCount = 0;
+                        foreach($grouped as $tipe => $items) {
+                            $itemsCount++;
+                            if(is_array($items)) {
+                                $itemsCount += count($items);
+                            }
+                        }
+                        $itemsCount += 2; // header rows
+                        $emptyRows = max(0, 6 - $itemsCount);
+                    @endphp
+                    @for($i=0; $i<$emptyRows; $i++)
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @endfor
+
+                    <!-- Footer: Terbilang + Total -->
+                    <tr>
+                        <td colspan="3" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
+                            <table style="width: 100%; border: none;">
+                                <tr>
+                                    <td style="width: 20%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: middle;">
+                                        Terbilang
+                                    </td>
+                                    <td style="width: 80%; border: none;">
+                                        <div style="background-color: #f0f0f0; padding: 6px 10px; font-weight: bold; font-style: italic; font-size: 12px; min-height: 15px;">
+                                            {{ trim(ucwords(terbilangShow($total))) }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black;">
+                            <div style="font-weight: bold; font-size: 14px; text-align: right; padding-bottom: 2px;">
+                                <span class="flex-rp">Rp</span>
+                                <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
+                                <div style="clear: both;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Footer: Dibukukan Oleh + Diterima Oleh -->
+                    <tr>
+                        <td colspan="3" style="border-right: 2px solid black; border-bottom: 2px solid black; padding: 0;">
+                            <table style="width: 100%; border: none;">
+                                <tr>
+                                    <td style="width: 50%; border: none; border-right: 2px solid black; text-align: center; vertical-align: top; padding: 5px;">
+                                        <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                            Dibukukan Oleh
+                                        </div>
+                                        <br><br>
+                                        <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
+                                    </td>
+                                    <td style="width: 50%; border: none; text-align: center; vertical-align: top; padding: 5px;">
+                                        <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                            Diterima Oleh
+                                        </div>
+                                        <br><br>
+                                        <strong>......</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="border-bottom: 2px solid black;"></td>
+                    </tr>
+                </table>
+
+                <!-- Signature Table -->
+                <table class="sign-table">
+                    <tr>
+                        <td style="width: 17%;" class="header-cell">DIAJUKAN OLEH :</td>
+                        <td style="width: 17%;" class="header-cell">DIPERIKSA OLEH :</td>
+                        <td style="width: 32%;" class="header-cell" colspan="2">DIKETAHUI OLEH :</td>
+                        <td style="width: 17%;" class="header-cell">DISETUJUI OLEH :</td>
+                        <td style="width: 17%;" class="header-cell">DIBAYAR OLEH :</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 80px; vertical-align: bottom;">
+                            <strong>Aldo</strong><br><span style="font-size: 9px;">Spv. Ops Kebun</span>
+                        </td>
+                        <td style="vertical-align: bottom;">
+                            <strong>Hendry</strong><br><span style="font-size: 9px;">Spv.Finance</span>
+                        </td>
+                        <td style="width: 16%; border-right: 1px solid black; vertical-align: bottom;">
+                            <strong>David</strong><br><span style="font-size: 9px;">Manager F&A</span>
+                        </td>
+                        <td style="width: 16%; vertical-align: bottom;">
+                            <strong>Stanly</strong><br><span style="font-size: 9px;">PIC Perkebunan</span>
+                        </td>
+                        <td style="vertical-align: bottom;">
+                            <strong>Willy</strong><br><span style="font-size: 9px;">Dir. F&A Audit</span>
+                        </td>
+                        <td style="vertical-align: bottom;">
+                            <strong>Prisillia</strong><br><span style="font-size: 9px;">Admin Kebun</span>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
