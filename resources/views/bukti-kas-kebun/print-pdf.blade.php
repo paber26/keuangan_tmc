@@ -335,53 +335,48 @@
                         </tr>
                         @endfor
 
-                        <!-- Footer: Terbilang + Total -->
+                        <!-- Footer: Jumlah Total -->
                         <tr>
-                            <td colspan="3" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black;">
+                            <td colspan="2" style="border-right: 2px solid black; border-bottom: 2px solid black;"></td>
+                            <td style="text-align: center; font-weight: bold; font-size: 14px; font-style: italic; border-right: 2px solid black; border-bottom: 2px solid black; padding: 5px 10px;">
+                                J u m l a h
+                            </td>
+                            <td style="text-align: right; padding: 5px; border-bottom: 2px solid black; font-weight: bold; font-size: 14px;">
+                                <span class="flex-rp">Rp</span>
+                                <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
+                                <div style="clear: both;"></div>
+                            </td>
+                        </tr>
+                        <!-- Footer: Terbilang + Dibukukan Oleh + Diterima Oleh (sejajar) -->
+                        <tr>
+                            <td colspan="2" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black; vertical-align: top;">
                                 <table style="width: 100%; border: none;">
                                     <tr>
-                                        <td style="width: 20%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: middle;">
+                                        <td style="width: 25%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: top;">
                                             Terbilang
                                         </td>
-                                        <td style="width: 80%; border: none;">
-                                            <div style="background-color: #f0f0f0; padding: 6px 10px; font-weight: bold; font-style: italic; font-size: 12px; min-height: 15px;">
+                                        <td style="width: 75%; border: none;">
+                                            <div style="background-color: #f0f0f0; padding: 6px 10px; font-weight: bold; font-style: italic; font-size: 11px; min-height: 15px;">
                                                 {{ trim(ucwords(terbilang($total))) }}
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
-                            <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black;">
-                                <div style="font-weight: bold; font-size: 14px; text-align: right; padding-bottom: 2px;">
-                                    <span class="flex-rp">Rp</span>
-                                    <span class="flex-nominal">{{ number_format($total, 0, ',', '.') }}</span>
-                                    <div style="clear: both;"></div>
+                            <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black; border-right: 2px solid black;">
+                                <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                    Dibukukan Oleh
                                 </div>
+                                <br><br>
+                                <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
                             </td>
-                        </tr>
-                        <!-- Footer: Dibukukan Oleh + Diterima Oleh -->
-                        <tr>
-                            <td colspan="3" style="border-right: 2px solid black; border-bottom: 2px solid black; padding: 0;">
-                                <table style="width: 100%; border: none;">
-                                    <tr>
-                                        <td style="width: 50%; border: none; border-right: 2px solid black; text-align: center; vertical-align: top; padding: 5px;">
-                                            <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                                Dibukukan Oleh
-                                            </div>
-                                            <br><br>
-                                            <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
-                                        </td>
-                                        <td style="width: 50%; border: none; text-align: center; vertical-align: top; padding: 5px;">
-                                            <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                                Diterima Oleh
-                                            </div>
-                                            <br><br>
-                                            <strong>......</strong>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black;">
+                                <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                    Diterima Oleh
+                                </div>
+                                <br><br>
+                                <strong>......</strong>
                             </td>
-                            <td style="border-bottom: 2px solid black;"></td>
                         </tr>
                     </table>
 
