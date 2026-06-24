@@ -192,12 +192,12 @@
                             <div style="clear: both;"></div>
                         </td>
                     </tr>
-                    <!-- Footer: Terbilang + Dibukukan Oleh + Diterima Oleh (sejajar) -->
+                    <!-- Footer: Terbilang + Diajukan + Dibuat -->
                     <tr>
                         <td colspan="4" style="padding: 0; border-bottom: 2px solid black;">
                             <table style="width: 100%; border-collapse: collapse; border: none;">
                                 <tr>
-                                    <td style="width: 50%; padding: 5px 10px; border-right: 2px solid black; vertical-align: top;">
+                                    <td style="width: 60%; padding: 5px 10px; border-right: 2px solid black; vertical-align: top;">
                                         <table style="width: 100%; border: none;">
                                             <tr>
                                                 <td style="width: 25%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: top;">
@@ -211,19 +211,19 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td style="width: 25%; text-align: center; vertical-align: top; padding: 5px; border-right: 2px solid black;">
+                                    <td style="width: 20%; text-align: center; vertical-align: top; padding: 5px; border-right: 2px solid black;">
                                         <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                            Dibukukan Oleh
+                                            DIAJUKAN OLEH
                                         </div>
                                         <br><br><br>
-                                        <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
+                                        <strong>Aldo</strong><br><span style="font-size: 9px;">Plantation Operations/ Spv</span>
                                     </td>
-                                    <td style="width: 25%; text-align: center; vertical-align: top; padding: 5px;">
+                                    <td style="width: 20%; text-align: center; vertical-align: top; padding: 5px;">
                                         <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                            Diterima Oleh
+                                            DIBUAT OLEH :
                                         </div>
                                         <br><br><br>
-                                        <strong>......</strong>
+                                        <strong>Prisillia</strong><br><span style="font-size: 9px;">Admin Kebun</span>
                                     </td>
                                 </tr>
                             </table>
@@ -234,30 +234,27 @@
                 <!-- Signature Table -->
                 <table class="sign-table">
                     <tr>
-                        <td style="width: 17%;" class="header-cell">DIAJUKAN OLEH :</td>
-                        <td style="width: 17%;" class="header-cell">DIPERIKSA OLEH :</td>
-                        <td style="width: 32%;" class="header-cell" colspan="2">DIKETAHUI OLEH :</td>
-                        <td style="width: 17%;" class="header-cell">DISETUJUI OLEH :</td>
-                        <td style="width: 17%;" class="header-cell">DIBAYAR OLEH :</td>
+                        <td style="width: 20%;" class="header-cell">DIPERIKSA OLEH :</td>
+                        <td style="width: 20%;" class="header-cell">DIKETAHUI OLEH :</td>
+                        <td style="width: 20%;" class="header-cell">DISETUJUI OLEH</td>
+                        <td style="width: 20%;" class="header-cell">DIBAYAR OLEH :</td>
+                        <td style="width: 20%;" class="header-cell">DIBUKUKAN OLEH</td>
                     </tr>
                     <tr>
-                        <td style="height: 80px; vertical-align: bottom;">
-                            <strong>Aldo</strong><br><span style="font-size: 9px;">Spv. Ops Kebun</span>
+                        <td style="height: 60px; vertical-align: bottom;">
+                            <strong>Hendry</strong><br><span style="font-size: 9px;">Finance Supervisor</span>
                         </td>
                         <td style="vertical-align: bottom;">
-                            <strong>Hendry</strong><br><span style="font-size: 9px;">Spv.Finance</span>
-                        </td>
-                        <td style="width: 16%; border-right: 1px solid black; vertical-align: bottom;">
-                            <strong>David</strong><br><span style="font-size: 9px;">Manager F&A</span>
-                        </td>
-                        <td style="width: 16%; vertical-align: bottom;">
-                            <strong>Stanly</strong><br><span style="font-size: 9px;">PIC Perkebunan</span>
+                            <strong>David</strong><br><span style="font-size: 9px;">F&A Manager</span>
                         </td>
                         <td style="vertical-align: bottom;">
-                            <strong>Willy</strong><br><span style="font-size: 9px;">Dir. F&A Audit</span>
+                            <strong>Willy</strong><br><span style="font-size: 9px;">F&A Audit Director</span>
                         </td>
                         <td style="vertical-align: bottom;">
                             <strong>Prisillia</strong><br><span style="font-size: 9px;">Admin Kebun</span>
+                        </td>
+                        <td style="vertical-align: bottom;">
+                            <strong>Edmon</strong><br><span style="font-size: 9px;">Spv / Accounting</span>
                         </td>
                     </tr>
                 </table>
