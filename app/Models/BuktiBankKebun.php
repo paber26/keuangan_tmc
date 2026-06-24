@@ -17,6 +17,10 @@ class BuktiBankKebun extends Model
         'bank_rek_tujuan'
     ];
 
+    protected $casts = [
+        'tanggal' => 'date',
+    ];
+
     public function items()
     {
         return $this->hasMany(BuktiBankKebunItem::class);
