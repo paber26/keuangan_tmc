@@ -93,11 +93,11 @@
                     <thead>
                         <tr class="bg-gray-100 border-y border-gray-200">
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Uraian</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[300px]">Uraian</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[120px]">Banyak Unit</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Harga Satuan (Rp)</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[180px] text-right">Total Harga (Rp) <span class="text-red-500">*</span></th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Keterangan</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[400px]">Keterangan</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[60px] text-center"></th>
                         </tr>
                     </thead>

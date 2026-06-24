@@ -205,7 +205,17 @@
                                 <span class="nominal font-bold">{{ number_format($item->total_harga, 0, ',', '.') }}</span>
                                 <div style="clear: both;"></div>
                             </td>
-                            <td class="uppercase font-bold" style="border-right: none;">{{ $item->keterangan }}</td>
+                            @if($index === 0)
+                            <td class="uppercase font-bold" style="border-right: none; vertical-align: top;" rowspan="{{ max(20, count($pengajuan_penggajian->items)) }}">
+                                @foreach($pengajuan_penggajian->items as $idx => $itm)
+                                    @if(count($pengajuan_penggajian->items) > 1)
+                                        <div style="margin-bottom: 5px;"><b>{{ $idx + 1 }}.</b> {{ $itm->keterangan }}</div>
+                                    @else
+                                        {{ $itm->keterangan }}
+                                    @endif
+                                @endforeach
+                            </td>
+                            @endif
                         </tr>
                         @endforeach
                         
@@ -216,7 +226,6 @@
                             <td style="padding: 0;"></td>
                             <td style="padding: 0;"></td>
                             <td style="padding: 0;"></td>
-                            <td style="border-right: none; padding: 0;"></td>
                         </tr>
                         @endfor
                         
