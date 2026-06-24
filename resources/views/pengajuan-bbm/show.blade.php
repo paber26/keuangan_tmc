@@ -145,7 +145,7 @@
                     <span class="border-b-2 border-black mx-2 pb-1">PRISILLIA</span>
                 </div>
                 <div class="p-2 flex flex-col justify-end">
-                    <span class="border-b-2 border-black mx-2 pb-1">EDMON</span>
+                    <span class="border-b-2 border-black mx-2 pb-1 text-transparent select-none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </div>
             </div>
 
