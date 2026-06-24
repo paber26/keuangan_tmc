@@ -117,12 +117,6 @@
                     Bukti Kas Kebun (A5)
                 </a>
 
-                <a href="{{ route('bukti-bank-kebun.index') }}" 
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('bukti-bank-kebun.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                    Bukti Bank Kebun (A5)
-                </a>
-
                 {{-- Manajemen BBM --}}
                 <div class="pt-4 pb-1">
                     <p class="px-3 text-[10px] font-semibold text-gray-500 uppercase tracking-widest">Manajemen BBM</p>
@@ -156,6 +150,11 @@
                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('pengajuan.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                     Pengajuan Barang
+                </a>
+                <a href="{{ route('bukti-bank-kebun.index') }}" 
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('bukti-bank-kebun.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    Bukti Bank Kebun (A5)
                 </a>
 
                 {{-- Master Data Section --}}
