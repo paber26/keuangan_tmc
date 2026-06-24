@@ -34,6 +34,8 @@ class BuktiBankKebunController extends Controller
             'qty.*' => 'required|integer|min:1',
             'harga_satuan' => 'required|array',
             'harga_satuan.*' => 'required|numeric|min:0',
+            'ditransfer_ke' => 'nullable|string|max:255',
+            'bank_rek_tujuan' => 'nullable|string|max:255',
         ]);
 
         try {
@@ -51,6 +53,8 @@ class BuktiBankKebunController extends Controller
                 'tanggal' => $request->tanggal,
                 'judul_pengajuan' => $request->judul_pengajuan,
                 'keterangan' => $request->keterangan,
+                'ditransfer_ke' => $request->ditransfer_ke,
+                'bank_rek_tujuan' => $request->bank_rek_tujuan,
                 'grand_total' => $grandTotal
             ]);
 
@@ -102,6 +106,8 @@ class BuktiBankKebunController extends Controller
             'qty.*' => 'required|integer|min:1',
             'harga_satuan' => 'required|array',
             'harga_satuan.*' => 'required|numeric|min:0',
+            'ditransfer_ke' => 'nullable|string|max:255',
+            'bank_rek_tujuan' => 'nullable|string|max:255',
         ]);
 
         try {
@@ -117,6 +123,8 @@ class BuktiBankKebunController extends Controller
                 'tanggal' => $request->tanggal,
                 'judul_pengajuan' => $request->judul_pengajuan,
                 'keterangan' => $request->keterangan,
+                'ditransfer_ke' => $request->ditransfer_ke,
+                'bank_rek_tujuan' => $request->bank_rek_tujuan,
                 'grand_total' => $grandTotal
             ]);
 

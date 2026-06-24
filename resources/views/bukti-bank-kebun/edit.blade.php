@@ -47,6 +47,16 @@
                     <input type="text" name="judul_pengajuan" value="{{ old('judul_pengajuan', $bukti_bank_kebun->judul_pengajuan) }}" required
                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ditransfer Ke (Opsional)</label>
+                    <input type="text" name="ditransfer_ke" value="{{ old('ditransfer_ke', $bukti_bank_kebun->ditransfer_ke) }}"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Bank / Rekening Tujuan (Opsional)</label>
+                    <input type="text" name="bank_rek_tujuan" value="{{ old('bank_rek_tujuan', $bukti_bank_kebun->bank_rek_tujuan) }}"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan Tambahan (Opsional)</label>
                     <textarea name="keterangan" rows="2"

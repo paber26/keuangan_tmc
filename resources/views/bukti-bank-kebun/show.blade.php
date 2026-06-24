@@ -180,9 +180,23 @@
                     </tr>
                     @endfor
 
+                    @if($bukti_bank_kebun->ditransfer_ke)
+                    <tr>
+                        <td></td>
+                        <td>DITRANSFER KE {{ strtoupper($bukti_bank_kebun->ditransfer_ke) }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @endif
+
                     <!-- Footer: Jumlah Total -->
                     <tr>
-                        <td colspan="2" style="border-right: 2px solid black; border-bottom: 2px solid black;"></td>
+                        <td style="border-bottom: 2px solid black;"></td>
+                        <td style="font-weight: bold; border-right: 2px solid black; border-bottom: 2px solid black; padding-left: 5px;">
+                            @if($bukti_bank_kebun->bank_rek_tujuan)
+                            BANK REK KEBUN KE REK {{ strtoupper($bukti_bank_kebun->bank_rek_tujuan) }}
+                            @endif
+                        </td>
                         <td style="text-align: center; font-weight: bold; font-size: 14px; font-style: italic; border-right: 2px solid black; border-bottom: 2px solid black; padding: 5px 10px;">
                             J u m l a h
                         </td>

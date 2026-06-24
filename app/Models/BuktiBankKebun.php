@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class BuktiBankKebun extends Model
 {
     protected $fillable = [
+        'pengajuan_id',
         'no_bukti',
         'tanggal',
-        'judul_pengajuan',
         'keterangan',
-        'grand_total'
+        'judul_pengajuan',
+        'grand_total',
+        'ditransfer_ke',
+        'bank_rek_tujuan'
     ];
 
     public function items()
