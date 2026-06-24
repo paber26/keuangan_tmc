@@ -13,7 +13,8 @@ class PengajuanKasGantungItem extends Model
         'nama_barang',
         'qty',
         'harga_satuan',
-        'total_harga'
+        'total_harga',
+        'keterangan_pengajuan'
     ];
 
     public function pengajuanKasGantung()

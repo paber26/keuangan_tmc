@@ -33,6 +33,8 @@ class PengajuanKasGantungController extends Controller
             'qty.*' => 'required|integer|min:1',
             'harga_satuan' => 'required|array',
             'harga_satuan.*' => 'required|numeric|min:0',
+            'keterangan_pengajuan' => 'nullable|array',
+            'keterangan_pengajuan.*' => 'nullable|string',
         ]);
 
         try {
@@ -57,7 +59,8 @@ class PengajuanKasGantungController extends Controller
                     'nama_barang' => $request->nama_barang[$i],
                     'qty' => $request->qty[$i],
                     'harga_satuan' => $request->harga_satuan[$i],
-                    'total_harga' => $totalHarga
+                    'total_harga' => $totalHarga,
+                    'keterangan_pengajuan' => $request->keterangan_pengajuan[$i] ?? null
                 ]);
             }
 
@@ -96,6 +99,8 @@ class PengajuanKasGantungController extends Controller
             'qty.*' => 'required|integer|min:1',
             'harga_satuan' => 'required|array',
             'harga_satuan.*' => 'required|numeric|min:0',
+            'keterangan_pengajuan' => 'nullable|array',
+            'keterangan_pengajuan.*' => 'nullable|string',
         ]);
 
         try {
@@ -122,7 +127,8 @@ class PengajuanKasGantungController extends Controller
                     'nama_barang' => $request->nama_barang[$i],
                     'qty' => $request->qty[$i],
                     'harga_satuan' => $request->harga_satuan[$i],
-                    'total_harga' => $totalHarga
+                    'total_harga' => $totalHarga,
+                    'keterangan_pengajuan' => $request->keterangan_pengajuan[$i] ?? null
                 ]);
             }
 
@@ -133,6 +139,20 @@ class PengajuanKasGantungController extends Controller
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Menunggu,Disetujui,Ditolak',
+        ]);
+
+        $pengajuan = PengajuanKasGantung::findOrFail($id);
+        $pengajuan->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->back()->with('success', 'Status pengajuan berhasil diperbarui.');
     }
 
     public function destroy($id)

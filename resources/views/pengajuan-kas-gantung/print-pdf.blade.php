@@ -108,7 +108,7 @@
                         <span class="nominal">{{ number_format($item->total_harga, 0, ',', '.') }}</span>
                         <div style="clear: both;"></div>
                     </td>
-                    <td class="font-bold" style="border-right: none;"></td>
+                    <td class="font-bold" style="border-right: none;">{{ strtoupper($item->keterangan_pengajuan) }}</td>
                 </tr>
                 @endforeach
                 

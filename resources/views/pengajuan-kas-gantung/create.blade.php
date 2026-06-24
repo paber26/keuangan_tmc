@@ -63,10 +63,11 @@
                     <thead>
                         <tr class="bg-gray-100 border-y border-gray-200">
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[50px]">No</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[250px]">Nama Barang / Deskripsi</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[200px]">Nama Barang / Deskripsi</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider min-w-[150px]">Keterangan</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[120px]">Jumlah (Qty)</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[180px]">Harga Satuan (Rp)</th>
-                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[200px] text-right">Total Harga (Rp)</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px]">Harga Satuan (Rp)</th>
+                            <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[150px] text-right">Total Harga (Rp)</th>
                             <th class="py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider w-[60px] text-center"></th>
                         </tr>
                     </thead>
@@ -76,6 +77,9 @@
                             <td class="py-3 px-4 text-sm text-gray-500 text-center row-number">1</td>
                             <td class="py-3 px-4">
                                 <input type="text" name="nama_barang[]" required placeholder="Nama barang" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
+                            </td>
+                            <td class="py-3 px-4">
+                                <input type="text" name="keterangan_pengajuan[]" placeholder="Keterangan..." class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm">
                             </td>
                             <td class="py-3 px-4">
                                 <input type="number" name="qty[]" required min="1" value="1" class="w-full px-3 py-2 rounded border border-gray-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-sm input-qty">
@@ -95,7 +99,7 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-gray-100 border-t border-gray-200">
-                            <td colspan="4" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Grand Total</td>
+                            <td colspan="5" class="py-4 px-4 text-sm font-bold text-gray-800 uppercase text-right tracking-wider">Grand Total</td>
                             <td class="py-4 px-4 text-right">
                                 <span class="text-lg font-bold text-emerald-600" id="grand-total">0</span>
                             </td>
@@ -165,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // Reset values
         newRow.querySelector('input[name="nama_barang[]"]').value = '';
+        newRow.querySelector('input[name="keterangan_pengajuan[]"]').value = '';
         newRow.querySelector('input[name="qty[]"]').value = '1';
         newRow.querySelector('input[name="harga_satuan[]"]').value = '';
         newRow.querySelector('.row-total').textContent = '0';

@@ -12,7 +12,8 @@ class PengajuanKasGantung extends Model
         'tanggal',
         'judul_pengajuan',
         'keterangan',
-        'grand_total'
+        'grand_total',
+        'status'
     ];
 
     protected $casts = [
