@@ -323,8 +323,15 @@
                         @endforeach
 
                         @php 
-                            $itemsCount = count($grouped) + 2; 
-                            $emptyRows = 6 - $itemsCount;
+                            $itemsCount = 0;
+                            foreach($grouped as $tipe => $items) {
+                                $itemsCount++;
+                                if(is_array($items)) {
+                                    $itemsCount += count($items);
+                                }
+                            }
+                            $itemsCount += 2; // header rows
+                            $emptyRows = max(0, 6 - $itemsCount);
                         @endphp
                         @for($i=0; $i<$emptyRows; $i++)
                         <tr>
