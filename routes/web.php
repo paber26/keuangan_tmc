@@ -59,6 +59,10 @@ Route::middleware('admin.login')->group(function () {
     Route::resource('bukti-kas-kebun', \App\Http\Controllers\BuktiKasKebunController::class);
     Route::get('bukti-kas-kebun/{bukti_kas_kebun}/print', [\App\Http\Controllers\BuktiKasKebunController::class, 'print'])->name('bukti-kas-kebun.print');
 
+    // Bukti Bank Kebun
+    Route::resource('bukti-bank-kebun', \App\Http\Controllers\BuktiBankKebunController::class);
+    Route::get('bukti-bank-kebun/{bukti_bank_kebun}/print', [\App\Http\Controllers\BuktiBankKebunController::class, 'print'])->name('bukti-bank-kebun.print');
+
     Route::get('/penggajian/laporan-mingguan', function() {
         return redirect()->route('penggajian.create', request()->all());
     });

@@ -117,6 +117,12 @@
                     Bukti Kas Kebun (A5)
                 </a>
 
+                <a href="{{ route('bukti-bank-kebun.index') }}" 
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 {{ request()->routeIs('bukti-bank-kebun.*') ? 'bg-emerald-600/90 text-white shadow-lg shadow-emerald-600/20' : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    Bukti Bank Kebun (A5)
+                </a>
+
                 {{-- Manajemen BBM --}}
                 <div class="pt-4 pb-1">
                     <p class="px-3 text-[10px] font-semibold text-gray-500 uppercase tracking-widest">Manajemen BBM</p>
