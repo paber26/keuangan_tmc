@@ -280,33 +280,39 @@
                     </tr>
                     <!-- Footer: Terbilang + Dibukukan Oleh + Diterima Oleh (sejajar) -->
                     <tr>
-                        <td colspan="2" style="padding: 5px 10px; border-right: 2px solid black; border-bottom: 2px solid black; vertical-align: top;">
-                            <table style="width: 100%; border: none;">
+                        <td colspan="4" style="padding: 0; border-bottom: 2px solid black;">
+                            <table style="width: 100%; border-collapse: collapse; border: none;">
                                 <tr>
-                                    <td style="width: 25%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: top;">
-                                        Terbilang
+                                    <td style="width: 50%; padding: 5px 10px; border-right: 2px solid black; vertical-align: top;">
+                                        <table style="width: 100%; border: none;">
+                                            <tr>
+                                                <td style="width: 25%; border: none; font-weight: bold; font-size: 14px; font-style: italic; vertical-align: top;">
+                                                    Terbilang
+                                                </td>
+                                                <td style="width: 75%; border: none;">
+                                                    <div style="background-color: #d3d3d3; border: 1px solid #000; padding: 6px 10px; font-weight: bold; font-style: italic; font-size: 11px; min-height: 15px;">
+                                                        {{ trim(ucwords(terbilangShow($total))) }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
-                                    <td style="width: 75%; border: none;">
-                                        <div style="background-color: #f0f0f0; padding: 6px 10px; font-weight: bold; font-style: italic; font-size: 11px; min-height: 15px;">
-                                            {{ trim(ucwords(terbilangShow($total))) }}
+                                    <td style="width: 25%; text-align: center; vertical-align: top; padding: 5px; border-right: 2px solid black;">
+                                        <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                            Dibukukan Oleh
                                         </div>
+                                        <br><br>
+                                        <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
+                                    </td>
+                                    <td style="width: 25%; text-align: center; vertical-align: top; padding: 5px;">
+                                        <div style="font-size: 9px; font-weight: bold; text-align: center;">
+                                            Diterima Oleh
+                                        </div>
+                                        <br><br>
+                                        <strong>......</strong>
                                     </td>
                                 </tr>
                             </table>
-                        </td>
-                        <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black; border-right: 2px solid black;">
-                            <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                Dibukukan Oleh
-                            </div>
-                            <br><br>
-                            <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
-                        </td>
-                        <td style="text-align: center; vertical-align: top; padding: 5px; border-bottom: 2px solid black;">
-                            <div style="font-size: 9px; font-weight: bold; text-align: center;">
-                                Diterima Oleh
-                            </div>
-                            <br><br>
-                            <strong>......</strong>
                         </td>
                     </tr>
                 </table>
