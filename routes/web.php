@@ -30,6 +30,10 @@ Route::middleware('admin.login')->group(function () {
     Route::patch('pengajuan/{pengajuan}/status', [PengajuanController::class, 'updateStatus'])->name('pengajuan.update-status');
     Route::get('pengajuan/{pengajuan}/print', [PengajuanController::class, 'print'])->name('pengajuan.print');
     Route::get('pengajuan/{pengajuan}/excel', [PengajuanController::class, 'exportExcel'])->name('pengajuan.excel');
+    
+    Route::get('pengajuan-kas-gantung/{pengajuan_kas_gantung}/print', [\App\Http\Controllers\PengajuanKasGantungController::class, 'print'])->name('pengajuan-kas-gantung.print');
+    Route::resource('pengajuan-kas-gantung', \App\Http\Controllers\PengajuanKasGantungController::class);
+
     Route::get('/komoditas', function() { return view('komoditas.index'); })->name('komoditas.index');
     Route::get('/tarif-kupas', function() { return view('tarif-kupas.index'); })->name('tarif-kupas.index');
 
