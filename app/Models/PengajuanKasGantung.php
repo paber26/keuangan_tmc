@@ -11,6 +11,7 @@ class PengajuanKasGantung extends Model
     protected $fillable = [
         'tanggal',
         'judul_pengajuan',
+        'pengajuan_kebutuhan',
         'keterangan',
         'grand_total',
         'status'

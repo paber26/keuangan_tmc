@@ -26,6 +26,7 @@ class PengajuanKasGantungController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'judul_pengajuan' => 'required|string|max:255',
+            'pengajuan_kebutuhan' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
             'nama_barang' => 'required|array',
             'nama_barang.*' => 'required|string',
@@ -48,6 +49,7 @@ class PengajuanKasGantungController extends Controller
             $pengajuan = PengajuanKasGantung::create([
                 'tanggal' => $request->tanggal,
                 'judul_pengajuan' => $request->judul_pengajuan,
+                'pengajuan_kebutuhan' => $request->pengajuan_kebutuhan,
                 'keterangan' => $request->keterangan,
                 'grand_total' => $grandTotal
             ]);
@@ -92,6 +94,7 @@ class PengajuanKasGantungController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'judul_pengajuan' => 'required|string|max:255',
+            'pengajuan_kebutuhan' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
             'nama_barang' => 'required|array',
             'nama_barang.*' => 'required|string',
@@ -114,6 +117,7 @@ class PengajuanKasGantungController extends Controller
             $pengajuan->update([
                 'tanggal' => $request->tanggal,
                 'judul_pengajuan' => $request->judul_pengajuan,
+                'pengajuan_kebutuhan' => $request->pengajuan_kebutuhan,
                 'keterangan' => $request->keterangan,
                 'grand_total' => $grandTotal
             ]);

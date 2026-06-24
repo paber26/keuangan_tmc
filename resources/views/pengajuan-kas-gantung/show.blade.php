@@ -58,7 +58,7 @@
                         </tr>
                         <tr>
                             <td class="pb-1">Pengajuan Untuk Kebutuhan</td>
-                            <td class="pb-1">: -</td>
+                            <td class="pb-1">: {{ strtoupper($pengajuan_kas_gantung->pengajuan_kebutuhan ?? '-') }}</td>
                         </tr>
                         <tr>
                             <td class="pb-1">Perihal</td>

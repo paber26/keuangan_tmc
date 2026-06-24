@@ -77,7 +77,7 @@
             </tr>
             <tr>
                 <td>Pengajuan Untuk Kebutuhan</td>
-                <td>: -</td>
+                <td>: {{ strtoupper($pengajuan_kas_gantung->pengajuan_kebutuhan ?? '-') }}</td>
             </tr>
             <tr>
                 <td>Perihal</td>
