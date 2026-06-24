@@ -301,14 +301,14 @@
                                         <div style="font-size: 9px; font-weight: bold; text-align: center;">
                                             Dibukukan Oleh
                                         </div>
-                                        <br><br><br><br>
+                                        <br><br><br>
                                         <strong>Edmon</strong><br><span style="font-size: 9px;">SPV Accounting</span>
                                     </td>
                                     <td style="width: 25%; text-align: center; vertical-align: top; padding: 5px;">
                                         <div style="font-size: 9px; font-weight: bold; text-align: center;">
                                             Diterima Oleh
                                         </div>
-                                        <br><br><br><br><br>
+                                        <br><br><br>
                                         <strong>......</strong>
                                     </td>
                                 </tr>

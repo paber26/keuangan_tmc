@@ -384,7 +384,7 @@
                                             <div style="font-size: 9px; font-weight: bold; text-align: center;">
                                                 Diterima Oleh
                                             </div>
-                                            <br><br><br><br><br>
+                                            <br><br><br>
                                             <strong>......</strong>
                                         </td>
                                     </tr>
