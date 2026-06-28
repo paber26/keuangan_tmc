@@ -410,7 +410,7 @@
                 @endif
                 
                 <div style="width: 100%;">
-                    <table style="width: 100%; border: none; margin: 0; padding: 0;">
+                    <table style="width: 100%; table-layout: fixed; border: none; margin: 0; padding: 0;">
                         <tr>
                     @php $imgCount = 0; @endphp
                     @foreach($docsForDate as $doc)
@@ -424,6 +424,9 @@
                             @php $imgCount++; @endphp
                         @endforeach
                     @endforeach
+                    @if($imgCount % 2 != 0)
+                            <td style="border: none; padding: 5px; width: 50%;"></td>
+                    @endif
                         </tr>
                     </table>
                 </div>
