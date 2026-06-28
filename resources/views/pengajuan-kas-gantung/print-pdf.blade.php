@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Print Form Pengajuan Dana - {{ $pengajuan_kas_gantung->id }}</title>
     <style>
-        body { font-family: 'Arial', sans-serif; font-size: 11px; color: #000; margin: 0; padding: 10px; }
+        @page { margin: 15px; }
+        body { font-family: 'Arial', sans-serif; font-size: 12px; color: #000; margin: 0; padding: 0; }
         .wrapper { width: 100%; border: 2px solid #000; }
         table { width: 100%; border-collapse: collapse; }
-        td, th { border: 2px solid #000; padding: 3px; }
+        td, th { border: 2px solid #000; padding: 6px; }
         .no-border { border: none !important; }
         .border-b { border-bottom: 2px solid #000; }
         .border-r { border-right: 2px solid #000; }
@@ -33,9 +34,9 @@
         .items-table th, .items-table td { border: 2px solid #000; padding: 4px; }
         .items-table th { text-align: center; font-weight: bold; }
         
-        .sign-table { width: 100%; border-collapse: collapse; text-align: center; font-weight: bold; font-size: 11px; }
+        .sign-table { width: 100%; border-collapse: collapse; text-align: center; font-weight: bold; font-size: 12px; }
         .sign-table td { border: 2px solid #000; border-bottom: none; width: 20%; padding: 4px; }
-        .sign-table .names td { border-top: none; padding-top: 40px; padding-bottom: 5px; }
+        .sign-table .names td { border-top: none; padding-top: 50px; padding-bottom: 10px; }
         .sign-line { border-bottom: 2px solid #000; display: inline-block; width: 80%; }
         
         .rp { float: left; }
@@ -114,7 +115,7 @@
                 
                 @for($i = count($pengajuan_kas_gantung->items) + 1; $i <= 5; $i++)
                 <tr>
-                    <td class="text-center font-bold" style="border-left: none; height: 15px;">{{ $i }}</td>
+                    <td class="text-center font-bold" style="border-left: none; height: 25px;">{{ $i }}</td>
                     <td></td>
                     <td></td>
                     <td style="border-right: none;"></td>
