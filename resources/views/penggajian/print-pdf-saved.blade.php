@@ -392,12 +392,23 @@
             $dateStr = $date->format('Y-m-d');
             $docsForDate = isset($dokumentasi[$dateStr]) ? $dokumentasi[$dateStr] : collect();
             
-            // Get people who worked Harian on this date
-            $harianNames = [];
+            $categoriesForDate = [];
+            
+            // Harian
             foreach($dataHarian as $harian) {
                 if(isset($harian->rincian_harian[$dateStr])) {
+                    $jabatan = strtoupper($harian->jabatan ?: 'TIDAK DIKETAHUI');
                     $nameParts = explode(' ', trim($harian->nama_karyawan));
-                    $harianNames[] = $nameParts[0]; // Get first name
+                    $categoriesForDate['HARIAN'][$jabatan][] = $nameParts[0];
+                }
+            }
+
+            // Borongan
+            foreach($dataBorongan as $borongan) {
+                if(isset($borongan->rincian_harian[$dateStr]) && $borongan->rincian_harian[$dateStr] > 0) {
+                    $jabatan = strtoupper($borongan->jabatan ?: 'TIDAK DIKETAHUI');
+                    $nameParts = explode(' ', trim($borongan->nama_karyawan));
+                    $categoriesForDate['BORONGAN'][$jabatan][] = $nameParts[0];
                 }
             }
         @endphp
@@ -405,9 +416,11 @@
         @if($docsForDate->count() > 0)
             <div style="margin-top: 20px;">
                 <h3 style="font-size: 14pt; margin-bottom: 10px;">{{ $date->format('j-n-y') }}</h3>
-                @if(count($harianNames) > 0)
-                    <p style="font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 10px;">HARIAN ( {{ implode(', ', $harianNames) }} )</p>
-                @endif
+                @foreach($categoriesForDate as $tipeGaji => $jabatans)
+                    @foreach($jabatans as $jabatan => $names)
+                        <p style="font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; margin-top: 5px;">{{ $tipeGaji }} - {{ $jabatan }} ( {{ implode(', ', $names) }} )</p>
+                    @endforeach
+                @endforeach
                 
                 <div style="width: 100%;">
                     <table style="width: 100%; table-layout: fixed; border: none; margin: 0; padding: 0;">

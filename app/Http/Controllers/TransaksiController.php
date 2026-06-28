@@ -38,7 +38,7 @@ class TransaksiController extends Controller
         $count_masuk = $all_transaksis_for_summary->where('tipe', 'Pemasukan')->count();
         $count_keluar = $all_transaksis_for_summary->where('tipe', 'Pengeluaran')->count();
 
-        $kebuns = Kebun::orderBy('nama', 'asc')->get();
+        $kebuns = Kebun::getVirtualKebunList();
 
         return view('transaksi.index', compact(
             'transaksis', 
