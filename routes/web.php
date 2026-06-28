@@ -83,7 +83,7 @@ Route::middleware('admin.login')->group(function () {
     Route::get('penggajian/{id}/excel', [\App\Http\Controllers\PenggajianController::class, 'exportExcel'])->name('penggajian.excel');
 
     // Keuangan & Laporan
-    Route::get('/transaksi', function() { return view('transaksi.index'); })->name('transaksi.index');
+    Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class)->except(['create', 'show', 'edit']);
     Route::get('/laporan/rekap-mingguan', [LaporanController::class, 'index'])->name('laporan.rekap-mingguan');
     Route::get('/laporan/rekap-mingguan/word', [LaporanController::class, 'exportWord'])->name('laporan.rekap-mingguan.word');
     Route::get('/laporan/rekap-mingguan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.rekap-mingguan.pdf');
