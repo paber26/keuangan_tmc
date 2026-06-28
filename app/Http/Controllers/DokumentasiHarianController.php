@@ -96,7 +96,8 @@ class DokumentasiHarianController extends Controller
         $dokumentasi = DokumentasiHarian::with(['images', 'karyawans'])->findOrFail($id);
         $kebun = \App\Models\Kebun::getVirtualKebunList();
         $karyawan = \App\Models\Karyawan::orderBy('nama', 'asc')->get();
-        return view('dokumentasi.edit', compact('dokumentasi', 'kebun', 'karyawan'));
+        $redirect_to = request('redirect_to', route('dokumentasi.index'));
+        return view('dokumentasi.edit', compact('dokumentasi', 'kebun', 'karyawan', 'redirect_to'));
     }
 
     public function update(Request $request, string $id)
@@ -148,7 +149,7 @@ class DokumentasiHarianController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('dokumentasi.index')->with('success', 'Dokumentasi berhasil diperbarui.');
+            return redirect($request->input('redirect_to', route('dokumentasi.index')))->with('success', 'Dokumentasi berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
@@ -168,7 +169,7 @@ class DokumentasiHarianController extends Controller
             $dokumentasi->delete();
             
             DB::commit();
-            return redirect()->route('dokumentasi.index')->with('success', 'Dokumentasi berhasil dihapus.');
+            return redirect()->back()->with('success', 'Dokumentasi berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
